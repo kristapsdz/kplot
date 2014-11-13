@@ -1,4 +1,4 @@
-.Dd $Mdocdate$
+.Dd $Mdocdate: November 13 2014 $
 .Dt KPLOT_DRAW 3
 .Os
 .Sh NAME
@@ -62,12 +62,24 @@ Space between horizontal (x-axis) labels and the plot area.
 Specifically, between the edge of the longest label along any face and
 the plot area.
 .It Va xlabelpad
-Space between vertical (y-axis) labels and the plot area.
-Specifically, between the edge of the highest label along any face and
-the plot area.
+See
+.Va xlabelpad .
 .It Va xrot
 Rotation of horizontal (x-axis) labels (in radians) clamped to 90 degrees.
 Rotation is clockwise.
+.It Va xformat
+This function may be user-defined for formatting the horizontal x-axis
+label as a UTF-8 string limited to 128 bytes (including nil terminator).
+It accepts three arguments: the value to format, the string buffer in
+which to format, and the size of the buffer.
+The default is to use
+.Xr snprintf 3
+with the
+.Li %g
+format string.
+.It Va yformat
+See
+.Va xformat .
 .It Va border
 Bitfield of which borders to draw:
 .Dv BORDER_LEFT ,
@@ -98,8 +110,8 @@ The number of tics (and thus labels) to draw along the horizontal
 x-axis.
 The border condition (one tic) is drawn in the centre.
 .It Va ytics
-The number of tics (and thus labels) to draw along the vertical y-axis.
-The border condition (one tic) is drawn in the centre.
+See
+.Va xtics .
 .It Va tic
 Bitfield of which tics to draw:
 .Dv TIC_LEFT_IN ,

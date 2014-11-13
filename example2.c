@@ -1,51 +1,64 @@
 #include <cairo.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 #include "kplot.h"
+
+static void
+format(double v, char *buf, size_t bufsz)
+{
+	time_t	t = (time_t)v;
+
+	strftime(buf, bufsz, "%F", localtime(&t));
+}
 
 int
 main(int argc, char *argv[])
 {
-	struct kpair	 points1[10], points2[10];
-	struct kdata	*d1, *d2;
+	struct kplotcfg	 cfg;
+	struct kpair	 points1[10];
+	struct kdata	*d1;
 	struct kplot	*p;
 	cairo_surface_t	*surf;
 	size_t		 i;
 	cairo_t		*cr;
 	cairo_status_t	 st;
+	time_t		 t;
 	int		 rc;
 
 	rc = EXIT_FAILURE;
 
-	d1 = d2 = NULL;
+	d1 = NULL;
 	p = NULL;
+	t = time(NULL);
 
 	for (i = 0; i < 10; i++) {
-		points1[i].x = points1[i].y = (double)i * 1000;
-		points2[i].x = points2[i].y = (double)i * -1000;
+		points1[i].x = time(NULL) + i * 24 * 60 * 60;
+		points1[i].y = arc4random_uniform(100);
 	}
 
+	kplotcfg_defaults(&cfg);
+	cfg.marginsz = 0.0;
+	cfg.xlabelpad = cfg.ylabelpad = 10.0;
+	cfg.xrot = M_PI_4;
+	cfg.xformat = format;
+
 	if (NULL == (d1 = kdata_alloc(points1, 10))) {
-		perror(NULL);
-		goto out;
-	} else if (NULL == (d2 = kdata_alloc(points2, 10))) {
 		perror(NULL);
 		goto out;
 	} else if (NULL == (p = kplot_alloc())) {
 		perror(NULL);
 		goto out;
-	} else if ( ! kplot_data(p, d1, KPLOT_LINES, NULL)) {
-		perror(NULL);
-		goto out;
-	} else if ( ! kplot_data(p, d2, KPLOT_POINTS, NULL)) {
+	} else if ( ! kplot_data(p, d1, KPLOT_POINTS, NULL)) {
 		perror(NULL);
 		goto out;
 	}
 
 	kdata_destroy(d1);
-	kdata_destroy(d2);
-	d1 = d2 = NULL;
+	d1 = NULL;
 
 	surf = cairo_image_surface_create
 		(CAIRO_FORMAT_ARGB32, 400, 400);
@@ -70,10 +83,14 @@ main(int argc, char *argv[])
 
 	}
 
-	kplot_draw(p, 400.0, 400.0, cr, NULL);
+	cairo_set_font_size(cr, 14.0);
+	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0); 
+	cairo_rectangle(cr, 0.0, 0.0, 400.0, 400.0);
+	cairo_fill(cr);
+	kplot_draw(p, 400.0, 400.0, cr, &cfg);
 
 	st = cairo_surface_write_to_png
-		(cairo_get_target(cr), "example1.png");
+		(cairo_get_target(cr), "example2.png");
 
 	if (CAIRO_STATUS_SUCCESS != st) {
 		fprintf(stderr, "%s", cairo_status_to_string(st));
@@ -87,6 +104,5 @@ main(int argc, char *argv[])
 out:
 	kplot_free(p);
 	kdata_destroy(d1);
-	kdata_destroy(d2);
 	return(rc);
 }

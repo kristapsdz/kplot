@@ -6,7 +6,7 @@ OBJS = kplot.o reallocarray.o label.o border.o margin.o draw.o tic.o
 PREFIX = /usr/local
 MANS = man/kplot.3 man/kplot_draw.3
 
-all: libkplot.a example1
+all: libkplot.a example1 example2
 
 install: all
 	mkdir -p $(PREFIX)/lib
@@ -16,9 +16,12 @@ install: all
 	install -m 0444 kplot.h $(PREFIX)/include
 	install -m 0444 $(MANS) $(PREFIX)/share/man/man3
 
-example1: libkplot.a
+example1 example2: libkplot.a
 
 example1: example1.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDADD) libkplot.a -o $@ $<
+
+example2: example2.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDADD) libkplot.a -o $@ $<
 
 libkplot.a: $(OBJS)

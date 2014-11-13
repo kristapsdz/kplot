@@ -128,6 +128,38 @@ kplotctx_draw_points(struct kplotctx *ctx, const struct kplotdat *d)
 }
 
 void
+kplotcfg_defaults(struct kplotcfg *cfg)
+{
+
+	memset(cfg, 0, sizeof(struct kplotcfg));
+	cfg->border = BORDER_ALL;
+	cfg->bordersz = 1.0;
+	cfg->label = LABEL_LEFT | LABEL_BOTTOM;
+	cfg->xtics = cfg->ytics = 5;
+	cfg->margin = MARGIN_ALL;
+	cfg->marginsz = 10.0;
+	cfg->xlabelpad = cfg->ylabelpad = 10.0;
+	cfg->clrsz = 5;
+	cfg->clrs[0].r = 1.0;
+	cfg->clrs[0].a = 1.0;
+	cfg->clrs[1].g = 1.0;
+	cfg->clrs[1].a = 1.0;
+	cfg->clrs[2].b = 1.0;
+	cfg->clrs[2].a = 1.0;
+	cfg->clrs[3].a = 1.0;
+	cfg->clrs[4].r = 0.5;
+	cfg->clrs[4].g = 0.5;
+	cfg->clrs[4].b = 0.5;
+	cfg->clrs[4].a = 1.0;
+	cfg->labelclr = 3;
+	cfg->borderclr = 4;
+	cfg->tic = TIC_LEFT_OUT | TIC_BOTTOM_OUT;
+	cfg->ticclr = 3;
+	cfg->ticlen = 5.0;
+	cfg->ticsz = 1.0;
+}
+
+void
 kplot_draw(const struct kplot *p, double w, 
 	double h, cairo_t *cr, const struct kplotcfg *cfg)
 {
@@ -143,31 +175,7 @@ kplot_draw(const struct kplot *p, double w,
 	ctx.maxv.x = ctx.maxv.y = -DBL_MAX;
 
 	if (NULL == cfg) {
-		ctx.cfg.border = BORDER_ALL;
-		ctx.cfg.bordersz = 1.0;
-		ctx.cfg.label = LABEL_LEFT | LABEL_BOTTOM;
-		ctx.cfg.xtics = ctx.cfg.ytics = 5;
-		ctx.cfg.margin = MARGIN_ALL;
-		ctx.cfg.marginsz = 10.0;
-		ctx.cfg.xlabelpad = ctx.cfg.ylabelpad = 10.0;
-		ctx.cfg.clrsz = 5;
-		ctx.cfg.clrs[0].r = 1.0;
-		ctx.cfg.clrs[0].a = 1.0;
-		ctx.cfg.clrs[1].g = 1.0;
-		ctx.cfg.clrs[1].a = 1.0;
-		ctx.cfg.clrs[2].b = 1.0;
-		ctx.cfg.clrs[2].a = 1.0;
-		ctx.cfg.clrs[3].a = 1.0;
-		ctx.cfg.clrs[4].r = 0.5;
-		ctx.cfg.clrs[4].g = 0.5;
-		ctx.cfg.clrs[4].b = 0.5;
-		ctx.cfg.clrs[4].a = 1.0;
-		ctx.cfg.labelclr = 3;
-		ctx.cfg.borderclr = 4;
-		ctx.cfg.tic = TIC_LEFT_OUT | TIC_BOTTOM_OUT;
-		ctx.cfg.ticclr = 3;
-		ctx.cfg.ticlen = 5.0;
-		ctx.cfg.ticsz = 1.0;
+		kplotcfg_defaults(&ctx.cfg);
 	} else {
 		ctx.cfg = *cfg;
 		if (ctx.cfg.marginsz < 0.0)

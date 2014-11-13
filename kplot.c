@@ -25,7 +25,8 @@ paircpy(struct kpair **p, const struct kpair *new,
 		*p = pp;
 	}
 
-	memcpy(*p, new, newsz * sizeof(struct kpair));
+	if (NULL != new)
+		memcpy(*p, new, newsz * sizeof(struct kpair));
 	*oldsz = newsz;
 	return(1);
 }
@@ -39,15 +40,30 @@ kdata_ref(struct kdata *d)
 }
 
 struct kdata *
-kdata_alloc(void)
+kdata_alloc(const struct kpair *np, size_t npsz)
 {
 	struct kdata	*d;
 
 	if (NULL == (d = calloc(1, sizeof(struct kdata))))
 		return(NULL);
 
+	if ( ! paircpy(&d->pairs, np, npsz, &d->pairsz, &d->pairmax)) {
+		free(d);
+		return(NULL);
+	}
+
 	d->refs = 1;
 	return(d);
+}
+
+void
+kdata_fill(struct kdata *d, void *arg, 
+	void (*fp)(size_t, struct kpair *, void *))
+{
+	size_t	 i;
+
+	for (i = 0; i < d->pairsz; i++)
+		(*fp)(i, &d->pairs[i], arg);
 }
 
 int
@@ -58,7 +74,7 @@ kdata_data(struct kdata *d, const struct kpair *np, size_t npsz)
 }
 
 void
-kdata_unref(struct kdata *d)
+kdata_destroy(struct kdata *d)
 {
 
 	if (NULL == d)
@@ -87,10 +103,19 @@ kplot_free(struct kplot *p)
 		return;
 
 	for (i = 0; i < p->datasz; i++)
-		kdata_unref(p->datas[i].data);
+		kdata_destroy(p->datas[i].data);
 
 	free(p->datas);
 	free(p);
+}
+
+void
+kdatacfg_defaults(struct kdatacfg *cfg)
+{
+
+	memset(cfg, 0, sizeof(struct kdatacfg));
+	cfg->pntsz = 5.0;
+	cfg->lnsz = 1.0;
 }
 
 int
@@ -111,8 +136,7 @@ kplot_data(struct kplot *p, struct kdata *d,
 	p->datas[p->datasz].type = t;
 
 	if (NULL == cfg) {
-		p->datas[p->datasz].cfg.pntsz = 10.0;
-		p->datas[p->datasz].cfg.lnsz = 1.0;
+		kdatacfg_defaults(&p->datas[p->datasz].cfg);
 		p->datas[p->datasz].cfg.clr = p->datasz;
 	} else
 		p->datas[p->datasz].cfg = *cfg;

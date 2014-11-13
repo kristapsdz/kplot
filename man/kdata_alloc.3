@@ -1,0 +1,77 @@
+.Dd $Mdocdate: November 13 2014 $
+.Dt KDATA_ALLOC 3
+.Os
+.Sh NAME
+.Nm kdata_alloc ,
+.Nm kdata_realloc ,
+.Nm kdata_destroy
+.Nd allocate and destroy data for plotting
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft "struct kdata *"
+.Fo kdata_alloc
+.Fa "struct kpair *pairs"
+.Fa "size_t sz"
+.Fc
+.Ft "struct kdata *"
+.Fo kdata_realloc
+.Fa "struct kdata *data"
+.Fa "struct kpair *pairs"
+.Fa "size_t sz"
+.Fc
+.Ft void
+.Fo kdata_destroy
+.Fa "struct kdata *data"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm kdata_alloc ,
+.Nm kdata_realloc ,
+and
+.Nm kdata_destroy
+functions create and destroy reference-counted data sources for
+.Xr kplot 3 .
+.Fn kdata_alloc
+allocates an initial structure with data points;
+.Fn kdata_realloc
+resets the data points, resizing the buffer if necessary; and
+.Fn kdata_destroy
+dereferences the object, freeing it if necessary.
+If
+.Fn kdata_alloc
+or
+.Fn kdata_realloc
+are passed
+.Dv NULL
+point values, the buffers are pre-allocated to random data.
+.Sh RETURN VALUES
+The
+.Nm kdata_alloc
+function returns the allocated structure or
+.Dv NULL
+if memory allocation failed.
+The
+.Nm kdata_realloc
+reallocates the data, returning zero on failure.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

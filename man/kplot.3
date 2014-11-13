@@ -1,4 +1,4 @@
-.Dd $Mdocdate$
+.Dd $Mdocdate: November 13 2014 $
 .Dt KPLOT 3
 .Os
 .Sh NAME
@@ -14,9 +14,7 @@ The library usually works as follows.
 .Bl -enum
 .It
 Allocate plot data sources with
-.Fn kdata_alloc ,
-filling them with
-.Fn kdata_data .
+.Fn kdata_alloc .
 .It
 Allocate plots with
 .Fn kplot_alloc .
@@ -27,7 +25,7 @@ Plot data sources are added by reference; thus, they may be referenced
 by multiple plots.
 .It
 Draw plots to Cairo contexts with
-.Fn kplot_draw .
+.Xr kplot_draw 3 .
 .It
 Free plots with
 .Fn kplot_free
@@ -57,8 +55,9 @@ the buffer zone.
 .Pp
 The plot area consists of the plotted curves and overlapping borders and
 axis tics.
-Each border centre is drawn at the graph extrema, so half the border
+Each border centre is drawn at the graph edge, so half the border
 width will extend into the plot.
+(This is how Cairo draws its lines.)
 Moreover, tics, if facing inward, will also (and obviously) be part of
 the plot area.
 .Pp
@@ -68,14 +67,12 @@ The vertical (left and right) margins define the space between the
 left-most (or right-most) vertical axis label point and the image edge.
 Similarly, the horizontal margins define the space beyond the top-most
 (or bottom-most) horizontal axis label point.
+.Pp
+The space around the plot area for labels takes into account horizontal
+labels flowing into the vertical label space and vice versa.
+.Pp
 Borders and tics are not considered when measuring the buffer zone.
 Thus, a margin of zero will directly abut the plot area.
-.Pp
-A caveat of this model: horizontal labels' horizontal sizes are not
-considered, nor are vertical labels' vertical sizes.
-So, for example, if the x-axis labels are very long, they may overrun
-the image boundary.
-To accomodate, set your margins or fix the axis precision.
 .Ss Memory Model
 .Nm
 uses the usual libc memory functions for allocation.
@@ -96,8 +93,8 @@ will dereference, only freeing when nobody references the source.
 .\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
-.\" .Sh SEE ALSO
-.\" .Xr foobar 1
+.Sh SEE ALSO
+.Xr kplot_draw 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
 .\" .Sh AUTHORS
