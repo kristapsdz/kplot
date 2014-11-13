@@ -1,0 +1,148 @@
+.Dd $Mdocdate$
+.Dt KPLOT_DRAW 3
+.Os
+.Sh NAME
+.Nm kplot_draw
+.Nd plot data on Cairo context
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft void
+.Fo kplot_draw
+.Fa "const struct kplot *p"
+.Fa double w
+.Fa double h
+.Fa "cairo_t *cr"
+.Fa "const struct kplotcfg *cfg"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm
+function draws all data sources onto a Cairo context
+.Fa cr
+of height
+.Fa h
+and width
+.Fa w .
+It performs all the necessary range and domain checks to fit all data
+sources into the image.
+The image is laid out as described in the Drawing Model section of
+.Xr kplot 3 .
+The options provided via the
+.Fa cfg
+object are as follows:
+.Bl -tag -width Ds
+.It Va margin
+Bitfield of which margins to draw:
+.Dv MARGIN_LEFT ,
+.Dv MARGIN_RIGHT ,
+.Dv MARGIN_TOP ,
+.Dv MARGIN_BOTTOM ,
+or
+.Dv MARGIN_ALL .
+.It Va marginsz
+The width of the margin in user-space Cairo coordinates.
+These are clamped to be non-negative.
+The margin is the space between the image boundary and the longest (or
+tallest) label edge, or if no label is specified on any face, the plot
+area.
+.It Va label
+Bitfield of which labels to draw:
+.Dv LABEL_LEFT ,
+.Dv LABEL_RIGHT ,
+.Dv LABEL_TOP ,
+or
+.Dv LABEL_BOTTOM.
+.It Va labelclr
+The colour index of the label text.
+.It Va xlabelpad
+Space between horizontal (x-axis) labels and the plot area.
+Specifically, between the edge of the longest label along any face and
+the plot area.
+.It Va xlabelpad
+Space between vertical (y-axis) labels and the plot area.
+Specifically, between the edge of the highest label along any face and
+the plot area.
+.It Va xrot
+Rotation of horizontal (x-axis) labels (in radians) clamped to 90 degrees.
+Rotation is clockwise.
+.It Va border
+Bitfield of which borders to draw:
+.Dv BORDER_LEFT ,
+.Dv BORDER_RIGHT ,
+.Dv BORDER_TOP ,
+.Dv BORDER_BOTTOM ,
+or
+.Dv BORDER_ALL .
+.It Va borderclr
+The colour index of the border.
+.It Va bordersz
+The Cairo pen width of the border.
+Note that this is the diameter of the pen, extending to either side of
+the border line.
+.It Va clrs
+Array of RGBA colours for the colour index.
+Each RGBA value is clamped to the unit interval.
+If no colours are specified, opaque black is used.
+.It Va clrsz
+The number of colours in clrs.
+Colour indices (e.g.,
+.Va borderclr )
+index into the
+.Va clrs
+array modulo this value.
+.It Va xtics
+The number of tics (and thus labels) to draw along the horizontal
+x-axis.
+The border condition (one tic) is drawn in the centre.
+.It Va ytics
+The number of tics (and thus labels) to draw along the vertical y-axis.
+The border condition (one tic) is drawn in the centre.
+.It Va tic
+Bitfield of which tics to draw:
+.Dv TIC_LEFT_IN ,
+.Dv TIC_RIGHT_IN ,
+.Dv TIC_TOP_IN ,
+.Dv TIC_BOTTOM_IN ,
+.Dv TIC_LEFT_OUT ,
+.Dv TIC_RIGHT_OUT ,
+.Dv TIC_TOP_OUT ,
+or
+.Dv TIC_BOTTOM_OUT .
+.It Va ticlen
+The length of the tic-mark in any direction.
+.It Va ticclr
+The tic colour index.
+.It Va ticsz
+The pen width for drawing tics.
+.El
+.Pp
+If
+.Dv NULL
+is passed as a configuration, reasonable defaults are used.
+.Sh RETURN VALUES
+The
+.Nm
+function has no return value.
+It always succeeds.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

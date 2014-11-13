@@ -1,0 +1,107 @@
+.Dd $Mdocdate$
+.Dt KPLOT 3
+.Os
+.Sh NAME
+.Nm kplot
+.Nd plotting library for Cairo
+.Sh LIBRARY
+.Lb libkplot
+.Sh DESCRIPTION
+The
+.Nm
+library plots 2d data and functions on Cairo drawing contexts.
+The library usually works as follows.
+.Bl -enum
+.It
+Allocate plot data sources with
+.Fn kdata_alloc ,
+filling them with
+.Fn kdata_data .
+.It
+Allocate plots with
+.Fn kplot_alloc .
+.It
+Associated each plot data source with one or more plot using
+.Fn kplot_data .
+Plot data sources are added by reference; thus, they may be referenced
+by multiple plots.
+.It
+Draw plots to Cairo contexts with
+.Fn kplot_draw .
+.It
+Free plots with
+.Fn kplot_free
+and data sources with
+.Fn kdata_destroy .
+.El
+.Ss Domain and Range
+Each plot domain and range is extended to fit all of its data sources at
+the moment
+.Fn kplot_draw
+is invoked.
+.Ss Styles
+Styles are applied to plots and when a plot data source is added to a
+plot.
+Thus, if one has a data source referenced by two separate plots, they
+may be styled in different ways.
+.Ss Numerical Precision
+All values in
+.Nm
+are double-precision floating-point.
+If a plot is handed non-normal numbers (infinite, subnormal, NaN), the
+entire coordinate pair is discarded from range/domain calculation and
+plotting.
+.Ss Drawing Model
+There are two main components to the drawing model: the plot area and
+the buffer zone.
+.Pp
+The plot area consists of the plotted curves and overlapping borders and
+axis tics.
+Each border centre is drawn at the graph extrema, so half the border
+width will extend into the plot.
+Moreover, tics, if facing inward, will also (and obviously) be part of
+the plot area.
+.Pp
+The buffer zone consists of the other half of borders, outward-facing
+tics, axis labels, and the margin.
+The vertical (left and right) margins define the space between the
+left-most (or right-most) vertical axis label point and the image edge.
+Similarly, the horizontal margins define the space beyond the top-most
+(or bottom-most) horizontal axis label point.
+Borders and tics are not considered when measuring the buffer zone.
+Thus, a margin of zero will directly abut the plot area.
+.Pp
+A caveat of this model: horizontal labels' horizontal sizes are not
+considered, nor are vertical labels' vertical sizes.
+So, for example, if the x-axis labels are very long, they may overrun
+the image boundary.
+To accomodate, set your margins or fix the axis precision.
+.Ss Memory Model
+.Nm
+uses the usual libc memory functions for allocation.
+Howeer, plot data sources are reference-counted to make sharing between
+plots easier.
+Thus, calling
+.Fn kdata_destroy
+will dereference, only freeing when nobody references the source.
+.\" .Sh RETURN VALUES
+.\" For sections 2, 3, and 9 function return values only.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.\" .Sh SEE ALSO
+.\" .Xr foobar 1
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.
