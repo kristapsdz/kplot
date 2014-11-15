@@ -1,11 +1,36 @@
 #ifndef EXTERN_H
 #define EXTERN_H
 
+struct	kdatahist {
+	double		 rmin; /* minimum bucket value */
+	double		 rmax; /* maximum bucket value */
+};
+
+struct	kdataarray {
+	size_t		 pairmax; /* maximum (for buffering) */
+};
+
+struct	kdatavector {
+	size_t		 stepsz; /* reallocation step */
+	size_t		 pairmax; /* current maximum */
+};
+
+enum	kdatatype {
+	KDATA_HIST,
+	KDATA_ARRAY,
+	KDATA_VECTOR
+};
+
 struct	kdata {
 	struct kpair	*pairs; /* data pairs */
 	size_t		 pairsz; /* number of pairs */
-	size_t		 pairmax; /* maximum (for buffering) */
 	size_t		 refs; /* >0 references to data */
+	enum kdatatype	 type;
+	union {
+		struct kdatahist	hist;
+		struct kdataarray	array;
+		struct kdatavector	vector;
+	} d;
 };
 
 struct	kplotdat {

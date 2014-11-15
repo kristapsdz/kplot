@@ -1,0 +1,46 @@
+.Dd $Mdocdate: November 13 2014 $
+.Dt KDATA_HIST_INCREMENT 3
+.Os
+.Sh NAME
+.Nm kdata_hist_increment
+.Nd increment histogram bucket
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft int
+.Fo kdata_hist_increment
+.Fa "struct kdata *d"
+.Fa "double v"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm kdata_hist_increment
+function increments the bucket into which
+.Fa v
+falls.
+It is used for data sources created with
+.Xr kdata_hist_alloc 3 .
+.Sh RETURN VALUES
+.Nm
+returns 0 if the requested bucket is outside of the histogram's range.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

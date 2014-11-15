@@ -76,12 +76,20 @@ struct	kplotcfg {
 
 __BEGIN_DECLS
 
-struct kdata	*kdata_alloc(const struct kpair *, size_t);
-int		 kdata_realloc(struct kdata *, 
+struct kdata	*kdata_hist_alloc(double, double, size_t);
+int		 kdata_hist_increment(struct kdata *, double);
+
+struct kdata	*kdata_vector_alloc(size_t);
+int		 kdata_vector_add(struct kdata *, double, double);
+
+struct kdata	*kdata_array_alloc(const struct kpair *, size_t);
+int		 kdata_array_realloc(struct kdata *, 
 			const struct kpair *, size_t);
-void		 kdata_destroy(struct kdata *);
-void		 kdata_fill(struct kdata *, void *,
+void		 kdata_array_fill(struct kdata *, void *,
 			void (*)(size_t, struct kpair *, void *));
+
+void		 kdata_destroy(struct kdata *);
+int		 kdata_copy(const struct kdata *, struct kdata *);
 
 void		 kdatacfg_defaults(struct kdatacfg *);
 

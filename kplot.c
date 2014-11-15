@@ -11,26 +11,6 @@
 #include "compat.h"
 #include "extern.h"
 
-static int
-paircpy(struct kpair **p, const struct kpair *new, 
-	size_t newsz, size_t *oldsz, size_t *oldmax)
-{
-	void	*pp;
-
-	if (newsz > *oldmax) {
-		*oldmax = newsz;
-		pp = reallocarray(*p, *oldmax, sizeof(struct kpair));
-		if (NULL == pp)
-			return(0);
-		*p = pp;
-	}
-
-	if (NULL != new)
-		memcpy(*p, new, newsz * sizeof(struct kpair));
-	*oldsz = newsz;
-	return(1);
-}
-
 static void
 kdata_ref(struct kdata *d)
 {
@@ -39,38 +19,23 @@ kdata_ref(struct kdata *d)
 	d->refs++;
 }
 
-struct kdata *
-kdata_alloc(const struct kpair *np, size_t npsz)
+int
+kdata_copy(const struct kdata *src, struct kdata *dst)
 {
-	struct kdata	*d;
+	void	*p;
 
-	if (NULL == (d = calloc(1, sizeof(struct kdata))))
-		return(NULL);
+	dst->d = src->d;
+	dst->type = src->type;
 
-	if ( ! paircpy(&d->pairs, np, npsz, &d->pairsz, &d->pairmax)) {
-		free(d);
-		return(NULL);
+	if (dst->pairsz != src->pairsz) {
+		dst->pairsz = src->pairsz;
+		p = reallocarray(dst->pairs, dst->pairsz, sizeof(struct kpair));
+		if (NULL == p)
+			return(0);
+		memcpy(dst->pairs, src->pairs, dst->pairsz * sizeof(struct kpair));
 	}
 
-	d->refs = 1;
-	return(d);
-}
-
-void
-kdata_fill(struct kdata *d, void *arg, 
-	void (*fp)(size_t, struct kpair *, void *))
-{
-	size_t	 i;
-
-	for (i = 0; i < d->pairsz; i++)
-		(*fp)(i, &d->pairs[i], arg);
-}
-
-int
-kdata_data(struct kdata *d, const struct kpair *np, size_t npsz)
-{
-
-	return(paircpy(&d->pairs, np, npsz, &d->pairsz, &d->pairmax));
+	return(1);
 }
 
 void

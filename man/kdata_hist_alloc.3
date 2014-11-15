@@ -1,0 +1,52 @@
+.Dd $Mdocdate: November 13 2014 $
+.Dt KDATA_HIST_ALLOC 3
+.Os
+.Sh NAME
+.Nm kdata_hist_alloc
+.Nd allocate histogram data for plotting
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft "struct kdata *"
+.Fo kdata_hist_alloc
+.Fa "double rmin"
+.Fa "double rmax"
+.Fa "size_t bins"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm kdata_hist_alloc
+function creates a reference-counted data sources for
+.Xr kplot 3 .
+It uses a histogram data model: the data array is laid out in
+uniformly-spaced buckets of size (rmax - rmin) / bins, with a given
+value x falling into bucket [i / bins * (rmax - rmin) <= x < (i + 1) /
+bins * (rmax - rmin)].
+Bucket values are incremented with
+.Xr kdata_hist_increment 3 .
+.Sh RETURN VALUES
+.Nm
+functions
+.Dv NULL
+if memory allocation failed.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

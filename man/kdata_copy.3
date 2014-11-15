@@ -1,0 +1,50 @@
+.Dd $Mdocdate: November 13 2014 $
+.Dt KDATA_COPY 3
+.Os
+.Sh NAME
+.Nm kdata_copy
+.Nd copy plotting data
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft int
+.Fo kdata_copy
+.Fa "const struct kdata *src"
+.Fa "struct kdata *dst"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm
+function copies data source data.
+It does
+.Em not
+copy the reference counter: only the enclosed data and, just as
+importantly, the data type.
+Thus, if the source is a histogram and the destination is an array, the
+destination will be reconstituted as a histogram exactly as the source.
+If and only if the size of the contained data is not the same, the
+destination data is reallocated.
+.Sh RETURN VALUES
+.Nm
+returns 0 if any internal reallocation fails.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

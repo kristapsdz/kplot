@@ -1,0 +1,48 @@
+.Dd $Mdocdate: November 13 2014 $
+.Dt KDATA_ARRAY_FILL 3
+.Os
+.Sh NAME
+.Nm kdata_array_fill
+.Nd fill prior-allocated data source
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft void
+.Fo kdata_array_fill
+.Fa "struct kdata *data"
+.Fa "void *arg"
+.Fa "void (*fp)(size_t, struct kpair *, void *)"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm
+function fills the buffers of a data source created by
+.Xr kdata_array_alloc 3 .
+It invokes the
+.Fa fp
+function with each bucket provided by
+.Xr kdata_array_alloc
+or
+.Xr kdata_array_realloc .
+.\" .Sh RETURN VALUES
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

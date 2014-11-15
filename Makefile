@@ -1,12 +1,22 @@
-CFLAGS = -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
-CPPFLAGS = -I/usr/X11/include/cairo
-LDFLAGS = -L/usr/X11/lib
-LDADD = -lcairo
-OBJS = kplot.o reallocarray.o label.o border.o margin.o draw.o tic.o
-PREFIX = /usr/local
-MANS = man/kplot.3 man/kplot_draw.3
+CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
+CPPFLAGS	= -I/usr/X11/include/cairo
+LDFLAGS		= -L/usr/X11/lib
+LDADD		= -lcairo
+OBJS		= kplot.o \
+		  reallocarray.o \
+		  label.o \
+		  border.o \
+		  margin.o \
+		  draw.o \
+		  tic.o \
+		  hist.o \
+		  array.o \
+		  vector.o
+PREFIX		= /usr/local
+MANS		= man/kplot.3 \
+		  man/kplot_draw.3
 
-all: libkplot.a example1 example2
+all: libkplot.a example1 example2 example3
 
 install: all
 	mkdir -p $(PREFIX)/lib
@@ -18,10 +28,13 @@ install: all
 
 example1 example2: libkplot.a
 
-example1: example1.c
+example1: example1.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDADD) libkplot.a -o $@ $<
 
-example2: example2.c
+example2: example2.c libkplot.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDADD) libkplot.a -o $@ $<
+
+example3: example3.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDADD) libkplot.a -o $@ $<
 
 libkplot.a: $(OBJS)
@@ -38,5 +51,7 @@ compat.h: compat.pre.h compat.post.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
 clean:
-	rm -f libkplot.a compat.h test-reallocarray example1
+	rm -f libkplot.a compat.h test-reallocarray 
+	rm -f example1 example2 example3
+	rm -rf *.dSYM
 	rm -f $(OBJS)

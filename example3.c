@@ -1,51 +1,50 @@
+#include <assert.h>
 #include <cairo.h>
+#include <math.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "kplot.h"
 
 int
 main(int argc, char *argv[])
 {
-	struct kpair	 points1[10], points2[10];
-	struct kdata	*d1, *d2;
+	struct kdata	*d;
 	struct kplot	*p;
 	cairo_surface_t	*surf;
 	size_t		 i;
 	cairo_t		*cr;
 	cairo_status_t	 st;
-	int		 rc;
+	int		 rc, c;
 
 	rc = EXIT_FAILURE;
 
-	d1 = d2 = NULL;
+	d = NULL;
 	p = NULL;
 
-	for (i = 0; i < 10; i++) {
-		points1[i].x = points1[i].y = (double)i * 1000;
-		points2[i].x = points2[i].y = (double)i * -1000;
-	}
-
-	if (NULL == (d1 = kdata_array_alloc(points1, 10))) {
-		perror(NULL);
-		goto out;
-	} else if (NULL == (d2 = kdata_array_alloc(points2, 10))) {
-		perror(NULL);
-		goto out;
-	} else if (NULL == (p = kplot_alloc())) {
-		perror(NULL);
-		goto out;
-	} else if ( ! kplot_data(p, d1, KPLOT_LINES, NULL)) {
-		perror(NULL);
-		goto out;
-	} else if ( ! kplot_data(p, d2, KPLOT_POINTS, NULL)) {
+	if (NULL == (d = kdata_hist_alloc(0.0, 1.0, 50))) {
 		perror(NULL);
 		goto out;
 	}
 
-	kdata_destroy(d1);
-	kdata_destroy(d2);
-	d1 = d2 = NULL;
+	for (i = 0; i < 1000; i++) {
+		c = kdata_hist_increment
+			(d, arc4random() / (double)UINT32_MAX);
+		assert(c);
+	}
+
+	if (NULL == (p = kplot_alloc())) {
+		perror(NULL);
+		goto out;
+	} else if ( ! kplot_data(p, d, KPLOT_LINES, NULL)) {
+		perror(NULL);
+		goto out;
+	}
+
+	kdata_destroy(d);
+	d = NULL;
 
 	surf = cairo_image_surface_create
 		(CAIRO_FORMAT_ARGB32, 400, 400);
@@ -70,10 +69,13 @@ main(int argc, char *argv[])
 
 	}
 
+	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0); 
+	cairo_rectangle(cr, 0.0, 0.0, 400.0, 400.0);
+	cairo_fill(cr);
 	kplot_draw(p, 400.0, 400.0, cr, NULL);
 
 	st = cairo_surface_write_to_png
-		(cairo_get_target(cr), "example1.png");
+		(cairo_get_target(cr), "example3.png");
 
 	if (CAIRO_STATUS_SUCCESS != st) {
 		fprintf(stderr, "%s", cairo_status_to_string(st));
@@ -86,7 +88,6 @@ main(int argc, char *argv[])
 	rc = EXIT_SUCCESS;
 out:
 	kplot_free(p);
-	kdata_destroy(d1);
-	kdata_destroy(d2);
+	kdata_destroy(d);
 	return(rc);
 }

@@ -1,0 +1,50 @@
+.Dd $Mdocdate: November 13 2014 $
+.Dt KDATA_VECTOR_ADD 3
+.Os
+.Sh NAME
+.Nm kdata_vector_add
+.Nd append data to a vector data source
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft int
+.Fo kdata_vector_add
+.Fa "struct kdata *data"
+.Fa "double x"
+.Fa "double y"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm
+function appends the point values
+.Fa x
+and
+.Fa y
+to a growable vector data source allocated with
+.Xr kdata_vector_alloc 3 .
+If necessary, the internal data source will be reallocated to hold the
+newly-appended data.
+.Sh RETURN VALUES
+.Nm
+returns 0 if the vector required reallocation and this failed.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

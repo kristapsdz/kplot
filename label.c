@@ -14,13 +14,13 @@ kplotctx_label_init(struct kplotctx *ctx)
 	char		buf[128];
 	size_t		i;
 	cairo_text_extents_t e;
-	double		maxh, maxw, offs, lastx, lasty;
+	double		maxh, maxw, offs, lastx, lasty, firsty;
 	struct kplotclr	clr;
 
 	kplotctx_colour(ctx, ctx->cfg.labelclr, &clr);
 	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
 	cairo_set_line_width(ctx->cr, ctx->cfg.bordersz);
-	maxh = maxw = lastx = lasty = 0.0;
+	maxh = maxw = lastx = lasty = firsty = 0.0;
 
 	/*
 	 * First, acquire the maximum space that will be required for
@@ -50,6 +50,7 @@ kplotctx_label_init(struct kplotctx *ctx)
 		 * Important: if we're on the last x-axis value, then
 		 * save the width, because we'll check that the
 		 * right-hand buffer zone accomodates for it.
+		 * FIXME: only do this is LABEL_TOP, etc...
 		 */
 		if (i == ctx->cfg.xtics - 1 && ctx->cfg.xrot > 0.0)
 			lastx = e.width * cos
@@ -88,6 +89,8 @@ kplotctx_label_init(struct kplotctx *ctx)
 
 		cairo_text_extents(ctx->cr, buf, &e);
 
+		if (i == 0)
+			firsty = e.height / 2.0;
 		if (i == ctx->cfg.ytics - 1)
 			lasty = e.height / 2.0;
 
@@ -113,6 +116,10 @@ kplotctx_label_init(struct kplotctx *ctx)
 	} else if (lastx > 0.0) 
 		ctx->dims.x -= lastx;
 
+	/*
+	 * Like with LABEL_RIGHT, we accomodate for the topmost vertical
+	 * axes bleeding into the horizontal axis area above.
+	 */
 	if (LABEL_TOP & ctx->cfg.label) {
 		if (maxh + ctx->cfg.xlabelpad > lasty) {
 			ctx->offs.y += maxh + ctx->cfg.xlabelpad;
@@ -126,8 +133,13 @@ kplotctx_label_init(struct kplotctx *ctx)
 		ctx->dims.y -= lasty;
 	}
 
-	if (LABEL_BOTTOM & ctx->cfg.label)
-		ctx->dims.y -= maxh + ctx->cfg.xlabelpad;
+	if (LABEL_BOTTOM & ctx->cfg.label) {
+		if (maxh + ctx->cfg.xlabelpad > firsty)
+			ctx->dims.y -= maxh + ctx->cfg.xlabelpad;
+		else
+			ctx->dims.y -= firsty;
+	} else if (firsty > 0.0)
+		ctx->dims.y -= firsty;
 
 	for (i = 0; i < ctx->cfg.xtics; i++) {
 		offs = 1 == ctx->cfg.xtics ? 0.5 : 
