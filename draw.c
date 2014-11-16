@@ -185,6 +185,15 @@ kplot_draw(const struct kplot *p, double w,
 	for (i = 0; i < p->datasz; i++) 
 		kdata_extrema(&p->datas[i], &ctx.minv, &ctx.maxv);
 
+	/*
+	 * If we've read in no points, then initialise ourselves to be
+	 * at zero.
+	 */
+	if (ctx.minv.x > ctx.maxv.x)
+		ctx.minv.x = ctx.maxv.x = 0.0;
+	if (ctx.minv.y > ctx.maxv.y)
+		ctx.minv.y = ctx.maxv.y = 0.0;
+
 	kplotctx_margin_init(&ctx);
 	kplotctx_label_init(&ctx);
 	kplotctx_border_init(&ctx);
