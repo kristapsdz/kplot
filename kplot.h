@@ -12,13 +12,22 @@ enum	kplottype {
 };
 
 struct	kdatacfg {
-	size_t		 clr; /* colour index */
+	size_t		 clr; /* colour index (SIZE_MAX for auto) */
 	/*
 	 * All of these dimensions are in user-space coordinate system
 	 * defined by cairo.
 	 */
 	double		 pntsz; /* point arc radius */
 	double		 lnsz; /* pen diameter */
+#define	EXTREMA_XMIN	 0x01
+#define	EXTREMA_XMAX	 0x02
+#define	EXTREMA_YMIN	 0x04
+#define	EXTREMA_YMAX	 0x08
+	unsigned int	 extrema; /* assumed bounds */
+	double		 extrema_xmin;
+	double		 extrema_xmax;
+	double		 extrema_ymin;
+	double		 extrema_ymax;
 };
 
 struct	kplotclr {

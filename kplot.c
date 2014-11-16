@@ -11,49 +11,6 @@
 #include "compat.h"
 #include "extern.h"
 
-static void
-kdata_ref(struct kdata *d)
-{
-
-	assert(d->refs > 0);
-	d->refs++;
-}
-
-int
-kdata_copy(const struct kdata *src, struct kdata *dst)
-{
-	void	*p;
-
-	dst->d = src->d;
-	dst->type = src->type;
-
-	if (src->pairsz > dst->pairbufsz) {
-		dst->pairbufsz = src->pairsz;
-		p = reallocarray(dst->pairs, dst->pairbufsz, sizeof(struct kpair));
-		if (NULL == p)
-			return(0);
-		dst->pairs = p;
-	}
-
-	dst->pairsz = src->pairsz;
-	memcpy(dst->pairs, src->pairs, dst->pairsz * sizeof(struct kpair));
-	return(1);
-}
-
-void
-kdata_destroy(struct kdata *d)
-{
-
-	if (NULL == d)
-		return;
-	assert(d->refs > 0);
-	if (--d->refs > 0)
-		return;
-
-	free(d->pairs);
-	free(d);
-}
-
 struct kplot *
 kplot_alloc(void)
 {
@@ -76,15 +33,6 @@ kplot_free(struct kplot *p)
 	free(p);
 }
 
-void
-kdatacfg_defaults(struct kdatacfg *cfg)
-{
-
-	memset(cfg, 0, sizeof(struct kdatacfg));
-	cfg->pntsz = 5.0;
-	cfg->lnsz = 1.0;
-}
-
 int
 kplot_data(struct kplot *p, struct kdata *d, 
 	enum kplottype t, const struct kdatacfg *cfg)
@@ -102,14 +50,16 @@ kplot_data(struct kplot *p, struct kdata *d,
 	p->datas[p->datasz].data = d;
 	p->datas[p->datasz].type = t;
 
-	if (NULL == cfg) {
+	if (NULL == cfg)
 		kdatacfg_defaults(&p->datas[p->datasz].cfg);
-		p->datas[p->datasz].cfg.clr = p->datasz;
-	} else
+	else
 		p->datas[p->datasz].cfg = *cfg;
 
+	if (SIZE_MAX == p->datas[p->datasz].cfg.clr)
+		p->datas[p->datasz].cfg.clr = p->datasz;
+
 	p->datasz++;
-	kdata_ref(d);
+	d->refs++;
 	return(1);
 }
 

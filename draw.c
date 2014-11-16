@@ -11,35 +11,15 @@
 #include "extern.h"
 
 static void
-kpair_max(const struct kpair *p, size_t sz, struct kpair *maxv)
+kdata_extrema(const struct kplotdat *d, 
+	struct kpair *minv, struct kpair *maxv)
 {
-	size_t	 	i;
+	size_t	 	 i;
+	struct kpair	*p;
 
-	for (i = 0; i < sz; i++) {
-		if (0.0 != p[i].x && ! isnormal(p[i].x))
-			continue;
-		if (0.0 != p[i].y && ! isnormal(p[i].y))
-			continue;
-		if (p[i].x > maxv->x)
-			maxv->x = p[i].x;
-		if (p[i].y > maxv->y)
-			maxv->y = p[i].y;
-	}
-}
+	p = d->data->pairs;
 
-static void
-kdata_max(const struct kdata *d, struct kpair *maxv)
-{
-
-	kpair_max(d->pairs, d->pairsz, maxv);
-}
-
-static void
-kpair_min(const struct kpair *p, size_t sz, struct kpair *minv)
-{
-	size_t	 	i;
-
-	for (i = 0; i < sz; i++) {
+	for (i = 0; i < d->data->pairsz; i++) {
 		if (0.0 != p[i].x && ! isnormal(p[i].x))
 			continue;
 		if (0.0 != p[i].y && ! isnormal(p[i].y))
@@ -48,14 +28,20 @@ kpair_min(const struct kpair *p, size_t sz, struct kpair *minv)
 			minv->x = p[i].x;
 		if (p[i].y < minv->y)
 			minv->y = p[i].y;
+		if (p[i].x > maxv->x)
+			maxv->x = p[i].x;
+		if (p[i].y > maxv->y)
+			maxv->y = p[i].y;
 	}
-}
 
-static void
-kdata_min(const struct kdata *d, struct kpair *minv)
-{
-
-	kpair_min(d->pairs, d->pairsz, minv);
+	if (EXTREMA_XMIN & d->cfg.extrema)
+		minv->x = d->cfg.extrema_xmin;
+	if (EXTREMA_YMIN & d->cfg.extrema)
+		minv->y = d->cfg.extrema_ymin;
+	if (EXTREMA_XMAX & d->cfg.extrema)
+		maxv->x = d->cfg.extrema_xmax;
+	if (EXTREMA_YMAX & d->cfg.extrema)
+		maxv->y = d->cfg.extrema_ymax;
 }
 
 static inline void
@@ -196,10 +182,8 @@ kplot_draw(const struct kplot *p, double w,
 			ctx.cfg.ticsz = 0.0;
 	}
 
-	for (i = 0; i < p->datasz; i++) {
-		kdata_min(p->datas[i].data, &ctx.minv);
-		kdata_max(p->datas[i].data, &ctx.maxv);
-	}
+	for (i = 0; i < p->datasz; i++) 
+		kdata_extrema(&p->datas[i], &ctx.minv, &ctx.maxv);
 
 	kplotctx_margin_init(&ctx);
 	kplotctx_label_init(&ctx);
