@@ -14,7 +14,10 @@ The library usually works as follows.
 .Bl -enum
 .It
 Allocate plot data sources with
-.Fn kdata_alloc .
+.Xr kdata_array_alloc 3 ,
+.Xr kdata_hist_alloc 3 ,
+and/or
+.Xr kdata_vector_alloc 3 ,
 .It
 Allocate plots with
 .Fn kplot_alloc .

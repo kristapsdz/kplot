@@ -1,0 +1,46 @@
+.Dd $Mdocdate: November 13 2014 $
+.Dt KPLOT_ALLOC 3
+.Os
+.Sh NAME
+.Nm kplot_alloc
+.Nd allocate plotting context 
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft "struct kplot *"
+.Fn kplot_alloc
+.Sh DESCRIPTION
+The
+.Nm
+function allocates a plotting context for later use by
+.Xr kplot_data 3
+and
+.Xr kplot_draw 3 .
+It must be freed with
+.Xr kplot_free 3 .
+.Sh RETURN VALUES
+.Nm
+returns
+.Dv NULL
+on memory allocation failure.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

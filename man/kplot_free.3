@@ -1,0 +1,42 @@
+.Dd $Mdocdate: November 13 2014 $
+.Dt KPLOT_FREE 3
+.Os
+.Sh NAME
+.Nm kplot_free
+.Nd free plotting context 
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft void
+.Fo kplot_free
+.Fa "struct kplot *p"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm
+function frees a plotting context created by
+.Xr kplot_alloc 3 .
+In doing so, it dereferences (possibly freeing) all data sources added with
+.Xr kplot_data 3 .
+.\" .Sh RETURN VALUES
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

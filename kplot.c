@@ -27,14 +27,16 @@ kdata_copy(const struct kdata *src, struct kdata *dst)
 	dst->d = src->d;
 	dst->type = src->type;
 
-	if (dst->pairsz != src->pairsz) {
-		dst->pairsz = src->pairsz;
-		p = reallocarray(dst->pairs, dst->pairsz, sizeof(struct kpair));
+	if (src->pairsz > dst->pairbufsz) {
+		dst->pairbufsz = src->pairsz;
+		p = reallocarray(dst->pairs, dst->pairbufsz, sizeof(struct kpair));
 		if (NULL == p)
 			return(0);
-		memcpy(dst->pairs, src->pairs, dst->pairsz * sizeof(struct kpair));
+		dst->pairs = p;
 	}
 
+	dst->pairsz = src->pairsz;
+	memcpy(dst->pairs, src->pairs, dst->pairsz * sizeof(struct kpair));
 	return(1);
 }
 

@@ -41,7 +41,7 @@ kdata_array_alloc(const struct kpair *np, size_t npsz)
 		return(NULL);
 
 	if ( ! paircpy(&d->pairs, np, npsz, 
-		&d->pairsz, &d->d.array.pairmax)) {
+		&d->pairsz, &d->pairbufsz)) {
 		free(d);
 		return(NULL);
 	}
@@ -68,5 +68,5 @@ kdata_array_realloc(struct kdata *d, const struct kpair *np, size_t npsz)
 
 	assert(KDATA_ARRAY == d->type);
 	return(paircpy(&d->pairs, np, npsz, 
-		&d->pairsz, &d->d.array.pairmax));
+		&d->pairsz, &d->pairbufsz));
 }

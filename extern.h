@@ -7,12 +7,10 @@ struct	kdatahist {
 };
 
 struct	kdataarray {
-	size_t		 pairmax; /* maximum (for buffering) */
 };
 
 struct	kdatavector {
 	size_t		 stepsz; /* reallocation step */
-	size_t		 pairmax; /* current maximum */
 };
 
 enum	kdatatype {
@@ -24,6 +22,7 @@ enum	kdatatype {
 struct	kdata {
 	struct kpair	*pairs; /* data pairs */
 	size_t		 pairsz; /* number of pairs */
+	size_t		 pairbufsz; /* allocated buffer size */
 	size_t		 refs; /* >0 references to data */
 	enum kdatatype	 type;
 	union {

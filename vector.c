@@ -17,6 +17,7 @@ kdata_vector_alloc(size_t step)
 
 	d->refs = 1;
 	d->type = KDATA_VECTOR;
+	d->d.vector.stepsz = step;
 	return(d);
 }
 
@@ -27,11 +28,11 @@ kdata_vector_add(struct kdata *d, double x, double y)
 
 	assert(KDATA_VECTOR == d->type);
 
-	if (d->pairsz + 1 >= d->d.vector.pairmax) {
-		d->d.vector.pairmax += d->d.vector.stepsz;
-		assert(d->d.vector.pairmax > d->pairsz + 1);
+	if (d->pairsz + 1 >= d->pairbufsz) {
+		d->pairbufsz += d->d.vector.stepsz;
+		assert(d->pairbufsz > d->pairsz + 1);
 		p = reallocarray(d->pairs, 
-			d->d.vector.pairmax, sizeof(struct kpair));
+			d->pairbufsz, sizeof(struct kpair));
 		if (NULL == p)
 			return(0);
 		d->pairs = p;
