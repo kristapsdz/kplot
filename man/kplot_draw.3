@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 16 2014 $
+.Dd $Mdocdate: November 17 2014 $
 .Dt KPLOT_DRAW 3
 .Os
 .Sh NAME
@@ -49,14 +49,14 @@ These are clamped to be non-negative.
 The margin is the space between the image boundary and the longest (or
 tallest) label edge, or if no label is specified on any face, the plot
 area.
-.It Va label
+.It Va ticlabel
 Bitfield of which labels to draw:
-.Dv LABEL_LEFT ,
-.Dv LABEL_RIGHT ,
-.Dv LABEL_TOP ,
+.Dv TICLABEL_LEFT ,
+.Dv TICLABEL_RIGHT ,
+.Dv TICLABEL_TOP ,
 or
-.Dv LABEL_BOTTOM.
-.It Va labelclr
+.Dv TICLABEL_BOTTOM.
+.It Va ticlabelclr
 The colour index of the label text.
 .It Va xlabelpad
 Space between horizontal (x-axis) labels and the plot area.

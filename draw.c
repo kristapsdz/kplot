@@ -120,7 +120,7 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	memset(cfg, 0, sizeof(struct kplotcfg));
 	cfg->border = BORDER_ALL;
 	cfg->bordersz = 1.0;
-	cfg->label = LABEL_LEFT | LABEL_BOTTOM;
+	cfg->ticlabel = TICLABEL_LEFT | TICLABEL_BOTTOM;
 	cfg->xtics = cfg->ytics = 5;
 	cfg->margin = MARGIN_ALL;
 	cfg->marginsz = 10.0;
@@ -137,7 +137,7 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	cfg->clrs[4].g = 0.5;
 	cfg->clrs[4].b = 0.5;
 	cfg->clrs[4].a = 1.0;
-	cfg->labelclr = 3;
+	cfg->ticlabelclr = 3;
 	cfg->borderclr = 4;
 	cfg->tic = TIC_LEFT_OUT | TIC_BOTTOM_OUT;
 	cfg->ticclr = 3;

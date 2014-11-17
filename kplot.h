@@ -60,12 +60,12 @@ struct	kplotcfg {
 	void		(*yticlabelfmt)(double, char *, size_t);
 	double		  ylabelpad;
 	double		  xlabelpad;
-#define	LABEL_LEFT	  0x01
-#define	LABEL_RIGHT	  0x02
-#define	LABEL_TOP	  0x04
-#define	LABEL_BOTTOM	  0x08
-	unsigned int	  label; /* labels to draw */
-	size_t		  labelclr; /* label colour index */
+#define	TICLABEL_LEFT	  0x01
+#define	TICLABEL_RIGHT	  0x02
+#define	TICLABEL_TOP	  0x04
+#define	TICLABEL_BOTTOM	  0x08
+	unsigned int	  ticlabel; /* labels to draw */
+	size_t		  ticlabelclr; /* label colour index */
 #define	COLOURS_MAX	  10
 	struct kplotclr	  clrs[COLOURS_MAX]; 
 	size_t		  clrsz; 

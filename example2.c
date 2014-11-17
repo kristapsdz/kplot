@@ -41,7 +41,7 @@ main(int argc, char *argv[])
 	}
 
 	kplotcfg_defaults(&cfg);
-	cfg.label &= ~LABEL_BOTTOM;
+	cfg.ticlabel &= ~TICLABEL_BOTTOM;
 	cfg.marginsz = 0.0;
 	cfg.xlabelpad = cfg.ylabelpad = 10.0;
 	cfg.xticlabelrot = M_PI_4;

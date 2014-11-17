@@ -17,7 +17,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 	double		maxh, maxw, offs, lastx, lasty, firsty;
 	struct kplotclr	clr;
 
-	kplotctx_colour(ctx, ctx->cfg.labelclr, &clr);
+	kplotctx_colour(ctx, ctx->cfg.ticlabelclr, &clr);
 	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
 	cairo_set_line_width(ctx->cr, ctx->cfg.bordersz);
 	maxh = maxw = lastx = lasty = firsty = 0.0;
@@ -50,7 +50,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 		 * Important: if we're on the last x-axis value, then
 		 * save the width, because we'll check that the
 		 * right-hand buffer zone accomodates for it.
-		 * FIXME: only do this is LABEL_TOP, etc...
+		 * FIXME: only do this is TICLABEL_TOP, etc...
 		 */
 		if (i == ctx->cfg.xtics - 1 && ctx->cfg.xticlabelrot > 0.0)
 			lastx = e.width * cos
@@ -98,7 +98,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 			maxw = e.width;
 	}
 	
-	if (LABEL_LEFT & ctx->cfg.label) {
+	if (TICLABEL_LEFT & ctx->cfg.ticlabel) {
 		ctx->offs.x += maxw + ctx->cfg.ylabelpad;
 		ctx->dims.x -= maxw + ctx->cfg.ylabelpad; 
 	}
@@ -108,7 +108,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 	 * Also check if our overflow for the horizontal axes into the
 	 * right buffer zone exists.
 	 */
-	if (LABEL_RIGHT & ctx->cfg.label) {
+	if (TICLABEL_RIGHT & ctx->cfg.ticlabel) {
 		if (maxw + ctx->cfg.ylabelpad > lastx)
 			ctx->dims.x -= maxw + ctx->cfg.ylabelpad;
 		else
@@ -117,10 +117,10 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 		ctx->dims.x -= lastx;
 
 	/*
-	 * Like with LABEL_RIGHT, we accomodate for the topmost vertical
+	 * Like with TICLABEL_RIGHT, we accomodate for the topmost vertical
 	 * axes bleeding into the horizontal axis area above.
 	 */
-	if (LABEL_TOP & ctx->cfg.label) {
+	if (TICLABEL_TOP & ctx->cfg.ticlabel) {
 		if (maxh + ctx->cfg.xlabelpad > lasty) {
 			ctx->offs.y += maxh + ctx->cfg.xlabelpad;
 			ctx->dims.y -= maxh + ctx->cfg.xlabelpad;
@@ -133,7 +133,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 		ctx->dims.y -= lasty;
 	}
 
-	if (LABEL_BOTTOM & ctx->cfg.label) {
+	if (TICLABEL_BOTTOM & ctx->cfg.ticlabel) {
 		if (maxh + ctx->cfg.xlabelpad > firsty)
 			ctx->dims.y -= maxh + ctx->cfg.xlabelpad;
 		else
@@ -157,7 +157,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 
 		cairo_text_extents(ctx->cr, buf, &e);
 
-		if (LABEL_BOTTOM & ctx->cfg.label) {
+		if (TICLABEL_BOTTOM & ctx->cfg.ticlabel) {
 			if (ctx->cfg.xticlabelrot > 0.0) {
 				cairo_move_to(ctx->cr, 
 					ctx->offs.x + 
@@ -181,7 +181,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 				cairo_restore(ctx->cr);
 		}
 
-		if (LABEL_TOP & ctx->cfg.label) {
+		if (TICLABEL_TOP & ctx->cfg.ticlabel) {
 			cairo_move_to(ctx->cr, 
 				ctx->offs.x + offs * ctx->dims.x -
 				(e.width / 2.0), 
@@ -206,7 +206,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 
 		cairo_text_extents(ctx->cr, buf, &e);
 
-		if (LABEL_LEFT & ctx->cfg.label) {
+		if (TICLABEL_LEFT & ctx->cfg.ticlabel) {
 			cairo_move_to(ctx->cr, 
 				ctx->offs.x - e.width - 
 				ctx->cfg.ylabelpad,
@@ -215,7 +215,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 				(e.height / 2.0));
 			cairo_show_text(ctx->cr, buf);
 		}
-		if (LABEL_RIGHT & ctx->cfg.label) {
+		if (TICLABEL_RIGHT & ctx->cfg.ticlabel) {
 			cairo_move_to(ctx->cr, 
 				ctx->offs.x + ctx->dims.x + 
 				ctx->cfg.ylabelpad,
