@@ -172,10 +172,10 @@ kplot_draw(const struct kplot *p, double w,
 			ctx.cfg.ylabelpad = 0.0;
 		if (ctx.cfg.xlabelpad < 0.0)
 			ctx.cfg.xlabelpad = 0.0;
-		if (ctx.cfg.xrot < 0.0)
-			ctx.cfg.xrot = 0.0;
-		if (ctx.cfg.xrot > M_PI_2)
-			ctx.cfg.xrot = M_PI_2;
+		if (ctx.cfg.xticlabelrot < 0.0)
+			ctx.cfg.xticlabelrot = 0.0;
+		if (ctx.cfg.xticlabelrot > M_PI_2)
+			ctx.cfg.xticlabelrot = M_PI_2;
 		if (ctx.cfg.ticlen < 0.0)
 			ctx.cfg.ticlen = 0.0;
 		if (ctx.cfg.ticsz < 0.0)
@@ -195,7 +195,7 @@ kplot_draw(const struct kplot *p, double w,
 		ctx.minv.y = ctx.maxv.y = 0.0;
 
 	kplotctx_margin_init(&ctx);
-	kplotctx_label_init(&ctx);
+	kplotctx_ticlabel_init(&ctx);
 	kplotctx_border_init(&ctx);
 	kplotctx_tic_init(&ctx);
 

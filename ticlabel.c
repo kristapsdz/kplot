@@ -9,7 +9,7 @@
 #include "extern.h"
 
 void
-kplotctx_label_init(struct kplotctx *ctx)
+kplotctx_ticlabel_init(struct kplotctx *ctx)
 {
 	char		buf[128];
 	size_t		i;
@@ -34,12 +34,12 @@ kplotctx_label_init(struct kplotctx *ctx)
 			i / (double)(ctx->cfg.xtics - 1);
 
 		/* Call out to xformat function? */
-		if (NULL == ctx->cfg.xformat)
+		if (NULL == ctx->cfg.xticlabelfmt)
 			snprintf(buf, sizeof(buf), "%g", 
 				ctx->minv.x + offs *
 				(ctx->maxv.x - ctx->minv.x));
 		else
-			(*ctx->cfg.xformat)
+			(*ctx->cfg.xticlabelfmt)
 				(ctx->minv.x + offs *
 				 (ctx->maxv.x - ctx->minv.x),
 				 buf, sizeof(buf));
@@ -52,11 +52,11 @@ kplotctx_label_init(struct kplotctx *ctx)
 		 * right-hand buffer zone accomodates for it.
 		 * FIXME: only do this is LABEL_TOP, etc...
 		 */
-		if (i == ctx->cfg.xtics - 1 && ctx->cfg.xrot > 0.0)
+		if (i == ctx->cfg.xtics - 1 && ctx->cfg.xticlabelrot > 0.0)
 			lastx = e.width * cos
 				(M_PI * 2.0 - 
-				 (M_PI_2 - ctx->cfg.xrot)) +
-				e.height * sin((ctx->cfg.xrot));
+				 (M_PI_2 - ctx->cfg.xticlabelrot)) +
+				e.height * sin((ctx->cfg.xticlabelrot));
 		else if (i == ctx->cfg.xtics - 1)
 			lastx = e.width / 2.0;
 
@@ -64,10 +64,10 @@ kplotctx_label_init(struct kplotctx *ctx)
 		 * If we're rotating, get our height by computing the
 		 * sum of the vertical segments.
 		 */
-		if (ctx->cfg.xrot > 0.0)
-			e.height = e.width * sin(ctx->cfg.xrot) +
+		if (ctx->cfg.xticlabelrot > 0.0)
+			e.height = e.width * sin(ctx->cfg.xticlabelrot) +
 				e.height * cos(M_PI * 2.0 - 
-					(M_PI_2 - ctx->cfg.xrot));
+					(M_PI_2 - ctx->cfg.xticlabelrot));
 
 		if (e.height > maxh)
 			maxh = e.height;
@@ -77,12 +77,12 @@ kplotctx_label_init(struct kplotctx *ctx)
 		offs = 1 == ctx->cfg.ytics ? 0.5 : 
 			i / (double)(ctx->cfg.ytics - 1);
 
-		if (NULL == ctx->cfg.yformat)
+		if (NULL == ctx->cfg.yticlabelfmt)
 			snprintf(buf, sizeof(buf), "%g", 
 				ctx->minv.y + offs *
 				(ctx->maxv.y - ctx->minv.y));
 		else
-			(*ctx->cfg.yformat)
+			(*ctx->cfg.yticlabelfmt)
 				(ctx->minv.y + offs *
 				 (ctx->maxv.y - ctx->minv.y),
 				 buf, sizeof(buf));
@@ -145,12 +145,12 @@ kplotctx_label_init(struct kplotctx *ctx)
 		offs = 1 == ctx->cfg.xtics ? 0.5 : 
 			i / (double)(ctx->cfg.xtics - 1);
 
-		if (NULL == ctx->cfg.xformat)
+		if (NULL == ctx->cfg.xticlabelfmt)
 			snprintf(buf, sizeof(buf), "%g", 
 				ctx->minv.x + offs *
 				(ctx->maxv.x - ctx->minv.x));
 		else
-			(*ctx->cfg.xformat)
+			(*ctx->cfg.xticlabelfmt)
 				(ctx->minv.x + offs *
 				 (ctx->maxv.x - ctx->minv.x),
 				 buf, sizeof(buf));
@@ -158,17 +158,17 @@ kplotctx_label_init(struct kplotctx *ctx)
 		cairo_text_extents(ctx->cr, buf, &e);
 
 		if (LABEL_BOTTOM & ctx->cfg.label) {
-			if (ctx->cfg.xrot > 0.0) {
+			if (ctx->cfg.xticlabelrot > 0.0) {
 				cairo_move_to(ctx->cr, 
 					ctx->offs.x + 
 					offs * ctx->dims.x,
 					ctx->offs.y + ctx->dims.y + 
 					e.height * cos
 					 (M_PI * 2.0 - 
-					  (M_PI_2 - ctx->cfg.xrot)) +
+					  (M_PI_2 - ctx->cfg.xticlabelrot)) +
 					ctx->cfg.xlabelpad);
 				cairo_save(ctx->cr);
-				cairo_rotate(ctx->cr, ctx->cfg.xrot);
+				cairo_rotate(ctx->cr, ctx->cfg.xticlabelrot);
 			} else 
 				cairo_move_to(ctx->cr, 
 					ctx->offs.x + offs * ctx->dims.x -
@@ -177,7 +177,7 @@ kplotctx_label_init(struct kplotctx *ctx)
 					maxh + ctx->cfg.xlabelpad);
 
 			cairo_show_text(ctx->cr, buf);
-			if (ctx->cfg.xrot > 0.0)
+			if (ctx->cfg.xticlabelrot > 0.0)
 				cairo_restore(ctx->cr);
 		}
 
@@ -194,12 +194,12 @@ kplotctx_label_init(struct kplotctx *ctx)
 		offs = 1 == ctx->cfg.ytics ? 0.5 : 
 			i / (double)(ctx->cfg.ytics - 1);
 
-		if (NULL == ctx->cfg.yformat)
+		if (NULL == ctx->cfg.yticlabelfmt)
 			snprintf(buf, sizeof(buf), "%g", 
 				ctx->minv.y + offs *
 				(ctx->maxv.y - ctx->minv.y));
 		else
-			(*ctx->cfg.yformat)
+			(*ctx->cfg.yticlabelfmt)
 				(ctx->minv.y + offs *
 				 (ctx->maxv.y - ctx->minv.y),
 				 buf, sizeof(buf));

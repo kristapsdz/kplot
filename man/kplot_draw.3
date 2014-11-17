@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 13 2014 $
+.Dd $Mdocdate: November 16 2014 $
 .Dt KPLOT_DRAW 3
 .Os
 .Sh NAME
@@ -65,10 +65,10 @@ the plot area.
 .It Va xlabelpad
 See
 .Va xlabelpad .
-.It Va xrot
+.It Va xticlabelrot
 Rotation of horizontal (x-axis) labels (in radians) clamped to 90 degrees.
 Rotation is clockwise.
-.It Va xformat
+.It Va xticlabelfmt
 This function may be user-defined for formatting the horizontal x-axis
 label as a UTF-8 string limited to 128 bytes (including nil terminator).
 It accepts three arguments: the value to format, the string buffer in
@@ -78,9 +78,9 @@ The default is to use
 with the
 .Li %g
 format string.
-.It Va yformat
+.It Va yticlabelfmt
 See
-.Va xformat .
+.Va xticlabelfmt .
 .It Va border
 Bitfield of which borders to draw:
 .Dv BORDER_LEFT ,

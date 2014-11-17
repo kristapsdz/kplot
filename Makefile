@@ -2,16 +2,18 @@ CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
 CPPFLAGS	= -I/usr/X11/include/cairo
 LDFLAGS		= -L/usr/X11/lib
 LDADD		= -lcairo
-OBJS		= kplot.o \
-		  kdata.o \
-		  reallocarray.o \
-		  label.o \
+OBJS		= array.o \
+		  axislabel.o \
 		  border.o \
-		  margin.o \
+		  bucket.o \
 		  draw.o \
-		  tic.o \
 		  hist.o \
-		  array.o \
+		  kdata.o \
+		  kplot.o \
+		  margin.o \
+		  reallocarray.o \
+		  tic.o \
+		  ticlabel.o \
 		  vector.o
 PREFIX		= /usr/local
 MANS		= man/kdata_array_alloc.3 \

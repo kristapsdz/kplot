@@ -7,6 +7,12 @@ struct	kdatahist {
 };
 
 struct	kdataarray {
+	/* Empty. */
+};
+
+struct	kdatabucket {
+	size_t		 rmin;
+	size_t		 rmax;
 };
 
 struct	kdatavector {
@@ -16,7 +22,8 @@ struct	kdatavector {
 enum	kdatatype {
 	KDATA_HIST,
 	KDATA_ARRAY,
-	KDATA_VECTOR
+	KDATA_VECTOR,
+	KDATA_BUCKET
 };
 
 struct	kdata {
@@ -29,6 +36,7 @@ struct	kdata {
 		struct kdatahist	hist;
 		struct kdataarray	array;
 		struct kdatavector	vector;
+		struct kdatabucket	bucket;
 	} d;
 };
 
@@ -66,7 +74,8 @@ __BEGIN_DECLS
 
 void	 kplotctx_colour(struct kplotctx *, size_t, struct kplotclr *);
 
-void	 kplotctx_label_init(struct kplotctx *);
+void	 kplotctx_axislabel_init(struct kplotctx *);
+void	 kplotctx_ticlabel_init(struct kplotctx *);
 void	 kplotctx_border_init(struct kplotctx *);
 void	 kplotctx_margin_init(struct kplotctx *);
 void	 kplotctx_tic_init(struct kplotctx *);

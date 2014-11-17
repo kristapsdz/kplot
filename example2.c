@@ -44,8 +44,8 @@ main(int argc, char *argv[])
 	cfg.label &= ~LABEL_BOTTOM;
 	cfg.marginsz = 0.0;
 	cfg.xlabelpad = cfg.ylabelpad = 10.0;
-	cfg.xrot = M_PI_4;
-	cfg.xformat = format;
+	cfg.xticlabelrot = M_PI_4;
+	cfg.xticlabelfmt = format;
 
 	if (NULL == (d1 = kdata_array_alloc(points1, 10))) {
 		perror(NULL);

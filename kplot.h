@@ -51,15 +51,15 @@ struct	kplotcfg {
 #define	BORDER_TOP	  0x04
 #define	BORDER_BOTTOM	  0x08
 #define	BORDER_ALL	  0xf
-	unsigned int	  border; /* borders to draw */
-	size_t		  borderclr; /* border colour index */
-	size_t		  xtics; /* number of labels on x-axis */
-	size_t		  ytics; /* number of labels on y-axis */
-	double		  xrot; /* x-axis rotation */
-	void		(*xformat)(double, char *, size_t);
-	void		(*yformat)(double, char *, size_t);
-	double		  ylabelpad; /* label padding */
-	double		  xlabelpad; /* label padding */
+	unsigned int	  border;
+	size_t		  borderclr;
+	size_t		  xtics;
+	size_t		  ytics;
+	double		  xticlabelrot;
+	void		(*xticlabelfmt)(double, char *, size_t);
+	void		(*yticlabelfmt)(double, char *, size_t);
+	double		  ylabelpad;
+	double		  xlabelpad;
 #define	LABEL_LEFT	  0x01
 #define	LABEL_RIGHT	  0x02
 #define	LABEL_TOP	  0x04
@@ -84,6 +84,9 @@ struct	kplotcfg {
 };
 
 __BEGIN_DECLS
+
+struct kdata	*kdata_bucket_alloc(size_t, size_t);
+int		 kdata_bucket_increment(struct kdata *, size_t);
 
 struct kdata	*kdata_hist_alloc(double, double, size_t);
 int		 kdata_hist_increment(struct kdata *, double);

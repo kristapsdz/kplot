@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <cairo.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -53,13 +54,13 @@ kdata_hist_increment(struct kdata *d, double v)
 		(d->d.hist.rmax - d->d.hist.rmin);
 
 	assert(frac >= 0.0 && frac < 1.0);
-	bucket = (size_t)(d->pairsz * frac);
+	bucket = d->pairsz * frac;
 
 	if (bucket == d->pairsz - 1) {
 		assert(d->pairs[bucket].x <= frac);
 	} else {
 		assert(d->pairs[bucket].x <= frac);
-		assert(d->pairs[bucket + 1].x > frac);
+		assert(d->pairs[bucket + 1].x >= frac);
 	}
 
 	d->pairs[bucket].y++;
