@@ -7,6 +7,7 @@ OBJS		= array.o \
 		  border.o \
 		  bucket.o \
 		  draw.o \
+		  grid.o \
 		  hist.o \
 		  kdata.o \
 		  kplot.o \
