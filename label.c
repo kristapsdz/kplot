@@ -24,30 +24,29 @@
 #include "compat.h"
 #include "extern.h"
 
-#if 0
-	cairo_text_extents(ctx->cr, xaxislabel, &e);
-	h = abs(e.width * sin(xaxislabelrot)) + abs(e.height * cos(xaxislabelrot));
-	w = abs(e.width * cos(xaxislabelrot)) + abs(e.height * sin(xaxislabelrot));
-#endif
-
 static void
-kplotctx_axisfont_init(struct kplotctx *ctx)
+bbox_extents(struct kplotctx *ctx, const char *v, 
+	double *h, double *w, double rot)
 {
-	struct kplotclr	 clr;
+	cairo_text_extents_t e;
 
-	kplotctx_colour(ctx, ctx->cfg.axislabelclr, &clr);
-	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
-	cairo_set_font_size(ctx->cr, ctx->cfg.axislabelsz);
+	cairo_text_extents(ctx->cr, v, &e);
+	*h = abs(e.width * sin(rot)) + abs(e.height * cos(rot));
+	*w = abs(e.width * cos(rot)) + abs(e.height * sin(rot));
 }
 
 static void
-kplotctx_ticfont_init(struct kplotctx *ctx)
+kplotctx_font_init(struct kplotctx *ctx, const struct kplotfont *font)
 {
 	struct kplotclr	 clr;
 
-	kplotctx_colour(ctx, ctx->cfg.ticlabelclr, &clr);
+	kplotctx_colour(ctx, font->clr, &clr);
+	cairo_select_font_face
+		(ctx->cr, font->family,
+		 font->slant,
+		 font->weight);
 	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
-	cairo_set_font_size(ctx->cr, ctx->cfg.ticlabelsz);
+	cairo_set_font_size(ctx->cr, font->sz);
 }
 
 void
@@ -56,7 +55,8 @@ kplotctx_label_init(struct kplotctx *ctx)
 	char		buf[128];
 	size_t		i;
 	cairo_text_extents_t e;
-	double		maxh, maxw, offs, lastx, lasty, firsty;
+	double		maxh, maxw, offs, lastx, 
+			lasty, firsty, w, h;
 
 	maxh = maxw = lastx = lasty = firsty = 0.0;
 
@@ -65,7 +65,7 @@ kplotctx_label_init(struct kplotctx *ctx)
 	 * the vertical (left or right) or horizontal (top or bottom)
 	 * tic labels.
 	 */
-	kplotctx_ticfont_init(ctx);
+	kplotctx_font_init(ctx, &ctx->cfg.ticlabelfont);
 
 	for (i = 0; i < ctx->cfg.xtics; i++) {
 		offs = 1 == ctx->cfg.xtics ? 0.5 : 
@@ -147,17 +147,19 @@ kplotctx_label_init(struct kplotctx *ctx)
 	 * These sit to the bottom and left of the plot and its tic
 	 * labels.
 	 */
-	kplotctx_axisfont_init(ctx);
+	kplotctx_font_init(ctx, &ctx->cfg.axislabelfont);
 
 	if (NULL != ctx->cfg.xaxislabel) {
-		cairo_text_extents(ctx->cr, ctx->cfg.xaxislabel, &e);
-		ctx->dims.y -= e.height + ctx->cfg.xaxislabelpad;
+		bbox_extents(ctx, ctx->cfg.xaxislabel, 
+			&h, &w, ctx->cfg.xaxislabelrot);
+		ctx->dims.y -= h + ctx->cfg.xaxislabelpad;
 	}
 
 	if (NULL != ctx->cfg.yaxislabel) {
-		cairo_text_extents(ctx->cr, ctx->cfg.yaxislabel, &e);
-		ctx->offs.x += e.width + ctx->cfg.yaxislabelpad;
-		ctx->dims.x -= e.width + ctx->cfg.yaxislabelpad;
+		bbox_extents(ctx, ctx->cfg.yaxislabel, 
+			&h, &w, ctx->cfg.yaxislabelrot);
+		ctx->offs.x += w + ctx->cfg.yaxislabelpad;
+		ctx->dims.x -= w + ctx->cfg.yaxislabelpad;
 	}
 
 
@@ -210,7 +212,7 @@ kplotctx_label_init(struct kplotctx *ctx)
 	 * now that we know what the plot dimensions are going to be.
 	 * Start with the x-axis.
 	 */
-	kplotctx_ticfont_init(ctx);
+	kplotctx_font_init(ctx, &ctx->cfg.ticlabelfont);
 
 	for (i = 0; i < ctx->cfg.xtics; i++) {
 		offs = 1 == ctx->cfg.xtics ? 0.5 : 
@@ -303,25 +305,41 @@ kplotctx_label_init(struct kplotctx *ctx)
 	 * These go after everything else has been computed, as we can
 	 * just set them given the margin offset.
 	 */
-	kplotctx_axisfont_init(ctx);
+	kplotctx_font_init(ctx, &ctx->cfg.axislabelfont);
 
 	if (NULL != ctx->cfg.xaxislabel) {
+		bbox_extents(ctx, ctx->cfg.xaxislabel, 
+			&h, &w, ctx->cfg.xaxislabelrot);
+		cairo_save(ctx->cr);
+		cairo_translate(ctx->cr, 
+			ctx->offs.x + ctx->dims.x / 2.0,
+			(MARGIN_BOTTOM & ctx->cfg.margin ? 
+			ctx->h - ctx->cfg.marginsz : ctx->h) - h / 2.0);
+		cairo_rotate(ctx->cr, ctx->cfg.xaxislabelrot);
 		cairo_text_extents(ctx->cr, ctx->cfg.xaxislabel, &e);
-		cairo_move_to(ctx->cr, 
-			ctx->offs.x + ctx->dims.x / 
-			2.0 - e.width / 2.0, 
-			MARGIN_BOTTOM & ctx->cfg.margin ? 
-			ctx->h - ctx->cfg.marginsz : ctx->h);
+		w = -e.width / 2.0;
+		h = e.height / 2.0;
+		cairo_translate(ctx->cr, w, h);
+		cairo_move_to(ctx->cr, 0.0, 0.0);
 		cairo_show_text(ctx->cr, ctx->cfg.xaxislabel);
+		cairo_restore(ctx->cr);
 	}
 
 	if (NULL != ctx->cfg.yaxislabel) {
+		bbox_extents(ctx, ctx->cfg.yaxislabel, 
+			&h, &w, ctx->cfg.yaxislabelrot);
+		cairo_save(ctx->cr);
+		cairo_translate(ctx->cr, 
+			(MARGIN_LEFT & ctx->cfg.margin ? 
+			 ctx->cfg.marginsz : 0.0) + w / 2.0,
+			ctx->offs.y + ctx->dims.y / 2.0);
+		cairo_rotate(ctx->cr, ctx->cfg.yaxislabelrot);
 		cairo_text_extents(ctx->cr, ctx->cfg.yaxislabel, &e);
-		cairo_move_to(ctx->cr, 
-			MARGIN_LEFT & ctx->cfg.margin ? 
-			ctx->cfg.marginsz : 0.0,
-			ctx->offs.y + ctx->dims.y / 
-			2.0 + e.height / 2.0);
+		w = -e.width / 2.0;
+		h = e.height / 2.0;
+		cairo_translate(ctx->cr, w, h);
+		cairo_move_to(ctx->cr, 0.0, 0.0);
 		cairo_show_text(ctx->cr, ctx->cfg.yaxislabel);
+		cairo_restore(ctx->cr);
 	}
 }

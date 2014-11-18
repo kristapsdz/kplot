@@ -51,6 +51,14 @@ struct	kplotclr {
 	double		 a; /* [0,1] */
 };
 
+struct 	kplotfont {
+	cairo_font_slant_t   slant;
+	cairo_font_weight_t  weight;
+	const char	    *family;
+	double		     sz;
+	size_t		     clr;
+};
+
 struct	kplotcfg {
 	double		  marginsz; /* margin dimensions */
 #define	MARGIN_LEFT	  0x01
@@ -79,8 +87,7 @@ struct	kplotcfg {
 #define	TICLABEL_TOP	  0x04
 #define	TICLABEL_BOTTOM	  0x08
 	unsigned int	  ticlabel; /* labels to draw */
-	size_t		  ticlabelclr; /* label colour index */
-	double		  ticlabelsz;
+	struct kplotfont  ticlabelfont;
 #define	COLOURS_MAX	  10
 	struct kplotclr	  clrs[COLOURS_MAX]; 
 	size_t		  clrsz; 
@@ -106,8 +113,9 @@ struct	kplotcfg {
 	double		  yaxislabelpad;
 	const char	 *xaxislabel;
 	const char	 *yaxislabel;
-	size_t		  axislabelclr;
-	double		  axislabelsz;
+	struct kplotfont  axislabelfont;
+	double		  xaxislabelrot;
+	double		  yaxislabelrot;
 };
 
 __BEGIN_DECLS

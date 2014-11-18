@@ -58,10 +58,13 @@ main(int argc, char *argv[])
 
 	kplotcfg_defaults(&cfg);
 	cfg.xticlabelpad = cfg.yticlabelpad = 10.0;
+	cfg.margin = 0;
 	cfg.xticlabelrot = M_PI_4;
 	cfg.xticlabelfmt = format;
-	cfg.xaxislabel = "x";
-	cfg.yaxislabel = "y";
+	cfg.xaxislabel = "xxxx";
+	cfg.xaxislabelrot = M_PI_2;
+	cfg.yaxislabel = "yyyy";
+	cfg.yaxislabelrot = M_PI_2 * 3.0;
 
 	if (NULL == (d1 = kdata_array_alloc(points1, 10))) {
 		perror(NULL);

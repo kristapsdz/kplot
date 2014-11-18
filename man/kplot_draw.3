@@ -56,10 +56,8 @@ Bitfield of which labels to draw:
 .Dv TICLABEL_TOP ,
 or
 .Dv TICLABEL_BOTTOM.
-.It Va ticlabelclr
-The colour index of the tic label text.
-.It Va ticlabelsz
-The font size of the tic label text.
+.It Va ticlabelfont
+All font characteristics of the tic labels.
 .It Va xticlabelpad
 Space between horizontal (x-axis) tic labels and the plot area.
 Specifically, between the edge of the longest label along any face and
@@ -144,19 +142,21 @@ call, and is thrown away afterward.
 .It Va yaxislabel
 See
 .Va xaxislabel .
+.It Va xaxislabelrot
+The clockwise rotation of the x-axis label.
+Note that this will turn around its centre, so no matter the rotation,
+it will be correctly buffered on both sides.
+.It Va yaxislabelrot
+See
+.Va xaxislabelrot .
 .It Va xaxislabelpad
 The padding between the top of the x-axis label and the bottom of the
 x-axis tics (if specified).
 .It Va yaxislabelpad
 See
 .Va xaxislabelpad .
-.It Va axislabelclr
-The colour index for
-.Va xaxislabel
-and
-.Va yaxislabel .
-.It Va axislabelsz
-The font size of the
+.It Va axislabelfont
+All font characteristics for the
 .Va xaxislabel
 and
 .Va yaxislabel .

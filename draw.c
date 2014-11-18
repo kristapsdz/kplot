@@ -141,6 +141,17 @@ kplotctx_draw_points(struct kplotctx *ctx, const struct kplotdat *d)
 }
 
 void
+kplotfont_defaults(struct kplotfont *font)
+{
+
+	font->family = "serif";
+	font->sz = 12.0;
+	font->slant = CAIRO_FONT_SLANT_NORMAL;
+	font->weight = CAIRO_FONT_WEIGHT_NORMAL;
+	font->clr = DEFCLR_BLACK;
+}
+
+void
 kplotcfg_defaults(struct kplotcfg *cfg)
 {
 
@@ -165,7 +176,6 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	cfg->clrs[DEFCLR_GREY].g = 0.8;
 	cfg->clrs[DEFCLR_GREY].b = 0.8;
 	cfg->clrs[DEFCLR_GREY].a = 1.0;
-	cfg->ticlabelclr = DEFCLR_BLACK;
 	cfg->borderclr = DEFCLR_GREY;
 	cfg->tic = TIC_LEFT_OUT | TIC_BOTTOM_OUT;
 	cfg->ticclr = DEFCLR_BLACK;
@@ -174,8 +184,8 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	cfg->gridclr = DEFCLR_GREY;
 	cfg->gridsz = 1.0;
 	cfg->grid = GRID_ALL;
-	cfg->axislabelclr = cfg->ticlabelclr = DEFCLR_BLACK;
-	cfg->axislabelsz = cfg->ticlabelsz = 12.0;
+	kplotfont_defaults(&cfg->axislabelfont);
+	kplotfont_defaults(&cfg->ticlabelfont);
 }
 
 void
