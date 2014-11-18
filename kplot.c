@@ -75,3 +75,29 @@ kplotctx_colour(struct kplotctx *ctx, size_t idx, struct kplotclr *res)
 	} else
 		*res = ctx->cfg.clrs[idx % ctx->cfg.clrsz];
 }
+
+/*
+ * Quick-ish test to see if we're an integer.
+ */
+static inline int 
+border_integer(double n)
+{
+
+	return(n - floor(n) < DBL_EPSILON);
+}
+
+/*
+ * Given a plotting context and a position for drawing a line, determine
+ * whether we want to "fix" the line so that it's fine.
+ * This is a foible of Cairo and drawing with doubles.
+ */
+double
+kplotctx_line_fix(const struct kplotctx *ctx, double pos)
+{
+	double	 v;
+
+	if (0 == (int)ctx->cfg.bordersz % 2)
+		return(pos);
+	v = pos - floor(pos);
+	return(v < DBL_EPSILON ? pos + 0.5 : pos - v + 0.5);
+}

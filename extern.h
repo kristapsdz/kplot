@@ -80,6 +80,8 @@ void	 kplotctx_border_init(struct kplotctx *);
 void	 kplotctx_margin_init(struct kplotctx *);
 void	 kplotctx_tic_init(struct kplotctx *);
 
+double	 kplotctx_line_fix(const struct kplotctx *, double);
+
 __END_DECLS
 
 #endif
