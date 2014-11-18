@@ -174,6 +174,8 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	cfg->gridclr = DEFCLR_GREY;
 	cfg->gridsz = 1.0;
 	cfg->grid = GRID_ALL;
+	cfg->axislabelclr = cfg->ticlabelclr = DEFCLR_BLACK;
+	cfg->axislabelsz = cfg->ticlabelsz = 12.0;
 }
 
 void

@@ -80,6 +80,7 @@ struct	kplotcfg {
 #define	TICLABEL_BOTTOM	  0x08
 	unsigned int	  ticlabel; /* labels to draw */
 	size_t		  ticlabelclr; /* label colour index */
+	double		  ticlabelsz;
 #define	COLOURS_MAX	  10
 	struct kplotclr	  clrs[COLOURS_MAX]; 
 	size_t		  clrsz; 
@@ -105,6 +106,8 @@ struct	kplotcfg {
 	double		  yaxislabelpad;
 	const char	 *xaxislabel;
 	const char	 *yaxislabel;
+	size_t		  axislabelclr;
+	double		  axislabelsz;
 };
 
 __BEGIN_DECLS

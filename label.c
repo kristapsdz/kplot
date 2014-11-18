@@ -30,6 +30,26 @@
 	w = abs(e.width * cos(xaxislabelrot)) + abs(e.height * sin(xaxislabelrot));
 #endif
 
+static void
+kplotctx_axisfont_init(struct kplotctx *ctx)
+{
+	struct kplotclr	 clr;
+
+	kplotctx_colour(ctx, ctx->cfg.axislabelclr, &clr);
+	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
+	cairo_set_font_size(ctx->cr, ctx->cfg.axislabelsz);
+}
+
+static void
+kplotctx_ticfont_init(struct kplotctx *ctx)
+{
+	struct kplotclr	 clr;
+
+	kplotctx_colour(ctx, ctx->cfg.ticlabelclr, &clr);
+	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
+	cairo_set_font_size(ctx->cr, ctx->cfg.ticlabelsz);
+}
+
 void
 kplotctx_label_init(struct kplotctx *ctx)
 {
@@ -37,25 +57,21 @@ kplotctx_label_init(struct kplotctx *ctx)
 	size_t		i;
 	cairo_text_extents_t e;
 	double		maxh, maxw, offs, lastx, lasty, firsty;
-	struct kplotclr	clr;
 
-	kplotctx_colour(ctx, ctx->cfg.ticlabelclr, &clr);
-	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
-	cairo_set_line_width(ctx->cr, ctx->cfg.bordersz);
 	maxh = maxw = lastx = lasty = firsty = 0.0;
 
 	/*
 	 * First, acquire the maximum space that will be required for
 	 * the vertical (left or right) or horizontal (top or bottom)
-	 * labels.
-	 * If we're rotating, make sure that we accomodate for the
-	 * maximum rotated box.
+	 * tic labels.
 	 */
+	kplotctx_ticfont_init(ctx);
+
 	for (i = 0; i < ctx->cfg.xtics; i++) {
 		offs = 1 == ctx->cfg.xtics ? 0.5 : 
 			i / (double)(ctx->cfg.xtics - 1);
 
-		/* Call out to xformat function? */
+		/* Call out to xformat function. */
 		if (NULL == ctx->cfg.xticlabelfmt)
 			snprintf(buf, sizeof(buf), "%g", 
 				ctx->minv.x + offs *
@@ -95,6 +111,7 @@ kplotctx_label_init(struct kplotctx *ctx)
 			maxh = e.height;
 	}
 
+	/* Now for the y-axis... */
 	for (i = 0; i < ctx->cfg.ytics; i++) {
 		offs = 1 == ctx->cfg.ytics ? 0.5 : 
 			i / (double)(ctx->cfg.ytics - 1);
@@ -111,6 +128,11 @@ kplotctx_label_init(struct kplotctx *ctx)
 
 		cairo_text_extents(ctx->cr, buf, &e);
 
+		/*
+		 * If we're the first or last tic label, record our
+		 * height so that the plot is buffered and our label
+		 * isn't cut off if there are no margins.
+		 */
 		if (i == 0)
 			firsty = e.height / 2.0;
 		if (i == ctx->cfg.ytics - 1)
@@ -119,6 +141,13 @@ kplotctx_label_init(struct kplotctx *ctx)
 		if (e.width > maxw)
 			maxw = e.width;
 	}
+
+	/*
+	 * Take into account the axis labels.
+	 * These sit to the bottom and left of the plot and its tic
+	 * labels.
+	 */
+	kplotctx_axisfont_init(ctx);
 
 	if (NULL != ctx->cfg.xaxislabel) {
 		cairo_text_extents(ctx->cr, ctx->cfg.xaxislabel, &e);
@@ -138,7 +167,8 @@ kplotctx_label_init(struct kplotctx *ctx)
 	}
 
 	/* 
-	 * Accomodate for the right label.
+	 * Now look at the tic labels.
+	 * Start with the right label.
 	 * Also check if our overflow for the horizontal axes into the
 	 * right buffer zone exists.
 	 */
@@ -174,6 +204,13 @@ kplotctx_label_init(struct kplotctx *ctx)
 			ctx->dims.y -= firsty;
 	} else if (firsty > 0.0)
 		ctx->dims.y -= firsty;
+
+	/*
+	 * Now we actually want to draw the tic labels below the plot,
+	 * now that we know what the plot dimensions are going to be.
+	 * Start with the x-axis.
+	 */
+	kplotctx_ticfont_init(ctx);
 
 	for (i = 0; i < ctx->cfg.xtics; i++) {
 		offs = 1 == ctx->cfg.xtics ? 0.5 : 
@@ -224,6 +261,7 @@ kplotctx_label_init(struct kplotctx *ctx)
 		}
 	}
 
+	/* Now move on to the y-axis... */
 	for (i = 0; i < ctx->cfg.ytics; i++) {
 		offs = 1 == ctx->cfg.ytics ? 0.5 : 
 			i / (double)(ctx->cfg.ytics - 1);
@@ -260,20 +298,30 @@ kplotctx_label_init(struct kplotctx *ctx)
 		}
 	}
 
+	/*
+	 * Now show the axis labels.
+	 * These go after everything else has been computed, as we can
+	 * just set them given the margin offset.
+	 */
+	kplotctx_axisfont_init(ctx);
+
 	if (NULL != ctx->cfg.xaxislabel) {
 		cairo_text_extents(ctx->cr, ctx->cfg.xaxislabel, &e);
 		cairo_move_to(ctx->cr, 
-			ctx->offs.x + ctx->dims.x / 2.0 - e.width / 2.0, 
-			MARGIN_BOTTOM & ctx->cfg.margin ? ctx->h - ctx->cfg.marginsz : ctx->h);
+			ctx->offs.x + ctx->dims.x / 
+			2.0 - e.width / 2.0, 
+			MARGIN_BOTTOM & ctx->cfg.margin ? 
+			ctx->h - ctx->cfg.marginsz : ctx->h);
 		cairo_show_text(ctx->cr, ctx->cfg.xaxislabel);
 	}
 
 	if (NULL != ctx->cfg.yaxislabel) {
 		cairo_text_extents(ctx->cr, ctx->cfg.yaxislabel, &e);
 		cairo_move_to(ctx->cr, 
-			MARGIN_LEFT & ctx->cfg.margin ? ctx->cfg.marginsz : 0.0,
-			ctx->offs.y + ctx->dims.y / 2.0 + e.height / 2.0);
+			MARGIN_LEFT & ctx->cfg.margin ? 
+			ctx->cfg.marginsz : 0.0,
+			ctx->offs.y + ctx->dims.y / 
+			2.0 + e.height / 2.0);
 		cairo_show_text(ctx->cr, ctx->cfg.yaxislabel);
 	}
-
 }
