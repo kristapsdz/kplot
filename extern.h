@@ -90,12 +90,11 @@ __BEGIN_DECLS
 
 void	 kplotctx_colour(struct kplotctx *, size_t, struct kplotclr *);
 
-void	 kplotctx_axislabel_init(struct kplotctx *);
 void	 kplotctx_border_init(struct kplotctx *);
 void	 kplotctx_grid_init(struct kplotctx *);
 void	 kplotctx_margin_init(struct kplotctx *);
 void	 kplotctx_tic_init(struct kplotctx *);
-void	 kplotctx_ticlabel_init(struct kplotctx *);
+void	 kplotctx_label_init(struct kplotctx *);
 
 double	 kplotctx_line_fix(const struct kplotctx *, double);
 

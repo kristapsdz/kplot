@@ -152,6 +152,7 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	cfg->margin = MARGIN_ALL;
 	cfg->marginsz = 10.0;
 	cfg->xticlabelpad = cfg->yticlabelpad = 10.0;
+	cfg->xaxislabelpad = cfg->yaxislabelpad = 10.0;
 	cfg->clrsz = DEFCLR__MAX;
 	cfg->clrs[DEFCLR_RED].r = 1.0;
 	cfg->clrs[DEFCLR_RED].a = 1.0;
@@ -212,6 +213,10 @@ kplot_draw(const struct kplot *p, double w,
 			ctx.cfg.ticsz = 0.0;
 		if (ctx.cfg.gridsz < 0.0)
 			ctx.cfg.gridsz = 0.0;
+		if (ctx.cfg.xaxislabelpad < 0.0)
+			ctx.cfg.xaxislabelpad = 0.0;
+		if (ctx.cfg.yaxislabelpad < 0.0)
+			ctx.cfg.yaxislabelpad = 0.0;
 	}
 
 	for (i = 0; i < p->datasz; i++) 
@@ -227,8 +232,7 @@ kplot_draw(const struct kplot *p, double w,
 		ctx.minv.y = ctx.maxv.y = 0.0;
 
 	kplotctx_margin_init(&ctx);
-	kplotctx_axislabel_init(&ctx);
-	kplotctx_ticlabel_init(&ctx);
+	kplotctx_label_init(&ctx);
 	kplotctx_border_init(&ctx);
 	kplotctx_grid_init(&ctx);
 	kplotctx_tic_init(&ctx);

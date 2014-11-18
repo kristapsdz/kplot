@@ -101,6 +101,10 @@ struct	kplotcfg {
 	unsigned int 	  grid;
 	size_t	 	  gridclr;
 	double	 	  gridsz;
+	double		  xaxislabelpad;
+	double		  yaxislabelpad;
+	const char	 *xaxislabel;
+	const char	 *yaxislabel;
 };
 
 __BEGIN_DECLS

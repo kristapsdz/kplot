@@ -3,18 +3,17 @@ CPPFLAGS	= -I/usr/X11/include/cairo
 LDFLAGS		= -L/usr/X11/lib
 LDADD		= -lcairo
 OBJS		= array.o \
-		  axislabel.o \
 		  border.o \
 		  bucket.o \
 		  draw.o \
 		  grid.o \
 		  hist.o \
+		  label.o \
 		  kdata.o \
 		  kplot.o \
 		  margin.o \
 		  reallocarray.o \
 		  tic.o \
-		  ticlabel.o \
 		  vector.o
 PREFIX		= /usr/local
 MANS		= man/kdata_array_alloc.3 \

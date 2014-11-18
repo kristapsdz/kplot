@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 16 2014 $
+.Dd $Mdocdate: November 18 2014 $
 .Dt KPLOT 3
 .Os
 .Sh NAME
@@ -66,9 +66,10 @@ Moreover, tics, if facing inward, will also (and obviously) be part of
 the plot area.
 .Pp
 The buffer zone consists of the other half of borders, outward-facing
-tics, axis labels, and the margin.
+tics, tic labels, axis labels, and the margin.
 The vertical (left and right) margins define the space between the
-left-most (or right-most) vertical axis label point and the image edge.
+left-most (or right-most) vertical axis label point and the image edge,
+or if labels have been specified, the same for those labels.
 Similarly, the horizontal margins define the space beyond the top-most
 (or bottom-most) horizontal axis label point.
 .Pp

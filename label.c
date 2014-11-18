@@ -24,8 +24,14 @@
 #include "compat.h"
 #include "extern.h"
 
+#if 0
+	cairo_text_extents(ctx->cr, xaxislabel, &e);
+	h = abs(e.width * sin(xaxislabelrot)) + abs(e.height * cos(xaxislabelrot));
+	w = abs(e.width * cos(xaxislabelrot)) + abs(e.height * sin(xaxislabelrot));
+#endif
+
 void
-kplotctx_ticlabel_init(struct kplotctx *ctx)
+kplotctx_label_init(struct kplotctx *ctx)
 {
 	char		buf[128];
 	size_t		i;
@@ -113,7 +119,19 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 		if (e.width > maxw)
 			maxw = e.width;
 	}
-	
+
+	if (NULL != ctx->cfg.xaxislabel) {
+		cairo_text_extents(ctx->cr, ctx->cfg.xaxislabel, &e);
+		ctx->dims.y -= e.height + ctx->cfg.xaxislabelpad;
+	}
+
+	if (NULL != ctx->cfg.yaxislabel) {
+		cairo_text_extents(ctx->cr, ctx->cfg.yaxislabel, &e);
+		ctx->offs.x += e.width + ctx->cfg.yaxislabelpad;
+		ctx->dims.x -= e.width + ctx->cfg.yaxislabelpad;
+	}
+
+
 	if (TICLABEL_LEFT & ctx->cfg.ticlabel) {
 		ctx->offs.x += maxw + ctx->cfg.yticlabelpad;
 		ctx->dims.x -= maxw + ctx->cfg.yticlabelpad; 
@@ -241,4 +259,21 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 			cairo_show_text(ctx->cr, buf);
 		}
 	}
+
+	if (NULL != ctx->cfg.xaxislabel) {
+		cairo_text_extents(ctx->cr, ctx->cfg.xaxislabel, &e);
+		cairo_move_to(ctx->cr, 
+			ctx->offs.x + ctx->dims.x / 2.0 - e.width / 2.0, 
+			MARGIN_BOTTOM & ctx->cfg.margin ? ctx->h - ctx->cfg.marginsz : ctx->h);
+		cairo_show_text(ctx->cr, ctx->cfg.xaxislabel);
+	}
+
+	if (NULL != ctx->cfg.yaxislabel) {
+		cairo_text_extents(ctx->cr, ctx->cfg.yaxislabel, &e);
+		cairo_move_to(ctx->cr, 
+			MARGIN_LEFT & ctx->cfg.margin ? ctx->cfg.marginsz : 0.0,
+			ctx->offs.y + ctx->dims.y / 2.0 + e.height / 2.0);
+		cairo_show_text(ctx->cr, ctx->cfg.yaxislabel);
+	}
+
 }
