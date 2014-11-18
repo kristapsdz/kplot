@@ -16,60 +16,43 @@
  */
 #include <assert.h>
 #include <cairo.h>
-#include <float.h>
-#include <inttypes.h>
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "kplot.h"
 #include "compat.h"
 #include "extern.h"
 
-int
-kdata_copy(const struct kdata *src, struct kdata *dst)
-{
-	void	*p;
-
-	dst->d = src->d;
-	dst->type = src->type;
-
-	if (src->pairsz > dst->pairbufsz) {
-		dst->pairbufsz = src->pairsz;
-		p = reallocarray(dst->pairs, dst->pairbufsz, sizeof(struct kpair));
-		if (NULL == p)
-			return(0);
-		dst->pairs = p;
-	}
-
-	dst->pairsz = src->pairsz;
-	memcpy(dst->pairs, src->pairs, dst->pairsz * sizeof(struct kpair));
-	return(1);
-}
-
 void
-kdata_destroy(struct kdata *d)
+kplotctx_grid_init(struct kplotctx *ctx)
 {
+	struct kplotclr	 clr;
+	double		 offs, v;
+	size_t		 i;
 
-	if (NULL == d)
-		return;
-	assert(d->refs > 0);
-	if (--d->refs > 0)
-		return;
+	kplotctx_colour(ctx, ctx->cfg.gridclr, &clr);
+	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
+	cairo_set_line_width(ctx->cr, ctx->cfg.gridsz);
 
-	free(d->pairs);
-	free(d);
-}
+	if (GRID_X & ctx->cfg.grid)
+		for (i = 0; i < ctx->cfg.xtics; i++) {
+			offs = 1 == ctx->cfg.xtics ? 0.5 : 
+				i / (double)(ctx->cfg.xtics - 1);
+			v = kplotctx_line_fix(ctx, 
+				ctx->offs.x + offs * ctx->dims.x);
+			cairo_move_to(ctx->cr, v, ctx->offs.y);
+			cairo_rel_line_to(ctx->cr, 0.0, ctx->dims.y);
+		}
 
-void
-kdatacfg_defaults(struct kdatacfg *cfg)
-{
+	if (GRID_Y & ctx->cfg.grid)
+		for (i = 0; i < ctx->cfg.ytics; i++) {
+			offs = 1 == ctx->cfg.ytics ? 0.5 : 
+				i / (double)(ctx->cfg.ytics - 1);
+			v = kplotctx_line_fix(ctx, 
+				ctx->offs.y + offs * ctx->dims.y);
+			cairo_move_to(ctx->cr, ctx->offs.x, v);
+			cairo_rel_line_to(ctx->cr, ctx->dims.x, 0.0);
+		}
 
-	memset(cfg, 0, sizeof(struct kdatacfg));
-	cfg->pntsz = 3.0;
-	cfg->pntlnsz = 1.0;
-	cfg->lnsz = 2.0;
-	cfg->clr = SIZE_MAX;
-	cfg->join = CAIRO_LINE_JOIN_ROUND;
+	cairo_stroke(ctx->cr);
 }

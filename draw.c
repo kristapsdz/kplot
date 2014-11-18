@@ -26,6 +26,15 @@
 #include "compat.h"
 #include "extern.h"
 
+enum	defclr {
+	DEFCLR_RED,
+	DEFCLR_GREEN,
+	DEFCLR_BLUE,
+	DEFCLR_GREY,
+	DEFCLR_BLACK,
+	DEFCLR__MAX
+};
+
 static void
 kdata_extrema(const struct kplotdat *d, 
 	struct kpair *minv, struct kpair *maxv)
@@ -93,6 +102,7 @@ kplotctx_draw_init(struct kplotctx *ctx, const struct kplotdat *d)
 	cairo_set_line_width(ctx->cr, d->cfg.lnsz);
 	kplotctx_colour(ctx, d->cfg.clr, &clr);
 	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
+	cairo_set_line_join(ctx->cr, d->cfg.join);
 }
 
 static void
@@ -103,15 +113,15 @@ kplotctx_draw_lines(struct kplotctx *ctx, const struct kplotdat *d)
 
 	kplotctx_draw_init(ctx, d);
 
+	kplotctx_point_to_real
+		(&d->data->pairs[0], &pair1, ctx);
+	cairo_move_to(ctx->cr, pair1.x, pair1.y);
 	for (i = 1; i < d->data->pairsz; i++) {
 		kplotctx_point_to_real
-			(&d->data->pairs[i - 1], &pair1, ctx);
-		kplotctx_point_to_real
 			(&d->data->pairs[i], &pair2, ctx);
-		cairo_move_to(ctx->cr, pair1.x, pair1.y);
 		cairo_line_to(ctx->cr, pair2.x, pair2.y);
-		cairo_stroke(ctx->cr);
 	}
+	cairo_stroke(ctx->cr);
 }
 
 static void
@@ -121,6 +131,7 @@ kplotctx_draw_points(struct kplotctx *ctx, const struct kplotdat *d)
 	struct kpair	 pair;
 
 	kplotctx_draw_init(ctx, d);
+	cairo_set_line_width(ctx->cr, d->cfg.pntlnsz);
 
 	for (i = 0; i < d->data->pairsz; i++) {
 		kplotctx_point_to_real(&d->data->pairs[i], &pair, ctx);
@@ -141,25 +152,25 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	cfg->margin = MARGIN_ALL;
 	cfg->marginsz = 10.0;
 	cfg->xlabelpad = cfg->ylabelpad = 10.0;
-	cfg->clrsz = 5;
-	cfg->clrs[0].r = 1.0;
-	cfg->clrs[0].a = 1.0;
-	cfg->clrs[1].g = 1.0;
-	cfg->clrs[1].a = 1.0;
-	cfg->clrs[2].b = 1.0;
-	cfg->clrs[2].a = 1.0;
-	cfg->clrs[3].a = 1.0;
-	cfg->clrs[4].r = 0.5;
-	cfg->clrs[4].g = 0.5;
-	cfg->clrs[4].b = 0.5;
-	cfg->clrs[4].a = 1.0;
-	cfg->ticlabelclr = 4;
-	cfg->borderclr = 3;
+	cfg->clrsz = DEFCLR__MAX;
+	cfg->clrs[DEFCLR_RED].r = 1.0;
+	cfg->clrs[DEFCLR_RED].a = 1.0;
+	cfg->clrs[DEFCLR_GREEN].g = 1.0;
+	cfg->clrs[DEFCLR_GREEN].a = 1.0;
+	cfg->clrs[DEFCLR_BLUE].b = 1.0;
+	cfg->clrs[DEFCLR_BLUE].a = 1.0;
+	cfg->clrs[DEFCLR_BLACK].a = 1.0;
+	cfg->clrs[DEFCLR_GREY].r = 0.8;
+	cfg->clrs[DEFCLR_GREY].g = 0.8;
+	cfg->clrs[DEFCLR_GREY].b = 0.8;
+	cfg->clrs[DEFCLR_GREY].a = 1.0;
+	cfg->ticlabelclr = DEFCLR_BLACK;
+	cfg->borderclr = DEFCLR_GREY;
 	cfg->tic = TIC_LEFT_OUT | TIC_BOTTOM_OUT;
-	cfg->ticclr = 4;
+	cfg->ticclr = DEFCLR_BLACK;
 	cfg->ticlen = 5.0;
 	cfg->ticsz = 1.0;
-	cfg->gridclr = 3;
+	cfg->gridclr = DEFCLR_GREY;
 	cfg->gridsz = 1.0;
 	cfg->grid = GRID_ALL;
 }

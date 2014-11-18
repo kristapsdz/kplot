@@ -28,22 +28,20 @@ enum	kplottype {
 };
 
 struct	kdatacfg {
-	size_t		 clr; /* colour index (SIZE_MAX for auto) */
-	/*
-	 * All of these dimensions are in user-space coordinate system
-	 * defined by cairo.
-	 */
-	double		 pntsz; /* point arc radius */
-	double		 lnsz; /* pen diameter */
-#define	EXTREMA_XMIN	 0x01
-#define	EXTREMA_XMAX	 0x02
-#define	EXTREMA_YMIN	 0x04
-#define	EXTREMA_YMAX	 0x08
-	unsigned int	 extrema; /* assumed bounds */
-	double		 extrema_xmin;
-	double		 extrema_xmax;
-	double		 extrema_ymin;
-	double		 extrema_ymax;
+	size_t		  clr; /* colour index (SIZE_MAX for auto) */
+	double		  pntsz; /* point arc radius */
+	double		  pntlnsz; /* pen diameter for points */
+	double		  lnsz; /* pen diameter for lines */
+#define	EXTREMA_XMIN	  0x01
+#define	EXTREMA_XMAX	  0x02
+#define	EXTREMA_YMIN	  0x04
+#define	EXTREMA_YMAX	  0x08
+	unsigned int	  extrema; /* assumed bounds */
+	double		  extrema_xmin;
+	double		  extrema_xmax;
+	double		  extrema_ymin;
+	double		  extrema_ymax;
+	cairo_line_join_t join;
 };
 
 struct	kplotclr {
@@ -107,36 +105,30 @@ struct	kplotcfg {
 
 __BEGIN_DECLS
 
+struct kdata	*kdata_array_alloc(const struct kpair *, size_t);
+void		 kdata_array_fill(struct kdata *, void *,
+			void (*)(size_t, struct kpair *, void *));
+int		 kdata_array_realloc(struct kdata *, 
+			const struct kpair *, size_t);
 struct kdata	*kdata_bucket_alloc(size_t, size_t);
 int		 kdata_bucket_increment(struct kdata *, size_t);
-
+int		 kdata_copy(const struct kdata *, struct kdata *);
+void		 kdata_destroy(struct kdata *);
 struct kdata	*kdata_hist_alloc(double, double, size_t);
 int		 kdata_hist_increment(struct kdata *, double);
-
 struct kdata	*kdata_vector_alloc(size_t);
 int		 kdata_vector_add(struct kdata *, double, double);
 
-struct kdata	*kdata_array_alloc(const struct kpair *, size_t);
-int		 kdata_array_realloc(struct kdata *, 
-			const struct kpair *, size_t);
-void		 kdata_array_fill(struct kdata *, void *,
-			void (*)(size_t, struct kpair *, void *));
-
-void		 kdata_destroy(struct kdata *);
-int		 kdata_copy(const struct kdata *, struct kdata *);
-
 void		 kdatacfg_defaults(struct kdatacfg *);
+void		 kplotcfg_defaults(struct kplotcfg *);
 
 struct kplot	*kplot_alloc(void);
 int		 kplot_data(struct kplot *, struct kdata *, 
 			enum kplottype, const struct kdatacfg *);
-void		 kplot_free(struct kplot *);
-
-void		 kplotcfg_defaults(struct kplotcfg *);
-
 void		 kplot_draw(const struct kplot *, 
 			double, double, cairo_t *, 
 			const struct kplotcfg *);
+void		 kplot_free(struct kplot *);
 
 __END_DECLS
 

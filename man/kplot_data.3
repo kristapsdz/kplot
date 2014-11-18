@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 13 2014 $
+.Dd $Mdocdate: November 16 2014 $
 .Dt KPLOT_DATA 3
 .Os
 .Sh NAME
@@ -39,8 +39,10 @@ this is automatically assigned.
 The radius of
 .Dv KPLOT_POINTS
 points.
+.It Va pntlnsz
+The pen diameter for drawing point plot types.
 .It Va lnsz
-The pen diameter for drawing all plot types.
+The pen diameter for drawing line plot types.
 .It Va extrema
 A bit-field allowing arbitrary assignment of xy-ranges:
 .Dv EXTREMA_XMIN ,
@@ -61,6 +63,8 @@ See
 .It Va extrema_ymax
 See
 .Va extrema_xmin .
+.It Va join
+The join type for line plots.
 .El
 .Pp
 If

@@ -1,33 +1,24 @@
-.Dd $Mdocdate: November 17 2014 $
-.Dt KDATA_BUCKET_ALLOC 3
+.Dd $Mdocdate: November 15 2014 $
+.Dt KPLOTCFG_DEFAULTS 3
 .Os
 .Sh NAME
-.Nm kdata_bucket_alloc
-.Nd allocate bucket data for plotting
+.Nm kplotcfg_defaults
+.Nd set default values for a plot
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
-.Ft "struct kdata *"
-.Fo kdata_bucket_alloc
-.Fa "size_t rmin"
-.Fa "size_t rmax"
+.Ft void
+.Fo kplotcfg_defaults
+.Fa "struct kplotcfg *cfg"
 .Fc
 .Sh DESCRIPTION
 The
-.Nm kdata_bucket_alloc
-function creates a reference-counted data sources for
-.Xr kplot 3 .
-It uses a bucket data model: each integer within the range corresponds
-to a specific bucket.
-Bucket values are incremented with
-.Xr kdata_bucket_increment 3 .
-.Sh RETURN VALUES
 .Nm
-returns
-.Dv NULL
-if memory allocation failed.
+function sets the default values used internally on a
+.Vt "struct kplotcfg" .
+.\" .Sh RETURN VALUES
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
