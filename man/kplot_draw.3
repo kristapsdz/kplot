@@ -58,16 +58,19 @@ or
 .Dv TICLABEL_BOTTOM.
 .It Va ticlabelclr
 The colour index of the label text.
-.It Va xlabelpad
-Space between horizontal (x-axis) labels and the plot area.
+.It Va xticlabelpad
+Space between horizontal (x-axis) tic labels and the plot area.
 Specifically, between the edge of the longest label along any face and
 the plot area.
-.It Va xlabelpad
+.It Va yticlabelpad
 See
-.Va xlabelpad .
+.Va xticlabelpad .
 .It Va xticlabelrot
 Rotation of horizontal (x-axis) labels (in radians) clamped to 90 degrees.
 Rotation is clockwise.
+Note that if this is nonzero, the tic label is aligned under the
+tic-mark at the top-left part of the field, instead of the middle as is
+the usual case.
 .It Va xticlabelfmt
 This function may be user-defined for formatting the horizontal x-axis
 label as a UTF-8 string limited to 128 bytes (including nil terminator).

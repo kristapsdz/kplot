@@ -115,8 +115,8 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 	}
 	
 	if (TICLABEL_LEFT & ctx->cfg.ticlabel) {
-		ctx->offs.x += maxw + ctx->cfg.ylabelpad;
-		ctx->dims.x -= maxw + ctx->cfg.ylabelpad; 
+		ctx->offs.x += maxw + ctx->cfg.yticlabelpad;
+		ctx->dims.x -= maxw + ctx->cfg.yticlabelpad; 
 	}
 
 	/* 
@@ -125,8 +125,8 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 	 * right buffer zone exists.
 	 */
 	if (TICLABEL_RIGHT & ctx->cfg.ticlabel) {
-		if (maxw + ctx->cfg.ylabelpad > lastx)
-			ctx->dims.x -= maxw + ctx->cfg.ylabelpad;
+		if (maxw + ctx->cfg.yticlabelpad > lastx)
+			ctx->dims.x -= maxw + ctx->cfg.yticlabelpad;
 		else
 			ctx->dims.x -= lastx;
 	} else if (lastx > 0.0) 
@@ -137,9 +137,9 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 	 * axes bleeding into the horizontal axis area above.
 	 */
 	if (TICLABEL_TOP & ctx->cfg.ticlabel) {
-		if (maxh + ctx->cfg.xlabelpad > lasty) {
-			ctx->offs.y += maxh + ctx->cfg.xlabelpad;
-			ctx->dims.y -= maxh + ctx->cfg.xlabelpad;
+		if (maxh + ctx->cfg.xticlabelpad > lasty) {
+			ctx->offs.y += maxh + ctx->cfg.xticlabelpad;
+			ctx->dims.y -= maxh + ctx->cfg.xticlabelpad;
 		} else {
 			ctx->offs.y += lasty;
 			ctx->dims.y -= lasty;
@@ -150,8 +150,8 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 	}
 
 	if (TICLABEL_BOTTOM & ctx->cfg.ticlabel) {
-		if (maxh + ctx->cfg.xlabelpad > firsty)
-			ctx->dims.y -= maxh + ctx->cfg.xlabelpad;
+		if (maxh + ctx->cfg.xticlabelpad > firsty)
+			ctx->dims.y -= maxh + ctx->cfg.xticlabelpad;
 		else
 			ctx->dims.y -= firsty;
 	} else if (firsty > 0.0)
@@ -182,7 +182,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 					e.height * cos
 					 (M_PI * 2.0 - 
 					  (M_PI_2 - ctx->cfg.xticlabelrot)) +
-					ctx->cfg.xlabelpad);
+					ctx->cfg.xticlabelpad);
 				cairo_save(ctx->cr);
 				cairo_rotate(ctx->cr, ctx->cfg.xticlabelrot);
 			} else 
@@ -190,7 +190,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 					ctx->offs.x + offs * ctx->dims.x -
 					(e.width / 2.0), 
 					ctx->offs.y + ctx->dims.y + 
-					maxh + ctx->cfg.xlabelpad);
+					maxh + ctx->cfg.xticlabelpad);
 
 			cairo_show_text(ctx->cr, buf);
 			if (ctx->cfg.xticlabelrot > 0.0)
@@ -225,7 +225,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 		if (TICLABEL_LEFT & ctx->cfg.ticlabel) {
 			cairo_move_to(ctx->cr, 
 				ctx->offs.x - e.width - 
-				ctx->cfg.ylabelpad,
+				ctx->cfg.yticlabelpad,
 				(ctx->offs.y + ctx->dims.y) - 
 				(offs * ctx->dims.y) + 
 				(e.height / 2.0));
@@ -234,7 +234,7 @@ kplotctx_ticlabel_init(struct kplotctx *ctx)
 		if (TICLABEL_RIGHT & ctx->cfg.ticlabel) {
 			cairo_move_to(ctx->cr, 
 				ctx->offs.x + ctx->dims.x + 
-				ctx->cfg.ylabelpad,
+				ctx->cfg.yticlabelpad,
 				(ctx->offs.y + ctx->dims.y) - 
 				(offs * ctx->dims.y) + 
 				(e.height / 2.0));

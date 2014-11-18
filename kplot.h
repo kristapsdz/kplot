@@ -72,8 +72,8 @@ struct	kplotcfg {
 	double		  xticlabelrot;
 	void		(*xticlabelfmt)(double, char *, size_t);
 	void		(*yticlabelfmt)(double, char *, size_t);
-	double		  ylabelpad;
-	double		  xlabelpad;
+	double		  yticlabelpad;
+	double		  xticlabelpad;
 #define	TICLABEL_LEFT	  0x01
 #define	TICLABEL_RIGHT	  0x02
 #define	TICLABEL_TOP	  0x04
