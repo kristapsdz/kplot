@@ -49,8 +49,18 @@ kplot_free(struct kplot *p)
 	free(p);
 }
 
+void
+kplot_data_remove_all(struct kplot *p)
+{
+	size_t	 i;
+
+	for (i = 0; i < p->datasz; i++)
+		kdata_destroy(p->datas[i].data);
+	p->datasz = 0;
+}
+
 int
-kplot_data(struct kplot *p, struct kdata *d, 
+kplot_data_add(struct kplot *p, struct kdata *d, 
 	enum kplottype t, const struct kdatacfg *cfg)
 {
 	void	*pp;

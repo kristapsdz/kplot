@@ -20,16 +20,22 @@ PREFIX		= /usr/local
 MANS		= man/kdata_array_alloc.3 \
 		  man/kdata_array_fill.3 \
 		  man/kdata_array_realloc.3 \
+		  man/kdata_bucket_alloc.3 \
+		  man/kdata_bucket_increment.3 \
 		  man/kdata_copy.3 \
 		  man/kdata_destroy.3 \
 		  man/kdata_hist_alloc.3 \
 		  man/kdata_hist_increment.3 \
 		  man/kdata_vector_add.3 \
 		  man/kdata_vector_alloc.3 \
+		  man/kdatacfg_defaults.3 \
 		  man/kplot.3 \
 		  man/kplot_alloc.3 \
+		  man/kplot_data_add.3 \
+		  man/kplot_data_remove_all.3 \
 		  man/kplot_draw.3 \
-		  man/kplot_free.3
+		  man/kplot_free.3 \
+		  man/kplotcfg_defaults.3
 
 all: libkplot.a example1 example2 example3
 

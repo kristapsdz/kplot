@@ -1,25 +1,24 @@
 .Dd $Mdocdate: November 18 2014 $
-.Dt KPLOT_FREE 3
+.Dt KPLOT_DATA_REMOVE_ALL 3
 .Os
 .Sh NAME
-.Nm kplot_free
-.Nd free plotting context
+.Nm kplot_data_remove_all
+.Nd remove all data sources from a plot
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
 .Ft void
-.Fo kplot_free
+.Fo kplot_data_remove_all
 .Fa "struct kplot *p"
 .Fc
 .Sh DESCRIPTION
 The
 .Nm
-function frees a plotting context created by
-.Xr kplot_alloc 3 .
-In doing so, it dereferences (possibly freeing) all data sources added with
+function removes all data sources from a plot added with
 .Xr kplot_data_add 3 .
+In doing so, it dereferences (possibly freeing) the data sources.
 .\" .Sh RETURN VALUES
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
