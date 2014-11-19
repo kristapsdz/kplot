@@ -95,24 +95,12 @@ kplotctx_point_to_real(const struct kpair *data,
 }
 
 static void
-kplotctx_draw_init(struct kplotctx *ctx, const struct kplotdat *d)
-{
-	struct kplotclr	 clr;
-
-	cairo_set_line_width(ctx->cr, d->cfg.lnsz);
-	kplotctx_colour(ctx, d->cfg.clr, &clr);
-	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
-	cairo_set_line_join(ctx->cr, d->cfg.join);
-}
-
-static void
 kplotctx_draw_lines(struct kplotctx *ctx, const struct kplotdat *d)
 {
 	size_t		 i;
 	struct kpair	 pair1, pair2;
 
-	kplotctx_draw_init(ctx, d);
-
+	kplotctx_line_init(ctx, &d->cfg.line);
 	kplotctx_point_to_real
 		(&d->data->pairs[0], &pair1, ctx);
 	cairo_move_to(ctx->cr, pair1.x, pair1.y);
@@ -130,12 +118,12 @@ kplotctx_draw_points(struct kplotctx *ctx, const struct kplotdat *d)
 	size_t		 i;
 	struct kpair	 pair;
 
-	kplotctx_draw_init(ctx, d);
-	cairo_set_line_width(ctx->cr, d->cfg.pntlnsz);
+	kplotctx_point_init(ctx, &d->cfg.point);
 
 	for (i = 0; i < d->data->pairsz; i++) {
 		kplotctx_point_to_real(&d->data->pairs[i], &pair, ctx);
-		cairo_arc(ctx->cr, pair.x, pair.y, d->cfg.pntsz, 0, 2 * M_PI);
+		cairo_arc(ctx->cr, pair.x, pair.y, 
+			d->cfg.point.radius, 0, 2 * M_PI);
 		cairo_stroke(ctx->cr);
 	}
 }
@@ -156,14 +144,8 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 {
 
 	memset(cfg, 0, sizeof(struct kplotcfg));
-	cfg->border = BORDER_ALL;
-	cfg->bordersz = 1.0;
-	cfg->ticlabel = TICLABEL_LEFT | TICLABEL_BOTTOM;
-	cfg->xtics = cfg->ytics = 5;
-	cfg->margin = MARGIN_ALL;
-	cfg->marginsz = 10.0;
-	cfg->xticlabelpad = cfg->yticlabelpad = 10.0;
-	cfg->xaxislabelpad = cfg->yaxislabelpad = 10.0;
+
+	/* Colours: red, green, black, grey. */
 	cfg->clrsz = DEFCLR__MAX;
 	cfg->clrs[DEFCLR_RED].r = 1.0;
 	cfg->clrs[DEFCLR_RED].a = 1.0;
@@ -172,20 +154,44 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	cfg->clrs[DEFCLR_BLUE].b = 1.0;
 	cfg->clrs[DEFCLR_BLUE].a = 1.0;
 	cfg->clrs[DEFCLR_BLACK].a = 1.0;
-	cfg->clrs[DEFCLR_GREY].r = 0.8;
-	cfg->clrs[DEFCLR_GREY].g = 0.8;
-	cfg->clrs[DEFCLR_GREY].b = 0.8;
+	cfg->clrs[DEFCLR_GREY].r = 0.5;
+	cfg->clrs[DEFCLR_GREY].g = 0.5;
+	cfg->clrs[DEFCLR_GREY].b = 0.5;
 	cfg->clrs[DEFCLR_GREY].a = 1.0;
-	cfg->borderclr = DEFCLR_GREY;
-	cfg->tic = TIC_LEFT_OUT | TIC_BOTTOM_OUT;
-	cfg->ticclr = DEFCLR_BLACK;
-	cfg->ticlen = 5.0;
-	cfg->ticsz = 1.0;
-	cfg->gridclr = DEFCLR_GREY;
-	cfg->gridsz = 1.0;
-	cfg->grid = GRID_ALL;
-	kplotfont_defaults(&cfg->axislabelfont);
+
+	/* Five left and bottom grey tic labels. */
 	kplotfont_defaults(&cfg->ticlabelfont);
+	cfg->ticlabelfont.clr = DEFCLR_GREY;
+	cfg->ticlabel = TICLABEL_LEFT | TICLABEL_BOTTOM;
+	cfg->xticlabelpad = cfg->yticlabelpad = 15.0;
+	cfg->xtics = cfg->ytics = 5;
+
+	/* A bit of margin. */
+	cfg->margin = MARGIN_ALL;
+	cfg->marginsz = 15.0;
+	
+	/* Innie tics, grey. */
+	cfg->tic = TIC_LEFT_IN | TIC_BOTTOM_IN;
+	cfg->ticline.clr = DEFCLR_BLACK;
+	cfg->ticline.len = 5.0;
+	cfg->ticline.sz = 1.0;
+
+	/* Grid line: dotted, grey. */
+	cfg->grid = GRID_ALL;
+	cfg->gridline.clr = DEFCLR_GREY;
+	cfg->gridline.sz = 1.0;
+	cfg->gridline.dashes[0] = 1.0;
+	cfg->gridline.dashes[1] = 4.0;
+	cfg->gridline.dashesz = 2;
+
+	/* Border line: solid, grey. */
+	cfg->border = BORDER_LEFT | BORDER_BOTTOM;
+	cfg->borderline.clr = DEFCLR_BLACK;
+	cfg->borderline.sz = 1.0;
+
+	/* Black axis labels. */
+	kplotfont_defaults(&cfg->axislabelfont);
+	cfg->xaxislabelpad = cfg->yaxislabelpad = 15.0;
 }
 
 void
@@ -203,33 +209,10 @@ kplot_draw(const struct kplot *p, double w,
 	ctx.minv.x = ctx.minv.y = DBL_MAX;
 	ctx.maxv.x = ctx.maxv.y = -DBL_MAX;
 
-	if (NULL == cfg) {
+	if (NULL == cfg)
 		kplotcfg_defaults(&ctx.cfg);
-	} else {
+	else 
 		ctx.cfg = *cfg;
-		if (ctx.cfg.marginsz < 0.0)
-			ctx.cfg.marginsz = 0.0;
-		if (ctx.cfg.bordersz < 0.0)
-			ctx.cfg.bordersz = 0.0;
-		if (ctx.cfg.yticlabelpad < 0.0)
-			ctx.cfg.yticlabelpad = 0.0;
-		if (ctx.cfg.xticlabelpad < 0.0)
-			ctx.cfg.xticlabelpad = 0.0;
-		if (ctx.cfg.xticlabelrot < 0.0)
-			ctx.cfg.xticlabelrot = 0.0;
-		if (ctx.cfg.xticlabelrot > M_PI_2)
-			ctx.cfg.xticlabelrot = M_PI_2;
-		if (ctx.cfg.ticlen < 0.0)
-			ctx.cfg.ticlen = 0.0;
-		if (ctx.cfg.ticsz < 0.0)
-			ctx.cfg.ticsz = 0.0;
-		if (ctx.cfg.gridsz < 0.0)
-			ctx.cfg.gridsz = 0.0;
-		if (ctx.cfg.xaxislabelpad < 0.0)
-			ctx.cfg.xaxislabelpad = 0.0;
-		if (ctx.cfg.yaxislabelpad < 0.0)
-			ctx.cfg.yaxislabelpad = 0.0;
-	}
 
 	for (i = 0; i < p->datasz; i++) 
 		kdata_extrema(&p->datas[i], &ctx.minv, &ctx.maxv);
@@ -245,8 +228,8 @@ kplot_draw(const struct kplot *p, double w,
 
 	kplotctx_margin_init(&ctx);
 	kplotctx_label_init(&ctx);
-	kplotctx_border_init(&ctx);
 	kplotctx_grid_init(&ctx);
+	kplotctx_border_init(&ctx);
 	kplotctx_tic_init(&ctx);
 
 	cairo_translate(ctx.cr, ctx.offs.x, ctx.offs.y);

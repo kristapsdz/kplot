@@ -92,21 +92,15 @@ Bitfield of which borders to draw:
 .Dv BORDER_BOTTOM ,
 or
 .Dv BORDER_ALL .
-.It Va borderclr
-The colour index of the border.
-.It Va bordersz
-The Cairo pen width of the border.
-Note that this is the diameter of the pen, extending to either side of
-the border line.
+.It Va borderline
+The configuration of the border line.
 .It Va clrs
 Array of RGBA colours for the colour index.
 Each RGBA value is clamped to the unit interval.
 If no colours are specified, opaque black is used.
 .It Va clrsz
 The number of colours in clrs.
-Colour indices (e.g.,
-.Va borderclr )
-index into the
+Colour indices index into the
 .Va clrs
 array modulo this value.
 .It Va xtics
@@ -127,18 +121,11 @@ Bitfield of which tics to draw:
 .Dv TIC_TOP_OUT ,
 or
 .Dv TIC_BOTTOM_OUT .
-.It Va ticlen
-The length of the tic-mark in any direction.
-.It Va ticclr
-The tic colour index.
-.It Va ticsz
-The pen width for drawing tics.
+.It Va ticline
+The configuration of the tic line.
 .It Va xaxislabel
 The label for the x-axis, shown below the bottom x-axis tic labels (if
 specified).
-This pointer must be valid throughout the
-.Fn kplot_draw
-call, and is thrown away afterward.
 .It Va yaxislabel
 See
 .Va xaxislabel .
@@ -166,10 +153,8 @@ Bitfield of which grid lines to draw:
 .Dv GRID_Y ,
 or
 .Dv GRID_ALL .
-.It Va gridsz
-The width of grid lines.
-.It Va gridclr
-The colour index of grid lines.
+.It Va gridline
+The configuration of grid lines.
 .El
 .Pp
 If

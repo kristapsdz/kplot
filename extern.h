@@ -88,15 +88,24 @@ struct	kplotctx {
 
 __BEGIN_DECLS
 
-void	 kplotctx_colour(struct kplotctx *, size_t, struct kplotclr *);
-
 void	 kplotctx_border_init(struct kplotctx *);
 void	 kplotctx_grid_init(struct kplotctx *);
 void	 kplotctx_margin_init(struct kplotctx *);
 void	 kplotctx_tic_init(struct kplotctx *);
 void	 kplotctx_label_init(struct kplotctx *);
 
-double	 kplotctx_line_fix(const struct kplotctx *, double);
+double	 kplotctx_line_fix(const struct kplotctx *, double, double);
+
+void	 kplotctx_colour_init(struct kplotctx *, 
+		size_t, struct kplotclr *);
+void	 kplotctx_font_init(struct kplotctx *, 
+		const struct kplotfont *);
+void	 kplotctx_line_init(struct kplotctx *, 
+		const struct kplotline *);
+void	 kplotctx_point_init(struct kplotctx *, 
+		const struct kplotpoint *);
+void	 kplotctx_ticln_init(struct kplotctx *, 
+		const struct kplotticln *);
 
 __END_DECLS
 

@@ -12,6 +12,7 @@ OBJS		= array.o \
 		  kdata.o \
 		  kplot.o \
 		  margin.o \
+		  plotctx.o \
 		  reallocarray.o \
 		  tic.o \
 		  vector.o

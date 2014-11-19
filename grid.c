@@ -26,19 +26,17 @@
 void
 kplotctx_grid_init(struct kplotctx *ctx)
 {
-	struct kplotclr	 clr;
 	double		 offs, v;
 	size_t		 i;
 
-	kplotctx_colour(ctx, ctx->cfg.gridclr, &clr);
-	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
-	cairo_set_line_width(ctx->cr, ctx->cfg.gridsz);
+	kplotctx_line_init(ctx, &ctx->cfg.gridline);
 
 	if (GRID_X & ctx->cfg.grid)
 		for (i = 0; i < ctx->cfg.xtics; i++) {
 			offs = 1 == ctx->cfg.xtics ? 0.5 : 
 				i / (double)(ctx->cfg.xtics - 1);
 			v = kplotctx_line_fix(ctx, 
+				ctx->cfg.gridline.sz,
 				ctx->offs.x + offs * ctx->dims.x);
 			cairo_move_to(ctx->cr, v, ctx->offs.y);
 			cairo_rel_line_to(ctx->cr, 0.0, ctx->dims.y);
@@ -49,6 +47,7 @@ kplotctx_grid_init(struct kplotctx *ctx)
 			offs = 1 == ctx->cfg.ytics ? 0.5 : 
 				i / (double)(ctx->cfg.ytics - 1);
 			v = kplotctx_line_fix(ctx, 
+				ctx->cfg.gridline.sz,
 				ctx->offs.y + offs * ctx->dims.y);
 			cairo_move_to(ctx->cr, ctx->offs.x, v);
 			cairo_rel_line_to(ctx->cr, ctx->dims.x, 0.0);

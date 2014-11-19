@@ -71,49 +71,13 @@ kplot_data(struct kplot *p, struct kdata *d,
 	else
 		p->datas[p->datasz].cfg = *cfg;
 
-	if (SIZE_MAX == p->datas[p->datasz].cfg.clr)
-		p->datas[p->datasz].cfg.clr = p->datasz;
+	if (SIZE_MAX == p->datas[p->datasz].cfg.point.clr)
+		p->datas[p->datasz].cfg.point.clr = p->datasz;
+	if (SIZE_MAX == p->datas[p->datasz].cfg.line.clr)
+		p->datas[p->datasz].cfg.line.clr = p->datasz;
 
 	p->datasz++;
 	d->refs++;
 	return(1);
 }
 
-void
-kplotctx_colour(struct kplotctx *ctx, size_t idx, struct kplotclr *res)
-{
-
-	if (0 == ctx->cfg.clrsz) {
-		res->r = 0.0;
-		res->g = 0.0;
-		res->b = 0.0;
-		res->a = 1.0;
-	} else
-		*res = ctx->cfg.clrs[idx % ctx->cfg.clrsz];
-}
-
-/*
- * Quick-ish test to see if we're an integer.
- */
-static inline int 
-border_integer(double n)
-{
-
-	return(n - floor(n) < DBL_EPSILON);
-}
-
-/*
- * Given a plotting context and a position for drawing a line, determine
- * whether we want to "fix" the line so that it's fine.
- * This is a foible of Cairo and drawing with doubles.
- */
-double
-kplotctx_line_fix(const struct kplotctx *ctx, double pos)
-{
-	double	 v;
-
-	if (0 == (int)ctx->cfg.bordersz % 2)
-		return(pos);
-	v = pos - floor(pos);
-	return(v < DBL_EPSILON ? pos + 0.5 : pos - v + 0.5);
-}

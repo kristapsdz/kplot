@@ -67,9 +67,10 @@ kdatacfg_defaults(struct kdatacfg *cfg)
 {
 
 	memset(cfg, 0, sizeof(struct kdatacfg));
-	cfg->pntsz = 3.0;
-	cfg->pntlnsz = 1.0;
-	cfg->lnsz = 2.0;
-	cfg->clr = SIZE_MAX;
-	cfg->join = CAIRO_LINE_JOIN_ROUND;
+	cfg->point.radius = 3.0;
+	cfg->point.sz = 2.0;
+	cfg->point.clr = SIZE_MAX;
+	cfg->line.sz = 2.0;
+	cfg->line.join = CAIRO_LINE_JOIN_ROUND;
+	cfg->line.clr = SIZE_MAX;
 }

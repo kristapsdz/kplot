@@ -35,20 +35,6 @@ bbox_extents(struct kplotctx *ctx, const char *v,
 	*w = abs(e.width * cos(rot)) + abs(e.height * sin(rot));
 }
 
-static void
-kplotctx_font_init(struct kplotctx *ctx, const struct kplotfont *font)
-{
-	struct kplotclr	 clr;
-
-	kplotctx_colour(ctx, font->clr, &clr);
-	cairo_select_font_face
-		(ctx->cr, font->family,
-		 font->slant,
-		 font->weight);
-	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
-	cairo_set_font_size(ctx->cr, font->sz);
-}
-
 void
 kplotctx_label_init(struct kplotctx *ctx)
 {

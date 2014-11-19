@@ -27,23 +27,6 @@ enum	kplottype {
 	KPLOT_LINES /* data points joined by lines */
 };
 
-struct	kdatacfg {
-	size_t		  clr; /* colour index (SIZE_MAX for auto) */
-	double		  pntsz; /* point arc radius */
-	double		  pntlnsz; /* pen diameter for points */
-	double		  lnsz; /* pen diameter for lines */
-#define	EXTREMA_XMIN	  0x01
-#define	EXTREMA_XMAX	  0x02
-#define	EXTREMA_YMIN	  0x04
-#define	EXTREMA_YMAX	  0x08
-	unsigned int	  extrema; /* assumed bounds */
-	double		  extrema_xmin;
-	double		  extrema_xmax;
-	double		  extrema_ymin;
-	double		  extrema_ymax;
-	cairo_line_join_t join;
-};
-
 struct	kplotclr {
 	double		 r; /* [0,1] */
 	double		 g; /* [0,1] */
@@ -59,15 +42,61 @@ struct 	kplotfont {
 	size_t		     clr;
 };
 
+struct	kplotticln {
+	double		  sz;
+	double		  len;
+#define	KPLOT_DASH_MAX	  8
+	double	  	  dashes[KPLOT_DASH_MAX];
+	size_t		  dashesz;
+	double	 	  dashoff;
+	size_t		  clr;
+};
+
+struct	kplotpoint {
+	double		  sz;
+	double		  radius;
+	double	  	  dashes[KPLOT_DASH_MAX];
+	size_t		  dashesz;
+	double	 	  dashoff;
+	size_t		  clr;
+};
+
+struct	kplotline {
+	double		  sz;
+	double	  	  dashes[KPLOT_DASH_MAX];
+	size_t		  dashesz;
+	double	 	  dashoff;
+	cairo_line_join_t join;
+	size_t		  clr;
+};
+
+struct	kdatacfg {
+	struct kplotline  line;
+	struct kplotpoint point;
+#define	EXTREMA_XMIN	  0x01
+#define	EXTREMA_XMAX	  0x02
+#define	EXTREMA_YMIN	  0x04
+#define	EXTREMA_YMAX	  0x08
+	unsigned int	  extrema; /* assumed bounds */
+	double		  extrema_xmin;
+	double		  extrema_xmax;
+	double		  extrema_ymin;
+	double		  extrema_ymax;
+};
+
 struct	kplotcfg {
-	double		  marginsz; /* margin dimensions */
+#define	COLOURS_MAX	  10
+	struct kplotclr	  clrs[COLOURS_MAX]; 
+	size_t		  clrsz; 
+	double		  marginsz; 
 #define	MARGIN_LEFT	  0x01
 #define	MARGIN_RIGHT	  0x02
 #define	MARGIN_TOP	  0x04
 #define	MARGIN_BOTTOM	  0x08
 #define	MARGIN_ALL	  0xf
-	unsigned int	  margin; /* margin bitfield */
-	double		  bordersz; /* border diameter */
+	unsigned int	  margin;
+	struct kplotline  borderline;
+	double		  bordersz;
 #define	BORDER_LEFT	  0x01
 #define	BORDER_RIGHT	  0x02
 #define	BORDER_TOP	  0x04
@@ -77,20 +106,7 @@ struct	kplotcfg {
 	size_t		  borderclr;
 	size_t		  xtics;
 	size_t		  ytics;
-	double		  xticlabelrot;
-	void		(*xticlabelfmt)(double, char *, size_t);
-	void		(*yticlabelfmt)(double, char *, size_t);
-	double		  yticlabelpad;
-	double		  xticlabelpad;
-#define	TICLABEL_LEFT	  0x01
-#define	TICLABEL_RIGHT	  0x02
-#define	TICLABEL_TOP	  0x04
-#define	TICLABEL_BOTTOM	  0x08
-	unsigned int	  ticlabel; /* labels to draw */
-	struct kplotfont  ticlabelfont;
-#define	COLOURS_MAX	  10
-	struct kplotclr	  clrs[COLOURS_MAX]; 
-	size_t		  clrsz; 
+	struct kplotticln ticline;
 #define	TIC_LEFT_IN	  0x01
 #define	TIC_LEFT_OUT	  0x02
 #define	TIC_RIGHT_IN	  0x04
@@ -100,15 +116,22 @@ struct	kplotcfg {
 #define	TIC_BOTTOM_IN	  0x40
 #define	TIC_BOTTOM_OUT	  0x80
 	unsigned int	  tic;
-	size_t		  ticclr;
-	double		  ticlen;
-	double		  ticsz;
+	double		  xticlabelrot;
+	void		(*xticlabelfmt)(double, char *, size_t);
+	void		(*yticlabelfmt)(double, char *, size_t);
+	double		  yticlabelpad;
+	double		  xticlabelpad;
+	struct kplotfont  ticlabelfont;
+#define	TICLABEL_LEFT	  0x01
+#define	TICLABEL_RIGHT	  0x02
+#define	TICLABEL_TOP	  0x04
+#define	TICLABEL_BOTTOM	  0x08
+	unsigned int	  ticlabel;
 #define	GRID_X 		  0x01
 #define GRID_Y 		  0x02
 #define GRID_ALL 	  0x03
 	unsigned int 	  grid;
-	size_t	 	  gridclr;
-	double	 	  gridsz;
+	struct kplotline  gridline;
 	double		  xaxislabelpad;
 	double		  yaxislabelpad;
 	const char	 *xaxislabel;

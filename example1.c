@@ -64,7 +64,7 @@ main(int argc, char *argv[])
 	d1 = d2 = NULL;
 
 	surf = cairo_image_surface_create
-		(CAIRO_FORMAT_ARGB32, 400, 400);
+		(CAIRO_FORMAT_ARGB32, 600, 400);
 
 	st = cairo_surface_status(surf);
 	if (CAIRO_STATUS_SUCCESS != st) {
@@ -86,7 +86,7 @@ main(int argc, char *argv[])
 
 	}
 
-	kplot_draw(p, 400.0, 400.0, cr, NULL);
+	kplot_draw(p, 600.0, 400.0, cr, NULL);
 
 	st = cairo_surface_write_to_png
 		(cairo_get_target(cr), "example1.png");

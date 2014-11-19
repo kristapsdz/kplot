@@ -58,11 +58,9 @@ main(int argc, char *argv[])
 
 	kplotcfg_defaults(&cfg);
 	cfg.xticlabelpad = cfg.yticlabelpad = 10.0;
-	cfg.margin = 0;
 	cfg.xticlabelrot = M_PI_4;
 	cfg.xticlabelfmt = format;
 	cfg.xaxislabel = "xxxx";
-	cfg.xaxislabelrot = M_PI_2;
 	cfg.yaxislabel = "yyyy";
 	cfg.yaxislabelrot = M_PI_2 * 3.0;
 
@@ -81,7 +79,7 @@ main(int argc, char *argv[])
 	d1 = NULL;
 
 	surf = cairo_image_surface_create
-		(CAIRO_FORMAT_ARGB32, 400, 400);
+		(CAIRO_FORMAT_ARGB32, 600, 400);
 
 	st = cairo_surface_status(surf);
 	if (CAIRO_STATUS_SUCCESS != st) {
@@ -105,9 +103,9 @@ main(int argc, char *argv[])
 
 	cairo_set_font_size(cr, 14.0);
 	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0); 
-	cairo_rectangle(cr, 0.0, 0.0, 400.0, 400.0);
+	cairo_rectangle(cr, 0.0, 0.0, 600.0, 400.0);
 	cairo_fill(cr);
-	kplot_draw(p, 400.0, 400.0, cr, &cfg);
+	kplot_draw(p, 600.0, 400.0, cr, &cfg);
 
 	st = cairo_surface_write_to_png
 		(cairo_get_target(cr), "example2.png");

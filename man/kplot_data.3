@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 16 2014 $
+.Dd $Mdocdate: November 18 2014 $
 .Dt KPLOT_DATA 3
 .Os
 .Sh NAME
@@ -30,19 +30,10 @@ The options provided via the
 .Fa cfg
 object are as follows:
 .Bl -tag -width Ds
-.It Va clr
-The colour index of the drawn plot.
-If set to
-.Dv SIZE_MAX ,
-this is automatically assigned.
-.It Va pntsz
-The radius of
+.It Va point
+The configuration for
 .Dv KPLOT_POINTS
-points.
-.It Va pntlnsz
-The pen diameter for drawing point plot types.
-.It Va lnsz
-The pen diameter for drawing line plot types.
+plots.
 .It Va extrema
 A bit-field allowing arbitrary assignment of xy-ranges:
 .Dv EXTREMA_XMIN ,
@@ -63,8 +54,10 @@ See
 .It Va extrema_ymax
 See
 .Va extrema_xmin .
-.It Va join
-The join type for line plots.
+.It Va line
+The configuration for
+.Dv KPLOT_LINES
+types.
 .El
 .Pp
 If
