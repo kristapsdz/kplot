@@ -1,9 +1,9 @@
 .SUFFIXES: .3 .3.html
 
 CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
-CPPFLAGS	= `pkg-config --cflags cairo`
+CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/usr/X11/include/cairo'`
 VERSION		= 0.1.4
-LDADD		= `pkg-config --libs cairo`
+LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcairo'`
 SRCS		= Makefile \
 		  compat.post.h \
 		  compat.pre.h \
