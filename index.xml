@@ -15,13 +15,15 @@
 		<p>
 			<span class="nm">kplot</span> is an ISO C, <a href="http://opensource.org/licenses/ISC" rel="license">ISC</a>-licensed
 			programming library for plotting graphs on a <a href="http://cairographics.org">Cairo</a> surface.
-			It handles margins, axis labels, tic labels, tics, borders, grids, and the data itself.
+			It handles drawing margins, axis labels, tic labels, tics, borders, grids, and the data itself.
+			Data may be specified as finite buckets, range histograms, arrays, and vectors.
 			The mission of <span class="nm">kplot</span> is to allow a programming interface to a vaguely <a
 				href="http://www.gnuplot.info">gnuplot(1)</a>-like system on Cairo contexts embeddable in applications and web
 			applications.
 			For a complete reference, please refer to <a href="kplot.3.html">kplot(3)</a>, which documents the library.
 			The current version is @@VERSION@@, <a href="snapshots/kplot.tgz">kplot.tgz</a> (<a href="snapshots/kplot.tgz.sha512">SHA512</a>).
 			For older versions, look in the <a href="snapshots">archive</a>.
+			<span class="nm">kplot</span> is a <a href="http://www.bsd.lv">BSD.lv</a> project, and quite new!
 		</p>
 		<figure>
 			<pre>#include &lt;cairo.h&gt;

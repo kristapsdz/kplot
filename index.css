@@ -1,9 +1,14 @@
-body			{ margin: 0; }
+body			{ margin: 0; 
+			  font-family: serif;
+			  font-size: 13pt; }
 pre			{ padding: 1em 4%; 
 			  background-color: #333; 
 			  font-family: monospace;
 			  color: #eee; }
+.nm			{ font-style: italic; }
 a			{ text-decoration: none; }		  
+pre, code		{ font-size: 10pt; 
+			  font-family: monospace; }
 pre			{ margin: 0; }
 pre a			{ color: yellow; }
 header			{ text-align: center; 
@@ -13,11 +18,13 @@ header			{ text-align: center;
 header > *		{ display: inline-block; 
 			  font-size: 24pt;
 			  margin: 0; }
-p			{ padding: 0 4%; }
+p			{ padding: 0 4%; 
+			  line-height: 120%; }
 figure			{ margin: 0; }
 figcaption		{ background-color: #ddd; 
 			  padding: 1ex 4%; }
 footer			{ text-align: center;
 			  color: #666;
+			  font-size: 11pt;
 			  padding: 1em 0; }
 footer a		{ color: #000; }
