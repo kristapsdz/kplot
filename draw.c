@@ -86,28 +86,41 @@ kpoint_to_real(const struct kpair *data, struct kpair *real,
 		real->y = h - h * (data->y - minv->y) / (maxv->y - minv->y);
 }
 
-static inline void
+static int
 kplotctx_point_to_real(const struct kpair *data, 
 	struct kpair *real, const struct kplotctx *ctx)
 {
 
+	if (0.0 != data->x && ! isnormal(data->x))
+		return(0);
+	if (0.0 != data->y && ! isnormal(data->y))
+		return(0);
+
 	kpoint_to_real(data, real, &ctx->minv, &ctx->maxv, ctx->w, ctx->h);
+	return(1);
 }
 
 static void
 kplotctx_draw_lines(struct kplotctx *ctx, const struct kplotdat *d)
 {
 	size_t		 i;
-	struct kpair	 pair1, pair2;
+	struct kpair	 pair;
+	int		 rc;
+
+	/* Skip past bad points to get to initial. */
+	for (rc = 0, i = 0; 0 == rc && i < d->data->pairsz; i++)
+		rc = kplotctx_point_to_real
+			(&d->data->pairs[i], &pair, ctx);
 
 	kplotctx_line_init(ctx, &d->cfg.line);
-	kplotctx_point_to_real
-		(&d->data->pairs[0], &pair1, ctx);
-	cairo_move_to(ctx->cr, pair1.x, pair1.y);
-	for (i = 1; i < d->data->pairsz; i++) {
-		kplotctx_point_to_real
-			(&d->data->pairs[i], &pair2, ctx);
-		cairo_line_to(ctx->cr, pair2.x, pair2.y);
+	cairo_move_to(ctx->cr, pair.x, pair.y);
+
+	/* Mark remaining. */
+	for ( ; i < d->data->pairsz; i++) {
+		rc = kplotctx_point_to_real
+			(&d->data->pairs[i], &pair, ctx);
+		if (rc > 0)
+			cairo_line_to(ctx->cr, pair.x, pair.y);
 	}
 	cairo_stroke(ctx->cr);
 }
@@ -117,11 +130,16 @@ kplotctx_draw_points(struct kplotctx *ctx, const struct kplotdat *d)
 {
 	size_t		 i;
 	struct kpair	 pair;
+	int		 rc;
 
 	kplotctx_point_init(ctx, &d->cfg.point);
 
 	for (i = 0; i < d->data->pairsz; i++) {
-		kplotctx_point_to_real(&d->data->pairs[i], &pair, ctx);
+		/* Skip bad points. */
+		rc = kplotctx_point_to_real
+			(&d->data->pairs[i], &pair, ctx);
+		if (0 == rc)
+			continue;
 		cairo_arc(ctx->cr, pair.x, pair.y, 
 			d->cfg.point.radius, 0, 2 * M_PI);
 		cairo_stroke(ctx->cr);

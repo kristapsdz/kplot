@@ -1,0 +1,23 @@
+body			{ margin: 0; }
+pre			{ padding: 1em 4%; 
+			  background-color: #333; 
+			  font-family: monospace;
+			  color: #eee; }
+a			{ text-decoration: none; }		  
+pre			{ margin: 0; }
+pre a			{ color: yellow; }
+header			{ text-align: center; 
+			  background-color: #eee;
+			  border-bottom: thin solid silver;
+			  padding: 1em 0; }
+header > *		{ display: inline-block; 
+			  font-size: 24pt;
+			  margin: 0; }
+p			{ padding: 0 4%; }
+figure			{ margin: 0; }
+figcaption		{ background-color: #ddd; 
+			  padding: 1ex 4%; }
+footer			{ text-align: center;
+			  color: #666;
+			  padding: 1em 0; }
+footer a		{ color: #000; }
