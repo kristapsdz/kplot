@@ -1,10 +1,9 @@
 .SUFFIXES: .3 .3.html
 
 CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
-CPPFLAGS	= -I/usr/X11/include/cairo
+CPPFLAGS	= `pkg-config --cflags cairo`
 VERSION		= 0.1.4
-LDFLAGS		= -L/usr/X11/lib
-LDADD		= -lcairo
+LDADD		= `pkg-config --libs cairo`
 SRCS		= Makefile \
 		  compat.post.h \
 		  compat.pre.h \
@@ -52,7 +51,7 @@ HTMLS		= index.html \
 		  man/kdata_bucket_alloc.3.html \
 		  man/kdata_bucket_increment.3.html \
 		  man/kdata_copy.3.html \
-		  man/kdata_destroy.3 \
+		  man/kdata_destroy.3.html \
 		  man/kdata_hist_alloc.3.html \
 		  man/kdata_hist_increment.3.html \
 		  man/kdata_vector_add.3.html \
@@ -109,16 +108,16 @@ installwww: www
 example0 example1 example2: libkplot.a
 
 example0: example0.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDADD) -lm libkplot.a -o $@ $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -lm -o $@ $< libkplot.a
 
 example1: example1.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDADD) libkplot.a -o $@ $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
 
 example2: example2.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDADD) libkplot.a -o $@ $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
 
 example3: example3.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDADD) libkplot.a -o $@ $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
 
 example0.png: example0
 	./example0
