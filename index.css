@@ -1,24 +1,41 @@
 body			{ margin: 0; 
 			  font-family: serif;
-			  font-size: 13pt; }
+			  font-size: 14pt; }
 pre			{ padding: 1em 4%; 
 			  background-color: #333; 
 			  font-family: monospace;
 			  color: #eee; }
 .nm			{ font-style: italic; }
+header .nm		{ font-style: normal;
+			  color: #333;
+			  font-weight: bolder; }
+header nav a		{ color: #444; 
+			  text-shadow: 1px 1px #ccc;
+			  font-size: 16pt; }
+header nav a:hover	{ color: #000;
+			  text-shadow: 1px 1px #eee; }
+header h1		{ margin: 0.5ex 0; }
 a			{ text-decoration: none; }		  
+pre.prettyprint		{ border: none; 
+			  line-height: 130%;
+			  margin: 0; 
+			  overflow: hidden;
+			  box-shadow: 0px 4px 7px #888;
+			  width: auto; }
+pre.prettyprint a	{ font-style: italic; }
+pre.prettyprint a:hover	{ font-style: italic; }
 pre, code		{ font-size: 10pt; 
 			  font-family: monospace; }
 pre			{ margin: 0; }
 pre a			{ color: yellow; }
 header			{ text-align: center; 
 			  background-color: #eee;
-			  border-bottom: thin solid silver;
+			  box-shadow: inset 0px -1px 4px #666;
 			  padding: 1em 0; }
-header > *		{ display: inline-block; 
+header > div > *	{ display: inline-block; 
 			  font-size: 24pt;
 			  margin: 0; }
-p			{ padding: 0 4%; 
+nav[data-sblg-nav], p	{ padding: 0 4%; 
 			  line-height: 120%; }
 figure			{ margin: 0; }
 figcaption		{ background-color: #ddd; 
@@ -28,3 +45,9 @@ footer			{ text-align: center;
 			  font-size: 11pt;
 			  padding: 1em 0; }
 footer a		{ color: #000; }
+nav[data-sblg-nav] ul	{ list-style-type: none; 
+			  padding: 0;
+			  margin: 0; }
+nav[data-sblg-nav] li	{ margin: 1ex 0; }
+nav[data-sblg-nav] li > div:last-child
+			{ margin-left: 3ex; }

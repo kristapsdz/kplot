@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 13 2014 $
+.Dd $Mdocdate: November 15 2014 $
 .Dt KDATA_ARRAY_ALLOC 3
 .Os
 .Sh NAME
@@ -19,10 +19,15 @@ The
 .Nm kdata_array_alloc
 function creates a reference-counted data sources for
 .Xr kplot 3 .
-It is set to an array of data points.
+It is set to an array of data points
+.Fa pairs .
 If passed a
 .Dv NULL
-pointer, the buffers are pre-allocated to random data.
+pointer as
+.Fa pairs ,
+the buffers are pre-allocated to zero.
+These values can be later reset with
+.Xr kdata_array_fill 3 .
 .Sh RETURN VALUES
 .Nm
 returns
@@ -39,6 +44,7 @@ if memory allocation failed.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kdata_array_fill 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

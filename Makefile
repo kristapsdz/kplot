@@ -4,6 +4,8 @@ CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
 CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/usr/X11/include/cairo'`
 VERSION		= 0.1.4
 LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcairo'`
+VERSIONS	= version_0_1_4.xml \
+		  version_0_1_5.xml
 SRCS		= Makefile \
 		  compat.post.h \
 		  compat.pre.h \
@@ -13,17 +15,21 @@ SRCS		= Makefile \
 		  array.c \
 		  border.c \
 		  bucket.c \
+		  buffer.c \
 		  draw.c \
 		  example0.c \
 		  example1.c \
 		  example2.c \
 		  example3.c \
+		  example4.c \
+		  example5.c \
 		  grid.c \
 		  hist.c \
 		  label.c \
 		  kdata.c \
 		  kplot.c \
 		  margin.c \
+		  mean.c \
 		  plotctx.c \
 		  reallocarray.c \
 		  test-reallocarray.c \
@@ -32,6 +38,7 @@ SRCS		= Makefile \
 OBJS		= array.o \
 		  border.o \
 		  bucket.o \
+		  buffer.o \
 		  draw.o \
 		  grid.o \
 		  hist.o \
@@ -39,6 +46,7 @@ OBJS		= array.o \
 		  kdata.o \
 		  kplot.o \
 		  margin.o \
+		  mean.o \
 		  plotctx.o \
 		  reallocarray.o \
 		  tic.o \
@@ -47,13 +55,15 @@ PREFIX		= /usr/local
 HTMLS		= index.html \
 		  man/kdata_array_alloc.3.html \
 		  man/kdata_array_fill.3.html \
-		  man/kdata_array_realloc.3.html \
 		  man/kdata_bucket_alloc.3.html \
 		  man/kdata_bucket_increment.3.html \
-		  man/kdata_copy.3.html \
+		  man/kdata_buffer_alloc.3.html \
+		  man/kdata_buffer_copy.3.html \
 		  man/kdata_destroy.3.html \
 		  man/kdata_hist_alloc.3.html \
 		  man/kdata_hist_increment.3.html \
+		  man/kdata_mean_add.3.html \
+		  man/kdata_mean_alloc.3.html \
 		  man/kdata_vector_add.3.html \
 		  man/kdata_vector_alloc.3.html \
 		  man/kdatacfg_defaults.3.html \
@@ -66,13 +76,15 @@ HTMLS		= index.html \
 	 	  man/kplotcfg_defaults.3.html
 MANS		= man/kdata_array_alloc.3 \
 		  man/kdata_array_fill.3 \
-		  man/kdata_array_realloc.3 \
 		  man/kdata_bucket_alloc.3 \
 		  man/kdata_bucket_increment.3 \
-		  man/kdata_copy.3 \
+		  man/kdata_buffer_alloc.3 \
+		  man/kdata_buffer_copy.3 \
 		  man/kdata_destroy.3 \
 		  man/kdata_hist_alloc.3 \
 		  man/kdata_hist_increment.3 \
+		  man/kdata_mean_add.3 \
+		  man/kdata_mean_alloc.3 \
 		  man/kdata_vector_add.3 \
 		  man/kdata_vector_alloc.3 \
 		  man/kdatacfg_defaults.3 \
@@ -84,7 +96,7 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kplot_free.3 \
 	 	  man/kplotcfg_defaults.3
 
-all: libkplot.a example0 example1 example2 example3
+all: libkplot.a example0 example1 example2 example3 example4 example5
 
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/lib
@@ -119,6 +131,12 @@ example2: example2.c libkplot.a
 example3: example3.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
 
+example4: example4.c libkplot.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
+
+example5: example5.c libkplot.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
+
 example0.png: example0
 	./example0
 
@@ -133,13 +151,13 @@ compat.h: compat.pre.h compat.post.h
 	  cat compat.post.h ; ) >$@
 
 .3.3.html:
-	mandoc -Thtml $< >$@
+	mandoc -Thtml -Oman=%N.%S.html $< >$@
 
 .c.o:
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
-index.html: index.xml
-	sed -e 's!@@VERSION@@!$(VERSION)!g' index.xml >$@
+index.html: index.xml $(VERSIONS)
+	sblg -t index.xml -o- $(VERSIONS) | sed "s!@VERSION@!$(VERSION)!g" >$@
 
 kplot-$(VERSION).tgz.sha512: kplot-$(VERSION).tgz
 	openssl dgst -sha512 kplot-$(VERSION).tgz >$@
@@ -154,7 +172,7 @@ kplot-$(VERSION).tgz:
 
 clean:
 	rm -f libkplot.a compat.h test-reallocarray 
-	rm -f example0 example1 example2 example3
+	rm -f example0 example1 example2 example3 example4 example5
 	rm -rf *.dSYM
 	rm -f $(OBJS)
 	rm -f $(HTMLS)

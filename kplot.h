@@ -1,6 +1,6 @@
 /*	$Id$ */
 /*
- * Copyright (c) 2014 Kristaps Dzonsons <kristaps@bsd.lv>
+ * Copyright (c) 2014, 2015 Kristaps Dzonsons <kristaps@bsd.lv>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -144,13 +144,19 @@ struct	kplotcfg {
 __BEGIN_DECLS
 
 struct kdata	*kdata_array_alloc(const struct kpair *, size_t);
-void		 kdata_array_fill(struct kdata *, void *,
+int		 kdata_array_fill(struct kdata *, void *,
 			void (*)(size_t, struct kpair *, void *));
-int		 kdata_array_realloc(struct kdata *, 
-			const struct kpair *, size_t);
 struct kdata	*kdata_bucket_alloc(size_t, size_t);
 int		 kdata_bucket_increment(struct kdata *, size_t);
-int		 kdata_copy(const struct kdata *, struct kdata *);
+struct kdata	*kdata_buffer_alloc(void);
+int		 kdata_buffer_copy(struct kdata *, const struct kdata *);
+
+struct kdata	*kdata_add_alloc(struct kdata *, ...);
+struct kdata	*kdata_sub_alloc(struct kdata *, ...);
+struct kdata	*kdata_mean_alloc(struct kdata *);
+int		 kdata_mean_add(struct kdata *, struct kdata *);
+struct kdata	*kdata_stddev_alloc(struct kdata *);
+
 void		 kdata_destroy(struct kdata *);
 struct kdata	*kdata_hist_alloc(double, double, size_t);
 int		 kdata_hist_increment(struct kdata *, double);

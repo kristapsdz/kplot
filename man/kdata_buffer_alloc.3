@@ -1,35 +1,29 @@
-.Dd $Mdocdate: November 15 2014 $
-.Dt KDATA_ARRAY_FILL 3
+.Dd $Mdocdate: November 18 2014 $
+.Dt KDATA_BUFFER_ALLOC 3
 .Os
 .Sh NAME
-.Nm kdata_array_fill
-.Nd fill prior-allocated data source
+.Nm kdata_buffer_alloc
+.Nd allocate immutable buffer data for plotting
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
-.Ft int
-.Fo kdata_array_fill
-.Fa "struct kdata *data"
-.Fa "void *arg"
-.Fa "void (*fp)(size_t, struct kpair *, void *)"
-.Fc
+.Ft "struct kdata *"
+.Fn kdata_buffer_alloc
 .Sh DESCRIPTION
 The
-.Nm
-function fills the buffers of a data source created by
-.Xr kdata_array_alloc 3 .
-It invokes the
-.Fa fp
-function with each bucket provided by
-.Xr kdata_array_alloc
-or
-.Xr kdata_array_realloc .
+.Nm kdata_buffer_alloc
+function creates a reference-counted data sources for
+.Xr kplot 3 .
+It's primarily used to copy other data sources into an immutable one.
+Bucket values are copied into this structure via
+.Xr kdata_buffer_copy 3 .
 .Sh RETURN VALUES
-.Nm kdata_array_fill
-returns 0 if it has any dependants whose update fails.
-Otherwise it returns 1.
+.Nm
+returns
+.Dv NULL
+if memory allocation failed.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
@@ -41,7 +35,7 @@ Otherwise it returns 1.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
-.Xr kdata_array_alloc 3 ,
+.Xr kdata_buffer_copy 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

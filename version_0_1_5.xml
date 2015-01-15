@@ -1,0 +1,15 @@
+<article data-sblg-article="1" data-sblg-tags="version">
+	<header>
+		<h1>0.1.5</h1>
+		<address>Kristaps Dzonsons</address>
+		<time datetime="2015-01-15">2015-01-15</time>
+	</header>
+	<aside>
+		Removed the <code>kdata_copy()</code> function in favour of <a href="kdata_buffer_alloc.3.html">kdata_buffer_alloc(3)</a> and <a
+			href="kdata_buffer_copy.3.html">kdata_buffer_copy(3)</a>, which quickly copy only the value pairs of their sources.
+		The reason for this removal is the addition of <q>dependant</q> data sources (e.g., the <a
+			href="kdata_mean_alloc.3.html">kdata_mean_alloc(3)</a>), which act on structural data sources (such as buckets) that
+		compute values based upon existing value-pairs.
+		Also removed the <code>kdata_array_realloc()</code> function.
+	</aside>
+</article>

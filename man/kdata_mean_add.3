@@ -1,31 +1,30 @@
 .Dd $Mdocdate: November 18 2014 $
-.Dt KDATA_BUCKET_ALLOC 3
+.Dt KDATA_MEAN_ADD 3
 .Os
 .Sh NAME
-.Nm kdata_bucket_alloc
-.Nd allocate bucket data for plotting
+.Nm kdata_mean_add
+.Nd add source for mean data plotting
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
-.Ft "struct kdata *"
-.Fo kdata_bucket_alloc
-.Fa "size_t rmin"
-.Fa "size_t rmax"
+.Ft int
+.Fo kdata_mean_add
+.Fa "struct kdata *dst"
+.Fa "struct kdata *source"
 .Fc
 .Sh DESCRIPTION
 The
-.Nm kdata_bucket_alloc
-function creates a reference-counted data sources for
-.Xr kplot 3 .
-It uses a bucket data model: each integer within the range
-.Fa rmin
-(inclusive) to
-.Fa rmax
-(non-inclusive) corresponds to a specific bucket.
-Bucket values are incremented with
-.Xr kdata_bucket_increment 3 .
+.Nm kdata_mean_add
+adds a data source
+.Fa source
+to a mean data source
+.Fa dst
+allocated with
+.Xr kdata_mean_alloc 3 .
+The internal buffers will be increased, if necessary, to the size of the
+new buffer.
 .Sh RETURN VALUES
 .Nm
 returns
@@ -42,7 +41,17 @@ if memory allocation failed.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kdata_mean_alloc 3 ,
 .Xr kplot 3
+.Rs
+.%A Donald E. Knuth
+.%B The Art of Computer Programming: Seminumerical Algorithms, 3rd Edition
+.%C Boston
+.%D 1998
+.%I Addison-Wesley
+.%P 232
+.%V Volume 2
+.Re
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
 .\" .Sh AUTHORS

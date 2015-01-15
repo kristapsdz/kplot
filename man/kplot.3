@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 19 2014 $
+.Dd $Mdocdate: November 24 2014 $
 .Dt KPLOT 3
 .Os
 .Sh NAME
@@ -16,7 +16,9 @@ The library usually works as follows.
 Allocate plot data sources with
 .Xr kdata_array_alloc 3 ,
 .Xr kdata_bucket_alloc 3 ,
+.Xr kdata_buffer_alloc 3 ,
 .Xr kdata_hist_alloc 3 ,
+.Xr kdata_mean_alloc 3 ,
 and/or
 .Xr kdata_vector_alloc 3 ,
 .It
@@ -101,13 +103,15 @@ will dereference, only freeing when nobody references the source.
 .Sh SEE ALSO
 .Xr kdata_array_alloc 3 ,
 .Xr kdata_array_fill 3 ,
-.Xr kdata_array_realloc 3 ,
 .Xr kdata_bucket_alloc 3 ,
 .Xr kdata_bucket_increment 3 ,
-.Xr kdata_copy 3 ,
+.Xr kdata_buffer_alloc 3 ,
+.Xr kdata_buffer_copy 3 ,
 .Xr kdata_destroy 3 ,
 .Xr kdata_hist_alloc 3 ,
 .Xr kdata_hist_increment 3 ,
+.Xr kdata_mean_add 3 ,
+.Xr kdata_mean_alloc 3 ,
 .Xr kdata_vector_add 3 ,
 .Xr kdata_vector_alloc 3 ,
 .Xr kdatacfg_defaults 3 ,

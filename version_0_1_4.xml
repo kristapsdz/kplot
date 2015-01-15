@@ -1,0 +1,12 @@
+<article data-sblg-article="1" data-sblg-tags="version">
+	<header>
+		<h1>0.1.4</h1>
+		<address>Kristaps Dzonsons</address>
+		<time datetime="2014-11-30">2014-11-30</time>
+	</header>
+	<aside>
+		Initial public release.
+		(Not the initial private release, however.)
+		The API is unlikely to change, though more functions and customisation will be added.
+	</aside>
+</article>

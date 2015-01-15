@@ -1,6 +1,6 @@
 /*	$Id$ */
 /*
- * Copyright (c) 2014 Kristaps Dzonsons <kristaps@bsd.lv>
+ * Copyright (c) 2014, 2015 Kristaps Dzonsons <kristaps@bsd.lv>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -27,27 +27,6 @@
 #include "compat.h"
 #include "extern.h"
 
-static int
-paircpy(struct kpair **p, const struct kpair *new, 
-	size_t newsz, size_t *oldsz, size_t *oldmax)
-{
-	void	*pp;
-
-	if (newsz > *oldmax) {
-		*oldmax = newsz;
-		pp = reallocarray(*p, *oldmax, sizeof(struct kpair));
-		if (NULL == pp)
-			return(0);
-		*p = pp;
-	}
-
-	if (NULL != new)
-		memcpy(*p, new, newsz * sizeof(struct kpair));
-	*oldsz = newsz;
-	return(1);
-}
-
-
 struct kdata *
 kdata_array_alloc(const struct kpair *np, size_t npsz)
 {
@@ -56,33 +35,33 @@ kdata_array_alloc(const struct kpair *np, size_t npsz)
 	if (NULL == (d = calloc(1, sizeof(struct kdata))))
 		return(NULL);
 
-	if ( ! paircpy(&d->pairs, np, npsz, 
-		&d->pairsz, &d->pairbufsz)) {
+	d->pairsz = npsz;
+	d->pairs = calloc(d->pairsz, sizeof(struct kpair));
+	if (NULL == d->pairs) {
 		free(d);
 		return(NULL);
 	}
+
+	if (NULL != np)
+		memcpy(d->pairs, np, d->pairsz * sizeof(struct kpair));
 
 	d->refs = 1;
 	d->type = KDATA_ARRAY;
 	return(d);
 }
 
-void
+int
 kdata_array_fill(struct kdata *d, void *arg, 
 	void (*fp)(size_t, struct kpair *, void *))
 {
 	size_t	 i;
+	int	 rc;
 
 	assert(KDATA_ARRAY == d->type);
-	for (i = 0; i < d->pairsz; i++)
+	for (rc = 1, i = 0; 0 != rc && i < d->pairsz; i++) {
 		(*fp)(i, &d->pairs[i], arg);
-}
+		rc = kdata_dep_run(d, i);
+	}
 
-int
-kdata_array_realloc(struct kdata *d, const struct kpair *np, size_t npsz)
-{
-
-	assert(KDATA_ARRAY == d->type);
-	return(paircpy(&d->pairs, np, npsz, 
-		&d->pairsz, &d->pairbufsz));
+	return(rc);
 }

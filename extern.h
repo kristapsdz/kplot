@@ -1,6 +1,6 @@
 /*	$Id$ */
 /*
- * Copyright (c) 2014 Kristaps Dzonsons <kristaps@bsd.lv>
+ * Copyright (c) 2014, 2015 Kristaps Dzonsons <kristaps@bsd.lv>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -18,12 +18,8 @@
 #define EXTERN_H
 
 struct	kdatahist {
-	double		 rmin; /* minimum bucket value */
-	double		 rmax; /* maximum bucket value */
-};
-
-struct	kdataarray {
-	/* Empty. */
+	double		 rmin;
+	double		 rmax;
 };
 
 struct	kdatabucket {
@@ -31,15 +27,28 @@ struct	kdatabucket {
 	size_t		 rmax;
 };
 
+struct	kdatamean {
+	size_t		*ns;
+};
+
 struct	kdatavector {
-	size_t		 stepsz; /* reallocation step */
+	size_t		 stepsz;
 };
 
 enum	kdatatype {
-	KDATA_HIST,
 	KDATA_ARRAY,
-	KDATA_VECTOR,
-	KDATA_BUCKET
+	KDATA_BUCKET,
+	KDATA_BUFFER,
+	KDATA_HIST,
+	KDATA_MEAN,
+	KDATA_VECTOR
+};
+
+typedef	int (*ksetfunc)(struct kdata *, size_t, double, double);
+
+struct	kdep {
+	struct kdata	 *dep;
+	ksetfunc	  func;
 };
 
 struct	kdata {
@@ -47,12 +56,14 @@ struct	kdata {
 	size_t		 pairsz; /* number of pairs */
 	size_t		 pairbufsz; /* allocated buffer size */
 	size_t		 refs; /* >0 references to data */
+	struct kdep	*deps; /* dependants */
+	size_t		 depsz; /* number of dependants */
 	enum kdatatype	 type;
 	union {
 		struct kdatahist	hist;
-		struct kdataarray	array;
 		struct kdatavector	vector;
 		struct kdatabucket	bucket;
+		struct kdatamean	mean;
 	} d;
 };
 
@@ -87,6 +98,9 @@ struct	kplotctx {
 };
 
 __BEGIN_DECLS
+
+int	 kdata_dep_add(struct kdata *, struct kdata *, ksetfunc);
+int	 kdata_dep_run(struct kdata *, size_t);
 
 void	 kplotctx_border_init(struct kplotctx *);
 void	 kplotctx_grid_init(struct kplotctx *);

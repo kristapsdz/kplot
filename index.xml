@@ -5,28 +5,24 @@
 		<meta charset="utf-8" /> 
 		<title>kplot: Cairo plotting library</title>
 		<link rel="stylesheet" href="index.css" type="text/css" />
+		<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=sons-of-obsidian"></script>
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
 	</head>
-	<body>
+	<body itemscope="itemscope" itemtype="http://schema.org/SoftwareApplication">
 		<header>
-			<h1>kplot</h1>
-			<div>&mdash;</div>
-			<div>Cairo plotting library</div>
+			<h1>
+				<span itemprop="name" class="nm">kplot</span> 
+				&#8211; 
+				<span itemprop="description" class="nd">Cairo plotting library</span>
+			</h1>
+			<nav>
+				<a itemprop="downloadURL" href="snapshots/kplot.tgz"><i class="fa fa-fw fa-gears"></i></a>
+				<a href="snapshots/kplot.tgz.sha512"><i class="fa fa-fw fa-lock"></i></a>
+				<a href="snapshots"><i class="fa fa-fw fa-archive"></i></a>
+			</nav>
 		</header>
-		<p>
-			<span class="nm">kplot</span> is an ISO C, <a href="http://opensource.org/licenses/ISC" rel="license">ISC</a>-licensed
-			programming library for plotting graphs on a <a href="http://cairographics.org">Cairo</a> surface.
-			It handles drawing margins, axis labels, tic labels, tics, borders, grids, and the data itself.
-			Data may be specified as finite buckets, range histograms, arrays, and vectors.
-			The mission of <span class="nm">kplot</span> is to allow a programming interface to a vaguely <a
-				href="http://www.gnuplot.info">gnuplot(1)</a>-like system on Cairo contexts embeddable in applications and web
-			applications.
-			For a complete reference, please refer to <a href="kplot.3.html">kplot(3)</a>, which documents the library.
-			The current version is @@VERSION@@, <a href="snapshots/kplot.tgz">kplot.tgz</a> (<a href="snapshots/kplot.tgz.sha512">SHA512</a>).
-			For older versions, look in the <a href="snapshots">archive</a>.
-			<span class="nm">kplot</span> is a <a href="http://www.bsd.lv">BSD.lv</a> project, and quite new!
-		</p>
 		<figure>
-			<pre>#include &lt;cairo.h&gt;
+			<pre class="prettyprint linenums">#include &lt;cairo.h&gt;
 #include &lt;math.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
@@ -65,15 +61,28 @@ main(void)
 	<a href="kplot_free.3.html">kplot_free</a>(p);
 	return(EXIT_SUCCESS);
 }</pre>
-			<figcaption>
-				By way of introduction, consider the above example.
-				(<em>Note</em>: this does not do any error checking.)
-				It accepts two fixed arrays <code>points1</code> and <code>points2</code> and graphs them with the default style.
-				It produces <a href="example0.png">example0.png</a>.
-			</figcaption>
 		</figure>
+		<p>
+			The above is an example usage of <span class="nm">kplot</span>, an ISO C, <a href="http://opensource.org/licenses/ISC"
+				rel="license">ISC</a>-licensed programming library for plotting graphs on a <a
+				href="http://cairographics.org">Cairo</a> surface.
+			It handles drawing margins, axis labels, tic labels, tics, borders, grids, and the data itself.
+			Data may be specified as finite buckets, range histograms, arrays, vectors, and so on.
+			For a complete reference, consult <a href="kplot.3.html">kplot(3)</a>.
+			Download sources from <a href="snapshots/kplot.tgz">kplot.tgz</a> (current version @VERSION@, <a href="snapshots/kplot.tgz.sha512">sha512</a>) or
+			browse the <a href="snapshots">archive</a>.
+			<span class="nm">kplot</span> is a <a href="http://www.bsd.lv">BSD.lv</a> project.
+		</p>
+		<nav data-sblg-nav="1" data-sblg-navcontent="1">
+			<div>
+				<i class="fa fa-fw fa-clock-o"></i>
+				<time datetime="${sblg-date}">${sblg-date}</time>: 
+				version ${sblg-title}
+			</div>
+			<div>${sblg-aside}</div>
+		</nav>
 		<footer>
-			&copy; 2014, <a href="http://kristaps.bsd.lv">Kristaps Dzonsons</a>
+			&#169; 2014&#8211;2015, <a href="http://kristaps.bsd.lv">Kristaps Dzonsons</a>
 		</footer>
 	</body>
 </html>

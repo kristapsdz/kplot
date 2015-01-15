@@ -1,6 +1,6 @@
 /*	$Id$ */
 /*
- * Copyright (c) 2014 Kristaps Dzonsons <kristaps@bsd.lv>
+ * Copyright (c) 2014, 2015 Kristaps Dzonsons <kristaps@bsd.lv>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -27,37 +27,23 @@
 #include "compat.h"
 #include "extern.h"
 
-int
-kdata_copy(const struct kdata *src, struct kdata *dst)
-{
-	void	*p;
-
-	dst->d = src->d;
-	dst->type = src->type;
-
-	if (src->pairsz > dst->pairbufsz) {
-		dst->pairbufsz = src->pairsz;
-		p = reallocarray(dst->pairs, dst->pairbufsz, sizeof(struct kpair));
-		if (NULL == p)
-			return(0);
-		dst->pairs = p;
-	}
-
-	dst->pairsz = src->pairsz;
-	memcpy(dst->pairs, src->pairs, dst->pairsz * sizeof(struct kpair));
-	return(1);
-}
-
 void
 kdata_destroy(struct kdata *d)
 {
+	size_t	 i;
 
 	if (NULL == d)
 		return;
+
 	assert(d->refs > 0);
 	if (--d->refs > 0)
 		return;
 
+	/* Destroy dependeants along with ourselves. */
+	for (i = 0; i < d->depsz; i++)
+		kdata_destroy(d->deps[i].dep);
+
+	free(d->deps);
 	free(d->pairs);
 	free(d);
 }
@@ -73,4 +59,50 @@ kdatacfg_defaults(struct kdatacfg *cfg)
 	cfg->line.sz = 2.0;
 	cfg->line.join = CAIRO_LINE_JOIN_ROUND;
 	cfg->line.clr = SIZE_MAX;
+}
+
+/*
+ * We've modified a value at (pair) position "pos".
+ * Pass this through to the underlying functional sources, if any.
+ */
+int
+kdata_dep_run(struct kdata *data, size_t pos)
+{
+	size_t	 i;
+	int	 rc;
+	double	 x, y;
+
+	x = data->pairs[pos].x;
+	y = data->pairs[pos].y;
+
+	for (rc = 1, i = 0; 0 != rc && i < data->depsz; i++)
+		rc = data->deps[i].func
+			(data->deps[i].dep, pos, x, y);
+
+	return(rc);
+}
+
+/*
+ * Add a functional kdata source "data" (e.g., stddev) to another kdata
+ * source "dep" as a dependent.
+ * All a source's dependents are updated with each modification of the
+ * source's internal pair values.
+ */
+int
+kdata_dep_add(struct kdata *data, struct kdata *dep, ksetfunc fp)
+{
+	void	*p;
+
+	p = reallocarray(dep->deps, 
+		dep->depsz + 1, sizeof(struct kdep));
+	if (NULL == p)
+		return(0);
+	dep->deps = p;
+	dep->deps[dep->depsz].dep = data;
+	dep->deps[dep->depsz].func = fp;
+	dep->depsz++;
+
+	/* While the parent exists, we must exist. */
+	data->refs++;
+	return(1);
 }

@@ -1,6 +1,6 @@
 /*	$Id$ */
 /*
- * Copyright (c) 2014 Kristaps Dzonsons <kristaps@bsd.lv>
+ * Copyright (c) 2014, 2015 Kristaps Dzonsons <kristaps@bsd.lv>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -80,5 +80,5 @@ kdata_hist_increment(struct kdata *d, double v)
 	}
 
 	d->pairs[bucket].y++;
-	return(1);
+	return(kdata_dep_run(d, bucket));
 }
