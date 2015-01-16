@@ -1,35 +1,60 @@
-.Dd $Mdocdate: November 15 2014 $
+.Dd $Mdocdate: January 15 2015 $
 .Dt KDATA_ARRAY_FILL 3
 .Os
 .Sh NAME
-.Nm kdata_array_fill
-.Nd fill prior-allocated data source
+.Nm kdata_array_add ,
+.Nm kdata_array_fill ,
+.Nm kdata_array_set
+.Nd modify array data source
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
 .Ft int
+.Fo kdata_array_add
+.Fa "struct kdata *data"
+.Fa "size_t pos"
+.Fa "double val"
+.Fc
+.Ft int
 .Fo kdata_array_fill
 .Fa "struct kdata *data"
 .Fa "void *arg"
 .Fa "void (*fp)(size_t, struct kpair *, void *)"
 .Fc
+.Ft int
+.Fo kdata_array_set
+.Fa "struct kdata *data"
+.Fa "size_t pos"
+.Fa "double val"
+.Fc
 .Sh DESCRIPTION
 The
-.Nm
-function fills the buffers of a data source created by
+.Nm kdata_array_add ,
+.Nm kdata_array_fill ,
+and
+.Nm kdata_array_set
+functions modify the buffers of a data source created by
 .Xr kdata_array_alloc 3 .
-It invokes the
+.Nm kdata_array_fill
+invokes the
 .Fa fp
 function with each bucket provided by
-.Xr kdata_array_alloc
-or
-.Xr kdata_array_realloc .
+.Xr kdata_array_alloc ,
+while
+.Nm kdata_array_add
+and
+.Nm kdata_array_fill
+directly modify the buckets at position
+.Fa pos .
 .Sh RETURN VALUES
 .Nm kdata_array_fill
-returns 0 if it has any dependants whose update fails.
-Otherwise it returns 1.
+returns 0 if it has any dependants whose update fails, the positions
+fall outside of the allocated boundaries, or the data source was not
+created with
+.Xr kdata_array_alloc 3 ;
+otherwise it returns 1.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES

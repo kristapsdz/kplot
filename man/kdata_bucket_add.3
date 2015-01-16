@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 17 2014 $
+.Dd $Mdocdate: January 16 2015 $
 .Dt KDATA_BUCKET_ADD 3
 .Os
 .Sh NAME
@@ -38,9 +38,10 @@ within the range provided to
 .Nm kdata_bucket_add
 and
 .Nm kdata_bucket_set
-return 0 if the requested bucket is outside of the bucket range or the
-source was not created with
-.Xr kdata_bucket_alloc 3 ,
+return 0 if the requested bucket is outside of the bucket range, 
+a dependant modification failed, or
+the source was not created with
+.Xr kdata_bucket_alloc 3 ;
 otherwise it returns non-zero.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.

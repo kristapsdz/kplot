@@ -18,21 +18,21 @@
 #define EXTERN_H
 
 struct	kdatahist {
-	double		 rmin;
-	double		 rmax;
+	double		 rmin; /* minimum inclusive */
+	double		 rmax; /* maximum non-inclusive */
 };
 
 struct	kdatabucket {
-	size_t		 rmin;
-	size_t		 rmax;
+	size_t		 rmin; /* minimum inclusive */
+	size_t		 rmax; /* maximum non-inclusive */
 };
 
 struct	kdatamean {
-	size_t		*ns;
+	size_t		*ns; /* number of bucket modifications */
 };
 
 struct	kdatavector {
-	size_t		 stepsz;
+	size_t		 stepsz; /* vector increase slush size */
 };
 
 enum	kdatatype {
@@ -46,11 +46,20 @@ enum	kdatatype {
 
 typedef	int (*ksetfunc)(struct kdata *, size_t, double, double);
 
+/*
+ * A dependant tacks on to a data source and is notified (by way of
+ * "func") whenever the value of a bucket has changed.
+ */
 struct	kdep {
 	struct kdata	 *dep;
 	ksetfunc	  func;
 };
 
+/*
+ * A data source can either be "real" (in the sense of being modified by
+ * the calling code) or a "dependant" (in the sense of being updated
+ * from another data source).
+ */
 struct	kdata {
 	struct kpair	*pairs; /* data pairs */
 	size_t		 pairsz; /* number of pairs */

@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 15 2014 $
+.Dd $Mdocdate: January 16 2015 $
 .Dt KDATA_VECTOR_ADD 3
 .Os
 .Sh NAME
@@ -28,8 +28,10 @@ If necessary, the internal data source will be reallocated to hold the
 newly-appended data.
 .Sh RETURN VALUES
 .Nm
-returns 0 if the vector required reallocation and this failed, otherwise
-it returns non-zero.
+returns 0 if the vector reallocation failed, a dependant modification
+failed, or the data source was not created with
+.Xr kdata_vector_alloc 3 ;
+otherwise it returns non-zero.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES

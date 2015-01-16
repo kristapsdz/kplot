@@ -57,11 +57,45 @@ kdata_array_fill(struct kdata *d, void *arg,
 	size_t	 i;
 	int	 rc;
 
-	assert(KDATA_ARRAY == d->type);
+	if (KDATA_ARRAY != d->type)
+		return(0);
+	
 	for (rc = 1, i = 0; 0 != rc && i < d->pairsz; i++) {
 		(*fp)(i, &d->pairs[i], arg);
 		rc = kdata_dep_run(d, i);
 	}
 
 	return(rc);
+}
+
+static int
+kdata_array_checkrange(const struct kdata *d, size_t v)
+{
+
+	if (KDATA_ARRAY != d->type)
+		return(0);
+	else if (v >= d->pairsz)
+		return(0);
+
+	return(1);
+}
+
+int
+kdata_array_add(struct kdata *d, size_t v, double val)
+{
+
+	if ( ! kdata_array_checkrange(d, v))
+		return(0);
+	d->pairs[v].y += val;
+	return(kdata_dep_run(d, v));
+}
+
+int
+kdata_array_set(struct kdata *d, size_t v, double val)
+{
+
+	if ( ! kdata_array_checkrange(d, v))
+		return(0);
+	d->pairs[v].y = val;
+	return(kdata_dep_run(d, v));
 }

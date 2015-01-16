@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 15 2014 $
+.Dd $Mdocdate: January 15 2015 $
 .Dt KDATA_ARRAY_ALLOC 3
 .Os
 .Sh NAME
@@ -26,8 +26,12 @@ If passed a
 pointer as
 .Fa pairs ,
 the buffers are pre-allocated to zero.
-These values can be later reset with
-.Xr kdata_array_fill 3 .
+These values can be later reset (but not resized) with
+.Xr kdata_array_fill 3 ,
+or directly modified with
+.Xr kdata_array_add 3
+or
+.Xr kdata_array_set 3 .
 .Sh RETURN VALUES
 .Nm
 returns

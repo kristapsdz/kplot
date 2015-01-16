@@ -141,24 +141,26 @@ struct	kplotcfg {
 	double		  yaxislabelrot;
 };
 
+struct 	kdata;
+
 __BEGIN_DECLS
 
+int		 kdata_array_add(struct kdata *, size_t, double);
 struct kdata	*kdata_array_alloc(const struct kpair *, size_t);
 int		 kdata_array_fill(struct kdata *, void *,
 			void (*)(size_t, struct kpair *, void *));
-struct kdata	*kdata_bucket_alloc(size_t, size_t);
+int		 kdata_array_set(struct kdata *, size_t, double);
 int		 kdata_bucket_add(struct kdata *, size_t, double);
+struct kdata	*kdata_bucket_alloc(size_t, size_t);
 int		 kdata_bucket_set(struct kdata *, size_t, double);
 struct kdata	*kdata_buffer_alloc(void);
 int		 kdata_buffer_copy(struct kdata *, const struct kdata *);
-
+void		 kdata_destroy(struct kdata *);
+int		 kdata_hist_add(struct kdata *, double, double);
+struct kdata	*kdata_hist_alloc(double, double, size_t);
+int		 kdata_hist_set(struct kdata *, double, double);
 struct kdata	*kdata_mean_alloc(struct kdata *);
 int		 kdata_mean_attach(struct kdata *, struct kdata *);
-
-void		 kdata_destroy(struct kdata *);
-struct kdata	*kdata_hist_alloc(double, double, size_t);
-int		 kdata_hist_add(struct kdata *, double, double);
-int		 kdata_hist_set(struct kdata *, double, double);
 struct kdata	*kdata_vector_alloc(size_t);
 int		 kdata_vector_append(struct kdata *, double, double);
 

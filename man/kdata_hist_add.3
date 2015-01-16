@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 15 2014 $
+.Dd $Mdocdate: January 16 2015 $
 .Dt KDATA_HIST_INCREMENT 3
 .Os
 .Sh NAME
@@ -39,9 +39,9 @@ It is used for data sources created with
 .Nm kdata_hist_add
 and
 .Nm kdata_hist_set
-return 0 if the requested bucket is outside of the bucket range or the
-source was not created with
-.Xr kdata_hist_alloc 3 ,
+return 0 if the requested bucket is outside of the bucket range, a
+dependant modification failed, or the source was not created with
+.Xr kdata_hist_alloc 3 ;
 otherwise it returns non-zero.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
