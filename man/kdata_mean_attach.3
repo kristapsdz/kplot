@@ -1,23 +1,23 @@
-.Dd $Mdocdate: November 18 2014 $
+.Dd $Mdocdate: January 15 2015 $
 .Dt KDATA_MEAN_ADD 3
 .Os
 .Sh NAME
-.Nm kdata_mean_add
-.Nd add source for mean data plotting
+.Nm kdata_mean_attach
+.Nd attach source for mean data plotting
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
 .Ft int
-.Fo kdata_mean_add
+.Fo kdata_mean_attach
 .Fa "struct kdata *dst"
 .Fa "struct kdata *source"
 .Fc
 .Sh DESCRIPTION
 The
-.Nm kdata_mean_add
-adds a data source
+.Nm kdata_mean_attach
+attach a data source
 .Fa source
 to a mean data source
 .Fa dst
@@ -27,9 +27,7 @@ The internal buffers will be increased, if necessary, to the size of the
 new buffer.
 .Sh RETURN VALUES
 .Nm
-returns
-.Dv NULL
-if memory allocation failed.
+returns 0 if memory allocation failed.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES

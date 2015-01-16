@@ -38,7 +38,7 @@ kdata_vector_alloc(size_t step)
 }
 
 int
-kdata_vector_add(struct kdata *d, double x, double y)
+kdata_vector_append(struct kdata *d, double x, double y)
 {
 	void	*p;
 

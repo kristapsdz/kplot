@@ -52,7 +52,7 @@ kdata_mean_set(struct kdata *d, size_t pos, double x, double y)
         delta_n = delta / (double)d->d.mean.ns[pos];
 	d->pairs[pos].y += delta_n;
 	d->pairs[pos].x = x;
-	return(1);
+	return(kdata_dep_run(d, pos));
 }
 
 struct kdata *
@@ -82,7 +82,7 @@ kdata_mean_alloc(struct kdata *dep)
 }
 
 int
-kdata_mean_add(struct kdata *d, struct kdata *dep)
+kdata_mean_attach(struct kdata *d, struct kdata *dep)
 {
 	void	*p;
 	size_t	 i;

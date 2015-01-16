@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 18 2014 $
+.Dd $Mdocdate: January 15 2015 $
 .Dt KDATA_MEAN_ALLOC 3
 .Os
 .Sh NAME
@@ -19,7 +19,7 @@ The
 creates a reference-counted data sources for
 .Xr kplot 3 .
 It piggy-backs on zero or more existing data sources and, when they
-update their values, tracks the mean value of the updates.
+update their values, tracks the mean value of the newly-updated value.
 The internal buffer is sized to the maximum index of all piggy-backed
 data sources, and initialises to zero for new buffer elements.
 .Pp
@@ -37,8 +37,8 @@ If
 is
 .Dv NULL ,
 the data source will be empty.
-Further data sources may be added with
-.Xr kdata_array_add 3 .
+Further data sources may be attached with
+.Xr kdata_mean_attach 3 .
 .Sh RETURN VALUES
 .Nm
 returns
@@ -55,7 +55,7 @@ if memory allocation failed.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
-.Xr kdata_mean_add 3 ,
+.Xr kdata_mean_attach 3 ,
 .Xr kplot 3
 .Rs
 .%A Donald E. Knuth
@@ -69,7 +69,11 @@ if memory allocation failed.
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
 .\" .Sh AUTHORS
-.\" .Sh CAVEATS
+.Sh CAVEATS
+If you attach a mean-value data source to a data source upon which one
+aggregates a value instead of setting it, the mean-value will be
+computed from the sequence of aggregating value, not the sequence of
+values themselves!
 .\" .Sh BUGS
 .\" .Sh SECURITY CONSIDERATIONS
 .\" Not used in OpenBSD.

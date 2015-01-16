@@ -1,8 +1,8 @@
-.Dd $Mdocdate: November 13 2014 $
+.Dd $Mdocdate: November 15 2014 $
 .Dt KDATA_VECTOR_ADD 3
 .Os
 .Sh NAME
-.Nm kdata_vector_add
+.Nm kdata_vector_append
 .Nd append data to a vector data source
 .Sh LIBRARY
 .Lb libkplot
@@ -10,7 +10,7 @@
 .In cairo.h
 .In kplot.h
 .Ft int
-.Fo kdata_vector_add
+.Fo kdata_vector_append
 .Fa "struct kdata *data"
 .Fa "double x"
 .Fa "double y"
@@ -28,7 +28,8 @@ If necessary, the internal data source will be reallocated to hold the
 newly-appended data.
 .Sh RETURN VALUES
 .Nm
-returns 0 if the vector required reallocation and this failed.
+returns 0 if the vector required reallocation and this failed, otherwise
+it returns non-zero.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
@@ -40,6 +41,7 @@ returns 0 if the vector required reallocation and this failed.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kdata_vector_alloc 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

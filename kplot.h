@@ -147,21 +147,20 @@ struct kdata	*kdata_array_alloc(const struct kpair *, size_t);
 int		 kdata_array_fill(struct kdata *, void *,
 			void (*)(size_t, struct kpair *, void *));
 struct kdata	*kdata_bucket_alloc(size_t, size_t);
-int		 kdata_bucket_increment(struct kdata *, size_t);
+int		 kdata_bucket_add(struct kdata *, size_t, double);
+int		 kdata_bucket_set(struct kdata *, size_t, double);
 struct kdata	*kdata_buffer_alloc(void);
 int		 kdata_buffer_copy(struct kdata *, const struct kdata *);
 
-struct kdata	*kdata_add_alloc(struct kdata *, ...);
-struct kdata	*kdata_sub_alloc(struct kdata *, ...);
 struct kdata	*kdata_mean_alloc(struct kdata *);
-int		 kdata_mean_add(struct kdata *, struct kdata *);
-struct kdata	*kdata_stddev_alloc(struct kdata *);
+int		 kdata_mean_attach(struct kdata *, struct kdata *);
 
 void		 kdata_destroy(struct kdata *);
 struct kdata	*kdata_hist_alloc(double, double, size_t);
-int		 kdata_hist_increment(struct kdata *, double);
+int		 kdata_hist_add(struct kdata *, double, double);
+int		 kdata_hist_set(struct kdata *, double, double);
 struct kdata	*kdata_vector_alloc(size_t);
-int		 kdata_vector_add(struct kdata *, double, double);
+int		 kdata_vector_append(struct kdata *, double, double);
 
 void		 kdatacfg_defaults(struct kdatacfg *);
 void		 kplotcfg_defaults(struct kplotcfg *);

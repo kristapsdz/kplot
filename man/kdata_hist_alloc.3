@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 15 2014 $
+.Dd $Mdocdate: November 18 2014 $
 .Dt KDATA_HIST_ALLOC 3
 .Os
 .Sh NAME
@@ -24,8 +24,10 @@ It uses a histogram data model: the data array is laid out in
 uniformly-spaced buckets of size (rmax - rmin) / bins, with a given
 value x falling into bucket [i / bins * (rmax - rmin) <= x < (i + 1) /
 bins * (rmax - rmin)].
-Bucket values are incremented with
-.Xr kdata_hist_increment 3 .
+Bucket values are modified with
+.Xr kdata_hist_add 3
+and
+.Xr kdata_hist_set 3 .
 .Sh RETURN VALUES
 .Nm
 returns
@@ -42,6 +44,7 @@ if memory allocation failed.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kdata_hist_add 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

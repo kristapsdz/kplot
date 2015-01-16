@@ -1,30 +1,48 @@
-.Dd $Mdocdate: November 13 2014 $
+.Dd $Mdocdate: November 15 2014 $
 .Dt KDATA_HIST_INCREMENT 3
 .Os
 .Sh NAME
-.Nm kdata_hist_increment
-.Nd increment histogram bucket
+.Nm kdata_hist_add
+.Nm kdata_hist_set
+.Nd modify histogram data values
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
 .Ft int
-.Fo kdata_hist_increment
+.Fo kdata_hist_add
 .Fa "struct kdata *d"
-.Fa "double v"
+.Fa "double x"
+.Fa "double y"
+.Fc
+.Ft int
+.Fo kdata_hist_set
+.Fa "struct kdata *d"
+.Fa "double x"
+.Fa "double y"
 .Fc
 .Sh DESCRIPTION
 The
-.Nm kdata_hist_increment
-function increments the bucket into which
-.Fa v
+.Nm kdata_hist_add
+and
+.Nm kdata_hist_set
+functions add or set
+.Fa y
+.Pq which is not checked for restrictions
+to the bucket into which
+.Fa x
 falls.
 It is used for data sources created with
 .Xr kdata_hist_alloc 3 .
 .Sh RETURN VALUES
-.Nm
-returns 0 if the requested bucket is outside of the histogram's range.
+.Nm kdata_hist_add
+and
+.Nm kdata_hist_set
+return 0 if the requested bucket is outside of the bucket range or the
+source was not created with
+.Xr kdata_hist_alloc 3 ,
+otherwise it returns non-zero.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
@@ -36,6 +54,7 @@ returns 0 if the requested bucket is outside of the histogram's range.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kdata_hist_alloc 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

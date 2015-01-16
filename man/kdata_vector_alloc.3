@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 13 2014 $
+.Dd $Mdocdate: November 15 2014 $
 .Dt KDATA_VECTOR_ALLOC 3
 .Os
 .Sh NAME
@@ -18,9 +18,8 @@ The
 .Nm kdata_vector_alloc
 function creates a reference-counted data sources for
 .Xr kplot 3 .
-It is growable, initialised to zero and growing in
-.Va stepsz
-as data is added to the vector.
+It is growable via
+.Xr kdata_vector_append 3 .
 .Sh RETURN VALUES
 .Nm
 returns
@@ -37,6 +36,7 @@ if memory allocation failed.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kdata_vector_append 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

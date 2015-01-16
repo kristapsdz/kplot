@@ -24,10 +24,18 @@
 
 #include "kplot.h"
 
+static void
+fill(size_t pos, struct kpair *val, void *dat)
+{
+
+	val->x = pos;
+	val->y = arc4random() / (double)UINT32_MAX;
+}
+
 int
 main(int argc, char *argv[])
 {
-	struct kdata	*d;
+	struct kdata	*d, *md;
 	struct kplot	*p;
 	cairo_surface_t	*surf;
 	size_t		 i;
@@ -37,30 +45,29 @@ main(int argc, char *argv[])
 
 	rc = EXIT_FAILURE;
 
-	d = NULL;
-	p = NULL;
-
-	if (NULL == (d = kdata_hist_alloc(0.0, 1.0, 50))) {
-		perror(NULL);
-		goto out;
-	}
-
-	for (i = 0; i < 1000; i++) {
-		c = kdata_hist_add(d, 
-			arc4random() / (double)UINT32_MAX, 1.0);
+	d = kdata_array_alloc(NULL, 100);
+	md = kdata_mean_alloc(d);
+	
+	for (i = 0; i < 100; i++) {
+		c = kdata_array_fill(d, NULL, fill);
 		assert(c);
 	}
 
 	if (NULL == (p = kplot_alloc())) {
 		perror(NULL);
 		goto out;
-	} else if ( ! kplot_data_add(p, d, KPLOT_LINES, NULL)) {
+	} else if ( ! kplot_data_add(p, d, KPLOT_POINTS, NULL)) {
+		perror(NULL);
+		goto out;
+	} else if ( ! kplot_data_add(p, md, KPLOT_LINES, NULL)) {
 		perror(NULL);
 		goto out;
 	}
 
 	kdata_destroy(d);
-	d = NULL;
+	kdata_destroy(md);
+
+	d = md = NULL;
 
 	surf = cairo_image_surface_create
 		(CAIRO_FORMAT_ARGB32, 600, 400);
@@ -91,7 +98,7 @@ main(int argc, char *argv[])
 	kplot_draw(p, 600.0, 400.0, cr, NULL);
 
 	st = cairo_surface_write_to_png
-		(cairo_get_target(cr), "example3.png");
+		(cairo_get_target(cr), "example4.png");
 
 	if (CAIRO_STATUS_SUCCESS != st) {
 		fprintf(stderr, "%s", cairo_status_to_string(st));
@@ -105,5 +112,6 @@ main(int argc, char *argv[])
 out:
 	kplot_free(p);
 	kdata_destroy(d);
+	kdata_destroy(md);
 	return(rc);
 }

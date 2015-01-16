@@ -53,32 +53,52 @@ kdata_hist_alloc(double rmin, double rmax, size_t bins)
 	return(d);
 }
 
-int
-kdata_hist_increment(struct kdata *d, double v)
+static ssize_t
+kdata_hist_checkrange(const struct kdata *d, double v)
 {
-	size_t	 bucket;
 	double	 frac;
+	ssize_t	 bucket;
 
-	assert(KDATA_HIST == d->type);
-
-	if (v < d->d.hist.rmin)
-		return(0);
+	if (KDATA_HIST != d->type)
+		return(-1);
+	else if (v < d->d.hist.rmin)
+		return(-1);
 	else if (v >= d->d.hist.rmax)
-		return(0);
+		return(-1);
 
 	frac = (v - d->d.hist.rmin) / 
 		(d->d.hist.rmax - d->d.hist.rmin);
-
 	assert(frac >= 0.0 && frac < 1.0);
 	bucket = d->pairsz * frac;
 
-	if (bucket == d->pairsz - 1) {
+	if ((size_t)bucket == d->pairsz - 1) {
 		assert(d->pairs[bucket].x <= frac);
 	} else {
 		assert(d->pairs[bucket].x <= frac);
 		assert(d->pairs[bucket + 1].x >= frac);
 	}
 
-	d->pairs[bucket].y++;
+	return(bucket);
+}
+
+int
+kdata_hist_add(struct kdata *d, double v, double val)
+{
+	ssize_t	 bucket;
+
+	if ((bucket = kdata_hist_checkrange(d, v)) < 0)
+		return(0);
+	d->pairs[bucket].y += val;
+	return(kdata_dep_run(d, bucket));
+}
+
+int
+kdata_hist_set(struct kdata *d, double v, double val)
+{
+	ssize_t	 bucket;
+
+	if ((bucket = kdata_hist_checkrange(d, v)) < 0)
+		return(0);
+	d->pairs[bucket].y = val;
 	return(kdata_dep_run(d, bucket));
 }

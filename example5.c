@@ -24,10 +24,18 @@
 
 #include "kplot.h"
 
+static void
+fill(size_t pos, struct kpair *val, void *dat)
+{
+
+	val->x = pos;
+	val->y = arc4random() / (double)UINT32_MAX;
+}
+
 int
 main(int argc, char *argv[])
 {
-	struct kdata	*d;
+	struct kdata	*d[20], *md;
 	struct kplot	*p;
 	cairo_surface_t	*surf;
 	size_t		 i;
@@ -37,30 +45,39 @@ main(int argc, char *argv[])
 
 	rc = EXIT_FAILURE;
 
-	d = NULL;
-	p = NULL;
-
-	if (NULL == (d = kdata_hist_alloc(0.0, 1.0, 50))) {
-		perror(NULL);
-		goto out;
-	}
-
-	for (i = 0; i < 1000; i++) {
-		c = kdata_hist_add(d, 
-			arc4random() / (double)UINT32_MAX, 1.0);
+	md = kdata_mean_alloc(NULL);
+	for (i = 0; i < 20; i++) {
+		d[i] = kdata_array_alloc(NULL, 100);
+		assert(NULL != d[i]);
+		c = kdata_mean_attach(md, d[i]);
+		assert(c);
+		c = kdata_array_fill(d[i], NULL, fill);
 		assert(c);
 	}
 
 	if (NULL == (p = kplot_alloc())) {
 		perror(NULL);
 		goto out;
-	} else if ( ! kplot_data_add(p, d, KPLOT_LINES, NULL)) {
+	}
+
+	for (i = 0; i < 20; i++) {
+		if ( ! kplot_data_add(p, d[i], KPLOT_POINTS, NULL)) {
+			perror(NULL);
+			goto out;
+		}
+	}
+	if ( ! kplot_data_add(p, md, KPLOT_LINES, NULL)) {
 		perror(NULL);
 		goto out;
 	}
 
-	kdata_destroy(d);
-	d = NULL;
+	for (i = 0; i < 20; i++) {
+		kdata_destroy(d[i]);
+		d[i] = NULL;
+	}
+
+	kdata_destroy(md);
+	md = NULL;
 
 	surf = cairo_image_surface_create
 		(CAIRO_FORMAT_ARGB32, 600, 400);
@@ -91,7 +108,7 @@ main(int argc, char *argv[])
 	kplot_draw(p, 600.0, 400.0, cr, NULL);
 
 	st = cairo_surface_write_to_png
-		(cairo_get_target(cr), "example3.png");
+		(cairo_get_target(cr), "example5.png");
 
 	if (CAIRO_STATUS_SUCCESS != st) {
 		fprintf(stderr, "%s", cairo_status_to_string(st));
@@ -104,6 +121,8 @@ main(int argc, char *argv[])
 	rc = EXIT_SUCCESS;
 out:
 	kplot_free(p);
-	kdata_destroy(d);
+	for (i = 0; i < 20; i++)
+		kdata_destroy(d[i]);
+	kdata_destroy(md);
 	return(rc);
 }

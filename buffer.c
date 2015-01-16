@@ -1,6 +1,6 @@
 /*	$Id$ */
 /*
- * Copyright (c) 2014, 2015 Kristaps Dzonsons <kristaps@bsd.lv>
+ * Copyright (c) 2015 Kristaps Dzonsons <kristaps@bsd.lv>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -25,62 +25,35 @@
 #include "extern.h"
 
 struct kdata *
-kdata_bucket_alloc(size_t rmin, size_t rmax)
+kdata_buffer_alloc(void)
 {
 	struct kdata	*d;
-	size_t		 i;
 
 	if (NULL == (d = calloc(1, sizeof(struct kdata))))
 		return(NULL);
 
 	d->refs = 1;
-	d->pairsz = d->pairbufsz = rmax - rmin;
-	d->pairs = calloc(d->pairsz, sizeof(struct kpair));
-	if (NULL == d->pairs) {
-		free(d);
-		return(NULL);
-	}
-
-	for (i = 0; i < d->pairsz; i++) 
-		d->pairs[i].x = rmin + i;
-
-	d->type = KDATA_BUCKET;
-	d->d.bucket.rmin = rmin;
-	d->d.bucket.rmax = rmax;
+	d->pairsz = 0;
+	d->type = KDATA_BUFFER;
 	return(d);
 }
 
-static int
-kdata_bucket_checkrange(const struct kdata *d, size_t v)
+int
+kdata_buffer_copy(struct kdata *dst, const struct kdata *src)
 {
+	void	*p;
 
-	if (KDATA_BUCKET != d->type)
-		return(0);
-	else if (v < d->d.bucket.rmin)
-		return(0);
-	else if (v >= d->d.bucket.rmax)
-		return(0);
+	if (src->pairsz > dst->pairbufsz) {
+		dst->pairbufsz = src->pairsz;
+		p = reallocarray(dst->pairs, 
+			dst->pairbufsz, sizeof(struct kpair));
+		if (NULL == p)
+			return(0);
+		dst->pairs = p;
+	}
 
+	dst->pairsz = src->pairsz;
+	memcpy(dst->pairs, src->pairs, 
+		dst->pairsz * sizeof(struct kpair));
 	return(1);
-}
-
-int
-kdata_bucket_set(struct kdata *d, size_t v, double val)
-{
-
-	if ( ! kdata_bucket_checkrange(d, v))
-		return(0);
-	d->pairs[v - d->d.bucket.rmin].y = val;
-	return(kdata_dep_run(d, v - d->d.bucket.rmin));
-}
-
-int
-kdata_bucket_add(struct kdata *d, size_t v, double val)
-{
-
-	if ( ! kdata_bucket_checkrange(d, v))
-		return(0);
-
-	d->pairs[v - d->d.bucket.rmin].y += val;
-	return(kdata_dep_run(d, v - d->d.bucket.rmin));
 }
