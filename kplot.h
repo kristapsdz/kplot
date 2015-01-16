@@ -168,7 +168,7 @@ void		 kdatacfg_defaults(struct kdatacfg *);
 void		 kplotcfg_defaults(struct kplotcfg *);
 
 struct kplot	*kplot_alloc(void);
-int		 kplot_data_add(struct kplot *, struct kdata *, 
+int		 kplot_data_attach(struct kplot *, struct kdata *, 
 			enum kplottype, const struct kdatacfg *);
 void		 kplot_data_remove_all(struct kplot *);
 void		 kplot_draw(const struct kplot *, 

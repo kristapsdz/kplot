@@ -60,7 +60,7 @@ kplot_data_remove_all(struct kplot *p)
 }
 
 int
-kplot_data_add(struct kplot *p, struct kdata *d, 
+kplot_data_attach(struct kplot *p, struct kdata *d, 
 	enum kplottype t, const struct kdatacfg *cfg)
 {
 	void	*pp;

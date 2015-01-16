@@ -2,7 +2,7 @@
 .Dt KPLOT_DATA_ADD 3
 .Os
 .Sh NAME
-.Nm kplot_data_add
+.Nm kplot_data_attach
 .Nd assign plot data to plotting context
 .Sh LIBRARY
 .Lb libkplot
@@ -10,7 +10,7 @@
 .In cairo.h
 .In kplot.h
 .Ft int
-.Fo kplot_data_add
+.Fo kplot_data_attach
 .Fa "const struct kplot *p"
 .Fa "struct kdata *d"
 .Fa "enum kplottype t"

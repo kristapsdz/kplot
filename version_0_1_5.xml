@@ -11,10 +11,12 @@
 			href="kdata_mean_alloc.3.html">kdata_mean_alloc(3)</a>), which act on structural data sources (such as buckets) that
 		compute values based upon existing value-pairs.
 		Also removed the <code>kdata_array_realloc()</code> function.
-		For clarity, renamed <code>kdata_hist_increment(3)</code>, <code>kdata_bucket_increment(3)</code>, and
-		<code>kdata_vector_add(3)</code> to <a href="kdata_hist_add.3.html">kdata_hist_add(3)</a>, <a
-			href="kdata_bucket_add.3.html">kdata_bucket_add(3)</a>, and <a
-			href="kdata_vector_append.3.html">kdata_vector_append(3)</a>, respectively.
+		For clarity, renamed <code>kdata_hist_increment(3)</code>, <code>kdata_bucket_increment(3)</code>, 
+		<code>kdata_vector_add(3)</code>, and <code>kplot_data_add(3)</code> 
+		to <a href="kdata_hist_add.3.html">kdata_hist_add(3)</a>, <a
+			href="kdata_bucket_add.3.html">kdata_bucket_add(3)</a>, <a
+			href="kdata_vector_append.3.html">kdata_vector_append(3)</a>, and <a 
+			href="kplot_data_attach.3.html">kplot_data_attach(3)</a>, respectively.
 		Added <a href="kdata_array_fill.3.html">kdata_array_add(3)</a>
 		and <a href="kdata_array_fill.3.html">kdata_array_set(3)</a>
 		for completeness.

@@ -69,7 +69,7 @@ HTMLS		= index.html \
 		  man/kdatacfg_defaults.3.html \
 		  man/kplot.3.html \
 		  man/kplot_alloc.3.html \
-		  man/kplot_data_add.3.html \
+		  man/kplot_data_attach.3.html \
 		  man/kplot_data_remove_all.3.html \
 		  man/kplot_draw.3.html \
 		  man/kplot_free.3.html \
@@ -90,7 +90,7 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kdatacfg_defaults.3 \
 		  man/kplot.3 \
 		  man/kplot_alloc.3 \
-		  man/kplot_data_add.3 \
+		  man/kplot_data_attach.3 \
 		  man/kplot_data_remove_all.3 \
 		  man/kplot_draw.3 \
 		  man/kplot_free.3 \
