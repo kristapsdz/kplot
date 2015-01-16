@@ -33,6 +33,7 @@ struct	kdatamean {
 
 struct	kdatavector {
 	size_t		 stepsz; /* vector increase slush size */
+	size_t		 pairbufsz; /* allocated buffer size */
 };
 
 enum	kdatatype {
@@ -63,7 +64,6 @@ struct	kdep {
 struct	kdata {
 	struct kpair	*pairs; /* data pairs */
 	size_t		 pairsz; /* number of pairs */
-	size_t		 pairbufsz; /* allocated buffer size */
 	size_t		 refs; /* >0 references to data */
 	struct kdep	*deps; /* dependants */
 	size_t		 depsz; /* number of dependants */

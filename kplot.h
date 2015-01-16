@@ -153,7 +153,7 @@ int		 kdata_array_set(struct kdata *, size_t, double);
 int		 kdata_bucket_add(struct kdata *, size_t, double);
 struct kdata	*kdata_bucket_alloc(size_t, size_t);
 int		 kdata_bucket_set(struct kdata *, size_t, double);
-struct kdata	*kdata_buffer_alloc(void);
+struct kdata	*kdata_buffer_alloc(size_t);
 int		 kdata_buffer_copy(struct kdata *, const struct kdata *);
 void		 kdata_destroy(struct kdata *);
 int		 kdata_hist_add(struct kdata *, double, double);

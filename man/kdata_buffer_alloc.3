@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 18 2014 $
+.Dd $Mdocdate: January 15 2015 $
 .Dt KDATA_BUFFER_ALLOC 3
 .Os
 .Sh NAME
@@ -10,12 +10,16 @@
 .In cairo.h
 .In kplot.h
 .Ft "struct kdata *"
-.Fn kdata_buffer_alloc
+.Fo kdata_buffer_alloc
+.Fa "size_t hintsz"
+.Fc
 .Sh DESCRIPTION
 The
 .Nm kdata_buffer_alloc
 function creates a reference-counted data sources for
-.Xr kplot 3 .
+.Xr kplot 3 ,
+initially sized to
+.Fa hintsz .
 It's primarily used to copy other data sources into an immutable one.
 Bucket values are copied into this structure via
 .Xr kdata_buffer_copy 3 .

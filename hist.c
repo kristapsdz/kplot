@@ -36,7 +36,7 @@ kdata_hist_alloc(double rmin, double rmax, size_t bins)
 		return(NULL);
 
 	d->refs = 1;
-	d->pairsz = d->pairbufsz = bins;
+	d->pairsz = bins;
 	d->pairs = calloc(d->pairsz, sizeof(struct kpair));
 	if (NULL == d->pairs) {
 		free(d);

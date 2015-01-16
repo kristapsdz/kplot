@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 15 2015 $
+.Dd $Mdocdate: January 16 2015 $
 .Dt KDATA_MEAN_ADD 3
 .Os
 .Sh NAME
@@ -17,7 +17,7 @@
 .Sh DESCRIPTION
 The
 .Nm kdata_mean_attach
-attach a data source
+function attaches a data source
 .Fa source
 to a mean data source
 .Fa dst
@@ -25,9 +25,20 @@ allocated with
 .Xr kdata_mean_alloc 3 .
 The internal buffers will be increased, if necessary, to the size of the
 new buffer.
+If the buffer is increased, the mean values of the new buckets are set to zero.
+The x-values of the new pairs are set to the new source's x-values.
+.Pp
+Passing
+.Dv NULL
+as
+.Fa source
+will simply return.
 .Sh RETURN VALUES
 .Nm
-returns 0 if memory allocation failed.
+returns 0 if memory allocation failed or if
+.Fa dst
+was not allocated with
+.Xr kdata_mean_alloc 3 .
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
@@ -53,7 +64,9 @@ returns 0 if memory allocation failed.
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
 .\" .Sh AUTHORS
-.\" .Sh CAVEATS
+.Sh CAVEATS
+If you attach multiple sources with different x-values, the mean
+x-values will be inconsistent.
 .\" .Sh BUGS
 .\" .Sh SECURITY CONSIDERATIONS
 .\" Not used in OpenBSD.

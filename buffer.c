@@ -25,15 +25,20 @@
 #include "extern.h"
 
 struct kdata *
-kdata_buffer_alloc(void)
+kdata_buffer_alloc(size_t hint)
 {
 	struct kdata	*d;
 
 	if (NULL == (d = calloc(1, sizeof(struct kdata))))
 		return(NULL);
 
+	d->pairsz = hint;
+	if (NULL == (d->pairs = calloc(d->pairsz, sizeof(struct kpair)))) {
+		free(d);
+		return(NULL);
+	}
+
 	d->refs = 1;
-	d->pairsz = 0;
 	d->type = KDATA_BUFFER;
 	return(d);
 }
@@ -43,10 +48,16 @@ kdata_buffer_copy(struct kdata *dst, const struct kdata *src)
 {
 	void	*p;
 
-	if (src->pairsz > dst->pairbufsz) {
-		dst->pairbufsz = src->pairsz;
+	/* 
+	 * FIXME: use a pairbufsz-type of construct.
+	 * We're not tied to any particular buffer size, so this should
+	 * grow and shrink efficiently.
+	 * Obviously, the current method is not efficient.
+	 */
+	if (src->pairsz > dst->pairsz) {
+		dst->pairsz = src->pairsz;
 		p = reallocarray(dst->pairs, 
-			dst->pairbufsz, sizeof(struct kpair));
+			dst->pairsz, sizeof(struct kpair));
 		if (NULL == p)
 			return(0);
 		dst->pairs = p;

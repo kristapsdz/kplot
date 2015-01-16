@@ -32,8 +32,18 @@ kdata_mean_set(struct kdata *d, size_t pos, double x, double y)
 
 	assert(KDATA_MEAN == d->type);
 
-	/* FIXME: zeroing the new values? */
-	if (pos > d->pairsz) {
+	if (pos >= d->pairsz) {
+		/*
+		 * A note on this.
+		 * Our only growable data source is the vector, which
+		 * can only grow one at a time.
+		 * Thus, if we attach to a vector, we'll never exceed
+		 * this.
+		 * If we have non-monotonically increasing data source
+		 * sizes, this will need to be addressed.
+		 * FIXME: this is very inefficient!
+		 */
+		assert(pos == d->pairsz);
 		d->pairsz = pos + 1;
 		p = reallocarray(d->pairs, 
 			d->pairsz, sizeof(struct kpair));
@@ -59,6 +69,7 @@ struct kdata *
 kdata_mean_alloc(struct kdata *dep)
 {
 	struct kdata	*d;
+	size_t		 i;
 
 	if (NULL == (d = calloc(1, sizeof(struct kdata))))
 		return(NULL);
@@ -78,6 +89,10 @@ kdata_mean_alloc(struct kdata *dep)
 		return(NULL);
 	}
 	kdata_dep_add(d, dep, kdata_mean_set);
+
+	for (i = 0; i < dep->pairsz; i++)
+		d->pairs[i].x = dep->pairs[i].x;
+
 	return(d);
 }
 
@@ -87,7 +102,10 @@ kdata_mean_attach(struct kdata *d, struct kdata *dep)
 	void	*p;
 	size_t	 i;
 
-	assert(KDATA_MEAN == d->type);
+	if (KDATA_MEAN != d->type)
+		return(0);
+	if (NULL == dep)
+		return(1);
 
 	if (d->pairsz < dep->pairsz) {
 		p = reallocarray(d->pairs, 
@@ -106,6 +124,8 @@ kdata_mean_attach(struct kdata *d, struct kdata *dep)
 		for (i = d->pairsz; i < dep->pairsz; i++) 
 			d->d.mean.ns[i] = 0;
 		d->pairsz = dep->pairsz;
+		for (i = 0; i < dep->pairsz; i++)
+			d->pairs[i].x = dep->pairs[i].x;
 	}
 
 	kdata_dep_add(d, dep, kdata_mean_set);

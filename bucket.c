@@ -34,7 +34,7 @@ kdata_bucket_alloc(size_t rmin, size_t rmax)
 		return(NULL);
 
 	d->refs = 1;
-	d->pairsz = d->pairbufsz = rmax - rmin;
+	d->pairsz = rmax - rmin;
 	d->pairs = calloc(d->pairsz, sizeof(struct kpair));
 	if (NULL == d->pairs) {
 		free(d);
