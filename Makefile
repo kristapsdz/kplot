@@ -2,10 +2,16 @@
 
 CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
 CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/usr/X11/include/cairo'`
-VERSION		= 0.1.4
+VERSION		= 0.1.5
 LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcairo'`
 VERSIONS	= version_0_1_4.xml \
 		  version_0_1_5.xml
+PNGS		= example0.png \
+		  example1.png \
+		  example2.png \
+		  example3.png \
+		  example4.png \
+		  example5.png
 SRCS		= Makefile \
 		  compat.post.h \
 		  compat.pre.h \
@@ -106,12 +112,12 @@ install: all
 	install -m 0444 kplot.h $(DESTDIR)$(PREFIX)/include
 	install -m 0444 $(MANS) $(DESTDIR)$(PREFIX)/man/man3
 
-www: $(HTMLS) example0.png kplot-$(VERSION).tgz kplot-$(VERSION).tgz.sha512
+www: $(HTMLS) $(PNGS) kplot-$(VERSION).tgz kplot-$(VERSION).tgz.sha512
 
 installwww: www
 	mkdir -p $(PREFIX)
 	mkdir -p $(PREFIX)/snapshots
-	install -m 0444 example0.png $(HTMLS) index.css $(PREFIX)
+	install -m 0444 $(PNGS) $(HTMLS) index.css $(PREFIX)
 	install -m 0444 kplot-$(VERSION).tgz $(PREFIX)/snapshots/kplot.tgz
 	install -m 0444 kplot-$(VERSION).tgz.sha512 $(PREFIX)/snapshots/kplot.tgz.sha512
 	install -m 0444 kplot-$(VERSION).tgz $(PREFIX)/snapshots
@@ -139,6 +145,21 @@ example5: example5.c libkplot.a
 
 example0.png: example0
 	./example0
+
+example1.png: example1
+	./example1
+
+example2.png: example2
+	./example2
+
+example3.png: example3
+	./example3
+
+example4.png: example4
+	./example4
+
+example5.png: example5
+	./example5
 
 libkplot.a: $(OBJS)
 	$(AR) rs $@ $(OBJS)

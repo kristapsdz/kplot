@@ -2,7 +2,7 @@
 	<header>
 		<h1>0.1.5</h1>
 		<address>Kristaps Dzonsons</address>
-		<time datetime="2015-01-15">2015-01-15</time>
+		<time datetime="2015-01-16">2015-01-16</time>
 	</header>
 	<aside>
 		Removed the <code>kdata_copy()</code> function in favour of <a href="kdata_buffer_alloc.3.html">kdata_buffer_alloc(3)</a> and <a

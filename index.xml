@@ -9,6 +9,14 @@
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
 	</head>
 	<body itemscope="itemscope" itemtype="http://schema.org/SoftwareApplication">
+		<figure id="gallery">
+			<div><a href="example0.png"><img src="example0.png" alt="Example" /></a></div>
+			<div><a href="example1.png"><img src="example1.png" alt="Example" /></a></div>
+			<div><a href="example2.png"><img src="example2.png" alt="Example" /></a></div>
+			<div><a href="example3.png"><img src="example3.png" alt="Example" /></a></div>
+			<div><a href="example4.png"><img src="example4.png" alt="Example" /></a></div>
+			<div><a href="example5.png"><img src="example5.png" alt="Example" /></a></div>
+		</figure>
 		<header>
 			<h1>
 				<span itemprop="name" class="nm">kplot</span> 
@@ -21,7 +29,7 @@
 				<a href="snapshots"><i class="fa fa-fw fa-archive"></i></a>
 			</nav>
 		</header>
-		<figure>
+		<figure id="codesample">
 			<pre class="prettyprint linenums">#include &lt;cairo.h&gt;
 #include &lt;math.h&gt;
 #include &lt;stdio.h&gt;

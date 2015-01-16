@@ -28,9 +28,9 @@ pre, code		{ font-size: 10pt;
 			  font-family: monospace; }
 pre			{ margin: 0; }
 pre a			{ color: yellow; }
+#codesample		{ box-shadow: 0px -2px 4px #333; }
 header			{ text-align: center; 
 			  background-color: #eee;
-			  box-shadow: inset 0px -1px 4px #666;
 			  padding: 1em 0; }
 header > div > *	{ display: inline-block; 
 			  font-size: 24pt;
@@ -38,6 +38,19 @@ header > div > *	{ display: inline-block;
 nav[data-sblg-nav], p	{ padding: 0 4%; 
 			  line-height: 120%; }
 figure			{ margin: 0; }
+#gallery		{ display: table; 
+			  background-color: #eee;
+			  padding-top: 1ex;
+			  text-align: center; }
+#gallery div		{ display: table-cell; 
+			  text-align: center;
+			  width: 16.6%; }
+#gallery a:hover img	{ box-shadow: 1px 1px 2px #333; }
+#gallery img		{ background-color: #fff; 
+			  border-radius: 4px;
+			  border: thin solid silver;
+			  box-shadow: 1px 1px 2px #aaa;
+			  width: 85%; }
 figcaption		{ background-color: #ddd; 
 			  padding: 1ex 4%; }
 footer			{ text-align: center;
