@@ -18,7 +18,6 @@
 #include <cairo.h>
 #include <float.h>
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -121,6 +120,17 @@ kdata_extrema_single(const struct kplotdat *d,
 		maxv->y = d->cfgs[0].extrema_ymax;
 }
 
+static inline int
+kpair_vrfy(const struct kpair *data)
+{
+
+	if (0.0 != data->x && ! isnormal(data->x))
+		return(0);
+	if (0.0 != data->y && ! isnormal(data->y))
+		return(0);
+	return(1);
+}
+
 static inline void
 kpoint_to_real(const struct kpair *data, struct kpair *real,
 	const struct kpair *minv, const struct kpair *maxv,
@@ -143,153 +153,167 @@ kplotctx_point_to_real(const struct kpair *data,
 	struct kpair *real, const struct kplotctx *ctx)
 {
 
-	if (0.0 != data->x && ! isnormal(data->x))
+	if ( ! kpair_vrfy(data))
 		return(0);
-	if (0.0 != data->y && ! isnormal(data->y))
-		return(0);
-
-	kpoint_to_real(data, real, &ctx->minv, &ctx->maxv, ctx->w, ctx->h);
+	kpoint_to_real(data, real, 
+		&ctx->minv, &ctx->maxv, ctx->w, ctx->h);
 	return(1);
 }
 
-static void
-kplotctx_draw_yerrline_points(struct kplotctx *ctx, 
-	const struct kplotdat *d)
+static size_t
+kplotctx_draw_yerrline_start(struct kplotctx *ctx, 
+	const struct kplotdat *d, size_t *end)
 {
-	size_t		 i, sz;
-	struct kpair	 pair, delta;
-	int		 rc;
+	size_t	 start;
 
 	/* Overlap between both point sets. */
-	sz = d->datas[0]->pairsz < d->datas[1]->pairsz ?
+	*end = d->datas[0]->pairsz < d->datas[1]->pairsz ?
 		d->datas[0]->pairsz : d->datas[1]->pairsz;
+
+	/* Skip past bad points to get to initial. */
+	for (start = 0; start < *end; start++)
+		if (kpair_vrfy(&d->datas[0]->pairs[start]) &&
+			kpair_vrfy(&d->datas[1]->pairs[start]))
+			return(start);
+
+	return(*end);
+}
+
+static void
+kplotctx_draw_yerrline_basepoints(struct kplotctx *ctx, 
+	size_t start, size_t end, const struct kplotdat *d)
+{
+	size_t		 i;
+	struct kpair	 pair;
+	int		 rc;
 
 	/* Write baseline first. */
 	kplotctx_point_init(ctx, &d->cfgs[0].point);
-	for (i = 0; i < sz; i++) {
+	for (i = start; i < end; i++) {
+		if ( ! (kpair_vrfy(&d->datas[0]->pairs[i]) &&
+			kpair_vrfy(&d->datas[1]->pairs[i])))
+			continue;
 		rc = kplotctx_point_to_real
 			(&d->datas[0]->pairs[i], &pair, ctx);
-		if (0 == rc)
-			continue;
-		rc = kplotctx_point_to_real
-			(&d->datas[1]->pairs[i], &delta, ctx);
-		if (0 == rc)
-			continue;
+		assert(0 != rc);
 		cairo_arc(ctx->cr, pair.x, pair.y, 
 			d->cfgs[0].point.radius, 0, 2 * M_PI);
 		cairo_stroke(ctx->cr);
 	}
+}
+
+static void
+kplotctx_draw_yerrline_pairpoints(struct kplotctx *ctx, 
+	size_t start, size_t end, const struct kplotdat *d)
+{
+	size_t	 	i;
+	struct kpair	orig, pair;
+	int		rc;
 
 	/* Now line above. */
 	kplotctx_point_init(ctx, &d->cfgs[1].point);
-	for (i = 0; i < sz; i++) {
-		rc = kplotctx_point_to_real
-			(&d->datas[0]->pairs[i], &pair, ctx);
-		if (0 == rc)
+	for (i = start; i < end; i++) {
+		if ( ! (kpair_vrfy(&d->datas[0]->pairs[i]) &&
+			kpair_vrfy(&d->datas[1]->pairs[i])))
 			continue;
-		rc = kplotctx_point_to_real
-			(&d->datas[1]->pairs[i], &delta, ctx);
-		if (0 == rc)
-			continue;
-		cairo_arc(ctx->cr, pair.x, pair.y + delta.y, 
+		orig.x = d->datas[0]->pairs[i].x;
+		orig.y = d->datas[0]->pairs[i].y +
+			 d->datas[1]->pairs[i].y;
+		rc = kplotctx_point_to_real(&orig, &pair, ctx);
+		assert(0 != rc);
+		cairo_arc(ctx->cr, pair.x, pair.y,
 			d->cfgs[1].point.radius, 0, 2 * M_PI);
 		cairo_stroke(ctx->cr);
 	}
 
-	/* Now line below. */
+	/* Now line above. */
 	kplotctx_point_init(ctx, &d->cfgs[1].point);
-	for (i = 0; i < sz; i++) {
-		rc = kplotctx_point_to_real
-			(&d->datas[0]->pairs[i], &pair, ctx);
-		if (0 == rc)
+	for (i = start; i < end; i++) {
+		if ( ! (kpair_vrfy(&d->datas[0]->pairs[i]) &&
+			kpair_vrfy(&d->datas[1]->pairs[i])))
 			continue;
-		rc = kplotctx_point_to_real
-			(&d->datas[1]->pairs[i], &delta, ctx);
-		if (0 == rc)
-			continue;
-		cairo_arc(ctx->cr, pair.x, pair.y - delta.y, 
+		orig.x = d->datas[0]->pairs[i].x;
+		orig.y = d->datas[0]->pairs[i].y -
+			 d->datas[1]->pairs[i].y;
+		rc = kplotctx_point_to_real(&orig, &pair, ctx);
+		assert(0 != rc);
+		cairo_arc(ctx->cr, pair.x, pair.y,
 			d->cfgs[1].point.radius, 0, 2 * M_PI);
 		cairo_stroke(ctx->cr);
 	}
 }
 
 static void
-kplotctx_draw_yerrline_lines(struct kplotctx *ctx, 
-	const struct kplotdat *d)
+kplotctx_draw_yerrline_baselines(struct kplotctx *ctx, 
+	size_t start, size_t end, const struct kplotdat *d)
 {
-	size_t		 start, i, sz;
-	struct kpair	 pair, delta;
-	int		 rc, rc1, rc2;
+	size_t		 i;
+	struct kpair	 pair;
+	int		 rc;
 
-	/* Overlap between both point sets. */
-	sz = d->datas[0]->pairsz < d->datas[1]->pairsz ?
-		d->datas[0]->pairsz : d->datas[1]->pairsz;
+	assert(d->datasz > 1);
 
-	/* Skip past bad points to get to initial. */
-	for (start = 0; start < sz; start++) {
-		rc1 = kplotctx_point_to_real
-			(&d->datas[0]->pairs[start], &pair, ctx);
-		rc2 = kplotctx_point_to_real
-			(&d->datas[1]->pairs[start], &delta, ctx);
-		if (rc1 > 0 && rc2 > 0)
-			break;
-	}
-
-	/* Write baseline first. */
 	kplotctx_line_init(ctx, &d->cfgs[0].line);
 	kplotctx_point_to_real
 		(&d->datas[0]->pairs[start], &pair, ctx);
 	cairo_move_to(ctx->cr, pair.x, pair.y);
-	for (i = start; i < sz; i++) {
+	for (i = start; i < end; i++) {
+		if ( ! (kpair_vrfy(&d->datas[0]->pairs[i]) &&
+			kpair_vrfy(&d->datas[1]->pairs[i])))
+			continue;
 		rc = kplotctx_point_to_real
 			(&d->datas[0]->pairs[i], &pair, ctx);
-		if (0 == rc)
-			continue;
-		rc = kplotctx_point_to_real
-			(&d->datas[1]->pairs[i], &delta, ctx);
-		if (0 == rc)
-			continue;
+		assert(0 != rc);
 		cairo_line_to(ctx->cr, pair.x, pair.y);
 	}
 	cairo_stroke(ctx->cr);
+}
+
+static void
+kplotctx_draw_yerrline_pairlines(struct kplotctx *ctx, 
+	size_t start, size_t end, const struct kplotdat *d)
+{
+	struct kpair	 orig, pair;
+	size_t		 i;
+	int		 rc;
 
 	/* Now line above. */
 	kplotctx_line_init(ctx, &d->cfgs[1].line);
-	kplotctx_point_to_real
-		(&d->datas[0]->pairs[start], &pair, ctx);
-	kplotctx_point_to_real
-		(&d->datas[0]->pairs[start], &delta, ctx);
-	cairo_move_to(ctx->cr, pair.x, pair.y + delta.y);
-	for (i = start; i < sz; i++) {
-		rc = kplotctx_point_to_real
-			(&d->datas[0]->pairs[i], &pair, ctx);
-		if (0 == rc)
+	orig.x = d->datas[0]->pairs[start].x;
+	orig.y = d->datas[0]->pairs[start].y +
+		 d->datas[1]->pairs[start].y;
+	kplotctx_point_to_real(&orig, &pair, ctx);
+	cairo_move_to(ctx->cr, pair.x, pair.y);
+	for (i = start; i < end; i++) {
+		if ( ! (kpair_vrfy(&d->datas[0]->pairs[i]) &&
+			kpair_vrfy(&d->datas[1]->pairs[i])))
 			continue;
-		rc = kplotctx_point_to_real
-			(&d->datas[1]->pairs[i], &delta, ctx);
-		if (0 == rc)
-			continue;
-		cairo_line_to(ctx->cr, pair.x, pair.y + delta.y);
+		orig.x = d->datas[0]->pairs[i].x;
+		orig.y = d->datas[0]->pairs[i].y +
+			 d->datas[1]->pairs[i].y;
+		rc = kplotctx_point_to_real(&orig, &pair, ctx);
+		assert(0 != rc);
+		cairo_line_to(ctx->cr, pair.x, pair.y);
 	}
 	cairo_stroke(ctx->cr);
 
 	/* Now line below. */
 	kplotctx_line_init(ctx, &d->cfgs[1].line);
-	kplotctx_point_to_real
-		(&d->datas[0]->pairs[start], &pair, ctx);
-	kplotctx_point_to_real
-		(&d->datas[0]->pairs[start], &delta, ctx);
-	cairo_move_to(ctx->cr, pair.x, pair.y - delta.y);
-	for (i = start; i < sz; i++) {
-		rc = kplotctx_point_to_real
-			(&d->datas[0]->pairs[i], &pair, ctx);
-		if (0 == rc)
+	orig.x = d->datas[0]->pairs[start].x;
+	orig.y = d->datas[0]->pairs[start].y -
+		 d->datas[1]->pairs[start].y;
+	kplotctx_point_to_real(&orig, &pair, ctx);
+	cairo_move_to(ctx->cr, pair.x, pair.y);
+	for (i = start; i < end; i++) {
+		if ( ! (kpair_vrfy(&d->datas[0]->pairs[i]) &&
+			kpair_vrfy(&d->datas[1]->pairs[i])))
 			continue;
-		rc = kplotctx_point_to_real
-			(&d->datas[1]->pairs[i], &delta, ctx);
-		if (0 == rc)
-			continue;
-		cairo_line_to(ctx->cr, pair.x, pair.y - delta.y);
+		orig.x = d->datas[0]->pairs[i].x;
+		orig.y = d->datas[0]->pairs[i].y -
+			 d->datas[1]->pairs[i].y;
+		rc = kplotctx_point_to_real(&orig, &pair, ctx);
+		assert(0 != rc);
+		cairo_line_to(ctx->cr, pair.x, pair.y);
 	}
 	cairo_stroke(ctx->cr);
 }
@@ -308,6 +332,9 @@ kplotctx_draw_lines(struct kplotctx *ctx, const struct kplotdat *d)
 		if (rc > 0)
 			break;
 	}
+
+	if (i == d->datas[0]->pairsz)
+		return;
 
 	/* Draw remaining points. */
 	kplotctx_line_init(ctx, &d->cfgs[0].line);
@@ -413,7 +440,7 @@ void
 kplot_draw(const struct kplot *p, double w, 
 	double h, cairo_t *cr, const struct kplotcfg *cfg)
 {
-	size_t	 	i;
+	size_t	 	i, start, end;
 	struct kplotctx	ctx;
 
 	memset(&ctx, 0, sizeof(struct kplotctx));
@@ -476,15 +503,29 @@ kplot_draw(const struct kplot *p, double w,
 			}
 			break;
 		case (KPLOTS_YERRORLINE):
+			start = kplotctx_draw_yerrline_start
+				(&ctx, &p->datas[i], &end);
+			if (start == end)
+				break;
 			assert(p->datas[i].datasz > 1);
 			switch (p->datas[i].types[0]) {
 			case (KPLOT_POINTS):
-				kplotctx_draw_yerrline_points
-					(&ctx, &p->datas[i]);
+				kplotctx_draw_yerrline_basepoints
+					(&ctx, start, end, &p->datas[i]);
 				break;
 			case (KPLOT_LINES):
-				kplotctx_draw_yerrline_lines
-					(&ctx, &p->datas[i]);
+				kplotctx_draw_yerrline_baselines
+					(&ctx, start, end, &p->datas[i]);
+				break;
+			}
+			switch (p->datas[i].types[1]) {
+			case (KPLOT_POINTS):
+				kplotctx_draw_yerrline_pairpoints
+					(&ctx, start, end, &p->datas[i]);
+				break;
+			case (KPLOT_LINES):
+				kplotctx_draw_yerrline_pairlines
+					(&ctx, start, end, &p->datas[i]);
 				break;
 			}
 			break;

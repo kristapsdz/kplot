@@ -1,0 +1,78 @@
+.Dd $Mdocdate: January 16 2015 $
+.Dt KPLOT_DATAS_ATTACH 3
+.Os
+.Sh NAME
+.Nm kplot_datas_attach
+.Nd assign multi-plot data to plotting context
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft int
+.Fo kplot_data_attach
+.Fa "const struct kplot *p"
+.Fa "struct kdata **d"
+.Fa "const enum kplottype *t"
+.Fa "const struct kdatacfg *const *cfg"
+.Fa "enum kplotstype st"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm
+function assigns a
+.Qq multi-data
+source set
+.Fa d
+to a plotting context
+.Fa p ,
+reference-counting the data sources in the process.
+See
+.Xr kplot_data_attach 3
+for a more general description of attaching data.
+Multi-data source sets describe, e.g., error-bar or error-line graphs
+that consist of a baseline plot and one or more depending on it.
+The most common usage is for graphing mean and standard deviation via
+.Xr kdata_mean_alloc 3
+and
+.Xr kdata_stddev_alloc 3 .
+The order in which you arrange the array parameters: the first is the baseline
+and subsequent are defined by the plot type
+.Fa st .
+Only the
+.Fa cfg
+argument can be
+.Dv NULL
+.Pq as can individual array entries .
+The plot types are as follows:
+.Bl -tag -width Ds
+.It Dv KPLOTS_YERRORLINE
+Draw a baseline using the first element in
+.Fa d .
+The next element is used to draw error lines above and below the baseline.
+Subsequent lines are ignored.
+Error lines are indexed by bucket, not by x-value.
+.El
+.Sh RETURN VALUES
+.Nm
+returns 0 if allocation of internal structures fails due to memory
+exhaustion.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

@@ -1,0 +1,73 @@
+.Dd $Mdocdate: January 16 2015 $
+.Dt KDATA_STDDEV_ADD 3
+.Os
+.Sh NAME
+.Nm kdata_stddev_attach
+.Nd attach source for standard deviation data plotting
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft int
+.Fo kdata_stddev_attach
+.Fa "struct kdata *dst"
+.Fa "struct kdata *source"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm kdata_stddev_attach
+function attaches a data source
+.Fa source
+to a standard deviation data source
+.Fa dst
+allocated with
+.Xr kdata_stddev_alloc 3 .
+The internal buffers will be increased, if necessary, to the size of the
+new buffer.
+If the buffer is increased, the standard deviation values of the new
+buckets are set to zero.
+The x-values of the new pairs are set to the new source's x-values.
+.Pp
+Passing
+.Dv NULL
+as
+.Fa source
+will simply return.
+.Sh RETURN VALUES
+.Nm
+returns 0 if memory allocation failed or if
+.Fa dst
+was not allocated with
+.Xr kdata_stddev_alloc 3 .
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kdata_stddev_alloc 3 ,
+.Xr kplot 3
+.Rs
+.%A Donald E. Knuth
+.%B The Art of Computer Programming: Seminumerical Algorithms, 3rd Edition
+.%C Boston
+.%D 1998
+.%I Addison-Wesley
+.%P 232
+.%V Volume 2
+.Re
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.Sh CAVEATS
+If you attach multiple sources with different x-values, the standard
+deviation x-values will be inconsistent.
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

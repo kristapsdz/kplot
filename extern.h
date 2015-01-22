@@ -31,6 +31,12 @@ struct	kdatamean {
 	size_t		*ns; /* number of bucket modifications */
 };
 
+struct	kdatastddev {
+	size_t		*ns; /* number of bucket modifications */
+	double		*m1s; /* incremental mean */
+	double		*m2s; /* incremental variance parameter */
+};
+
 struct	kdatavector {
 	size_t		 stepsz; /* vector increase slush size */
 	size_t		 pairbufsz; /* allocated buffer size */
@@ -42,6 +48,7 @@ enum	kdatatype {
 	KDATA_BUFFER,
 	KDATA_HIST,
 	KDATA_MEAN,
+	KDATA_STDDEV,
 	KDATA_VECTOR
 };
 
@@ -73,6 +80,7 @@ struct	kdata {
 		struct kdatavector	vector;
 		struct kdatabucket	bucket;
 		struct kdatamean	mean;
+		struct kdatastddev	stddev;
 	} d;
 };
 

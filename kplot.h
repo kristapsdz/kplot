@@ -166,6 +166,8 @@ struct kdata	*kdata_hist_alloc(double, double, size_t);
 int		 kdata_hist_set(struct kdata *, double, double);
 struct kdata	*kdata_mean_alloc(struct kdata *);
 int		 kdata_mean_attach(struct kdata *, struct kdata *);
+struct kdata	*kdata_stddev_alloc(struct kdata *);
+int		 kdata_stddev_attach(struct kdata *, struct kdata *);
 struct kdata	*kdata_vector_alloc(size_t);
 int		 kdata_vector_append(struct kdata *, double, double);
 
@@ -175,11 +177,10 @@ void		 kplotcfg_defaults(struct kplotcfg *);
 struct kplot	*kplot_alloc(void);
 int		 kplot_data_attach(struct kplot *, struct kdata *, 
 			enum kplottype, const struct kdatacfg *);
-#if 0
-int		 kplot_datas_attach(struct kplot *,
-			struct kdata **, size_t, enum kplotstype,
-			const struct kdatacfg *const *, size_t);
-#endif
+int		 kplot_datas_attach(struct kplot *, size_t, 
+			struct kdata **, const enum kplottype *, 
+			const struct kdatacfg *const *, 
+			enum kplotstype);
 void		 kplot_data_remove_all(struct kplot *);
 void		 kplot_draw(const struct kplot *, 
 			double, double, cairo_t *, 

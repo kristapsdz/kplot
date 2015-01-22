@@ -19,7 +19,6 @@
 #include <float.h>
 #include <inttypes.h>
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -107,7 +106,7 @@ kplotdat_attach(struct kplot *p, size_t sz,
 	for (i = 0; i < sz; i++) {
 		p->datas[p->datasz].datas[i] = d[i];
 		p->datas[p->datasz].types[i] = types[i];
-		if (NULL == cfg[i])
+		if (NULL == cfg || NULL == cfg[i])
 			kdatacfg_defaults(&p->datas[p->datasz].cfgs[i]);
 		else
 			p->datas[p->datasz].cfgs[i] = *cfg[i];

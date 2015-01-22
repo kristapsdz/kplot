@@ -75,7 +75,8 @@ main(void)
 				rel="license">ISC</a>-licensed UNIX programming library for plotting graphs on a <a
 				href="http://cairographics.org">Cairo</a> surface.
 			It handles drawing margins, axis labels, tic labels, tics, borders, grids, and the data itself.
-			Data may be specified as finite buckets, range histograms, arrays, vectors, and so on.
+			Data may be specified structurally as finite buckets, range histograms, arrays, and vectors.
+			Data may also be computed from other sources, such as the mean and standard deviation.
 			For a complete reference, consult <a href="kplot.3.html">kplot(3)</a>.
 			Download sources from <a href="snapshots/kplot.tgz">kplot.tgz</a> (current version @VERSION@, <a href="snapshots/kplot.tgz.sha512">sha512</a>) or
 			browse the <a href="snapshots">archive</a>.

@@ -7,13 +7,15 @@ LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcai
 #If you're on GNU/Linux, you'll need to uncomment this.
 #LDADD		+= -lbsd
 VERSIONS	= version_0_1_4.xml \
-		  version_0_1_5.xml
+		  version_0_1_5.xml \
+		  version_0_1_6.xml
 PNGS		= example0.png \
 		  example1.png \
 		  example2.png \
 		  example3.png \
 		  example4.png \
-		  example5.png
+		  example5.png \
+		  example6.png
 SRCS		= Makefile \
 		  compat.post.h \
 		  compat.pre.h \
@@ -31,6 +33,7 @@ SRCS		= Makefile \
 		  example3.c \
 		  example4.c \
 		  example5.c \
+		  example6.c \
 		  grid.c \
 		  hist.c \
 		  label.c \
@@ -40,6 +43,7 @@ SRCS		= Makefile \
 		  mean.c \
 		  plotctx.c \
 		  reallocarray.c \
+		  stddev.c \
 		  test-reallocarray.c \
 		  tic.c \
 		  vector.c
@@ -57,6 +61,7 @@ OBJS		= array.o \
 		  mean.o \
 		  plotctx.o \
 		  reallocarray.o \
+		  stddev.o \
 		  tic.o \
 		  vector.o
 PREFIX		= /usr/local
@@ -72,6 +77,8 @@ HTMLS		= index.html \
 		  man/kdata_hist_add.3.html \
 		  man/kdata_mean_alloc.3.html \
 		  man/kdata_mean_attach.3.html \
+		  man/kdata_stddev_alloc.3.html \
+		  man/kdata_stddev_attach.3.html \
 		  man/kdata_vector_append.3.html \
 		  man/kdata_vector_alloc.3.html \
 		  man/kdatacfg_defaults.3.html \
@@ -79,6 +86,7 @@ HTMLS		= index.html \
 		  man/kplot_alloc.3.html \
 		  man/kplot_data_attach.3.html \
 		  man/kplot_data_remove_all.3.html \
+		  man/kplot_datas_attach.3.html \
 		  man/kplot_draw.3.html \
 		  man/kplot_free.3.html \
 	 	  man/kplotcfg_defaults.3.html
@@ -93,6 +101,8 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kdata_hist_add.3 \
 		  man/kdata_mean_alloc.3 \
 		  man/kdata_mean_attach.3 \
+		  man/kdata_stddev_alloc.3 \
+		  man/kdata_stddev_attach.3 \
 		  man/kdata_vector_append.3 \
 		  man/kdata_vector_alloc.3 \
 		  man/kdatacfg_defaults.3 \
@@ -100,11 +110,12 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kplot_alloc.3 \
 		  man/kplot_data_attach.3 \
 		  man/kplot_data_remove_all.3 \
+		  man/kplot_datas_attach.3 \
 		  man/kplot_draw.3 \
 		  man/kplot_free.3 \
 	 	  man/kplotcfg_defaults.3
 
-all: libkplot.a example0 example1 example2 example3 example4 example5
+all: libkplot.a example0 example1 example2 example3 example4 example5 example6
 
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/lib
@@ -145,6 +156,9 @@ example4: example4.c libkplot.a
 example5: example5.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
 
+example6: example6.c libkplot.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
+
 example0.png: example0
 	./example0
 
@@ -162,6 +176,9 @@ example4.png: example4
 
 example5.png: example5
 	./example5
+
+example6.png: example6
+	./example6
 
 libkplot.a: $(OBJS)
 	$(AR) rs $@ $(OBJS)
@@ -195,7 +212,7 @@ kplot-$(VERSION).tgz:
 
 clean:
 	rm -f libkplot.a compat.h test-reallocarray 
-	rm -f example0 example1 example2 example3 example4 example5
+	rm -f example0 example1 example2 example3 example4 example5 example6
 	rm -rf *.dSYM
 	rm -f $(OBJS)
 	rm -f $(HTMLS) $(PNGS)
