@@ -72,7 +72,7 @@ main(void)
 		</figure>
 		<p>
 			The above is an example usage of <span class="nm">kplot</span>, an ISO C, <a href="http://opensource.org/licenses/ISC"
-				rel="license">ISC</a>-licensed programming library for plotting graphs on a <a
+				rel="license">ISC</a>-licensed UNIX programming library for plotting graphs on a <a
 				href="http://cairographics.org">Cairo</a> surface.
 			It handles drawing margins, axis labels, tic labels, tics, borders, grids, and the data itself.
 			Data may be specified as finite buckets, range histograms, arrays, vectors, and so on.

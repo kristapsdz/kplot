@@ -1,6 +1,6 @@
 /*	$Id$ */
 /*
- * Copyright (c) 2014 Kristaps Dzonsons <kristaps@bsd.lv>
+ * Copyright (c) 2014, 2015 Kristaps Dzonsons <kristaps@bsd.lv>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -27,6 +27,22 @@
 #include "compat.h"
 #include "extern.h"
 
+static void
+kplotdat_free(struct kplotdat *p)
+{
+	size_t	 i;
+
+	if (NULL == p)
+		return;
+
+	for (i = 0; i < p->datasz; i++)
+		kdata_destroy(p->datas[i]);
+
+	free(p->datas);
+	free(p->cfgs);
+	free(p->types);
+}
+
 struct kplot *
 kplot_alloc(void)
 {
@@ -37,14 +53,11 @@ kplot_alloc(void)
 void
 kplot_free(struct kplot *p)
 {
-	size_t	 i;
 
 	if (NULL == p)
 		return;
 
-	for (i = 0; i < p->datasz; i++)
-		kdata_destroy(p->datas[i].data);
-
+	kplot_data_remove_all(p);
 	free(p->datas);
 	free(p);
 }
@@ -55,39 +68,67 @@ kplot_data_remove_all(struct kplot *p)
 	size_t	 i;
 
 	for (i = 0; i < p->datasz; i++)
-		kdata_destroy(p->datas[i].data);
+		kplotdat_free(&p->datas[i]);
+
+	free(p->datas);
+	p->datas = NULL;
 	p->datasz = 0;
+}
+
+static int
+kplotdat_attach(struct kplot *p, size_t sz,
+	struct kdata **d, 
+	const struct kdatacfg *const *cfg,
+	const enum kplottype *types, 
+	enum kplotstype stype)
+{
+	void	*pp;
+	size_t	 i;
+
+	pp = reallocarray(p->datas, 
+		p->datasz + 1, sizeof(struct kplotdat));
+	if (NULL == pp)
+		return(0);
+	p->datas = pp;
+
+	p->datas[p->datasz].datas = 
+		calloc(sz, sizeof(struct kdata *));
+	if (NULL == p->datas[p->datasz].datas)
+		return(0);
+	p->datas[p->datasz].cfgs = 
+		calloc(sz, sizeof(struct kdatacfg));
+	if (NULL == p->datas[p->datasz].cfgs)
+		return(0);
+	p->datas[p->datasz].types = 
+		calloc(sz, sizeof(enum kplottype));
+	if (NULL == p->datas[p->datasz].types)
+		return(0);
+
+	for (i = 0; i < sz; i++) {
+		p->datas[p->datasz].datas[i] = d[i];
+		p->datas[p->datasz].types[i] = types[i];
+		if (NULL == cfg[i])
+			kdatacfg_defaults(&p->datas[p->datasz].cfgs[i]);
+		else
+			p->datas[p->datasz].cfgs[i] = *cfg[i];
+		if (SIZE_MAX == p->datas[p->datasz].cfgs[i].point.clr)
+			p->datas[p->datasz].cfgs[i].point.clr = p->datasz;
+		if (SIZE_MAX == p->datas[p->datasz].cfgs[i].line.clr)
+			p->datas[p->datasz].cfgs[i].line.clr = p->datasz;
+		d[i]->refs++;
+	}
+
+	p->datas[p->datasz].datasz = sz;
+	p->datas[p->datasz].stype = stype;
+	p->datasz++;
+	return(1);
 }
 
 int
 kplot_data_attach(struct kplot *p, struct kdata *d, 
 	enum kplottype t, const struct kdatacfg *cfg)
 {
-	void	*pp;
 
-	pp = reallocarray(p->datas, 
-		p->datasz + 1, sizeof(struct kplotdat));
-
-	if (NULL == pp)
-		return(0);
-
-	p->datas = pp;
-	memset(&p->datas[p->datasz].cfg, 0, sizeof(struct kdatacfg));
-	p->datas[p->datasz].data = d;
-	p->datas[p->datasz].type = t;
-
-	if (NULL == cfg)
-		kdatacfg_defaults(&p->datas[p->datasz].cfg);
-	else
-		p->datas[p->datasz].cfg = *cfg;
-
-	if (SIZE_MAX == p->datas[p->datasz].cfg.point.clr)
-		p->datas[p->datasz].cfg.point.clr = p->datasz;
-	if (SIZE_MAX == p->datas[p->datasz].cfg.line.clr)
-		p->datas[p->datasz].cfg.line.clr = p->datasz;
-
-	p->datasz++;
-	d->refs++;
-	return(1);
+	return(kplotdat_attach(p, 1, &d, &cfg, &t, KPLOTS_SINGLE));
 }
 

@@ -198,5 +198,5 @@ clean:
 	rm -f example0 example1 example2 example3 example4 example5
 	rm -rf *.dSYM
 	rm -f $(OBJS)
-	rm -f $(HTMLS)
+	rm -f $(HTMLS) $(PNGS)
 	rm -f kplot-$(VERSION).tgz kplot-$(VERSION).tgz.sha512

@@ -36,15 +36,67 @@ enum	defclr {
 };
 
 static void
-kdata_extrema(const struct kplotdat *d, 
+kdata_extrema_yerror(const struct kplotdat *d, 
+	struct kpair *minv, struct kpair *maxv)
+{
+	size_t	 	 i, sz;
+	struct kpair	*p, *err;
+
+	assert(d->datasz > 1);
+	p = d->datas[0]->pairs;
+	err = d->datas[1]->pairs;
+
+	/*
+	 * Use the smaller of the two pair lengths.
+	 */
+	sz = d->datas[0]->pairsz < d->datas[1]->pairsz ?
+		d->datas[0]->pairsz : d->datas[1]->pairsz;
+
+	for (i = 0; i < sz; i++) {
+		if (0.0 != p[i].x && ! isnormal(p[i].x))
+			continue;
+		if (0.0 != p[i].y && ! isnormal(p[i].y))
+			continue;
+		if (0.0 != err[i].y && ! isnormal(err[i].y))
+			continue;
+		if (p[i].x < minv->x)
+			minv->x = p[i].x;
+		if (p[i].x > maxv->x)
+			maxv->x = p[i].x;
+		/* 
+		 * Since the error can be negative, check in both
+		 * directions from the basis point.
+		 */
+		if (p[i].y - err[i].y < minv->y)
+			minv->y = p[i].y - err[i].y;
+		if (p[i].y + err[i].y < minv->y)
+			minv->y = p[i].y + err[i].y;
+		if (p[i].y - err[i].y > maxv->y)
+			maxv->y = p[i].y - err[i].y;
+		if (p[i].y + err[i].y > maxv->y)
+			maxv->y = p[i].y + err[i].y;
+	}
+
+	if (EXTREMA_XMIN & d->cfgs[0].extrema)
+		minv->x = d->cfgs[0].extrema_xmin;
+	if (EXTREMA_YMIN & d->cfgs[0].extrema)
+		minv->y = d->cfgs[0].extrema_ymin;
+	if (EXTREMA_XMAX & d->cfgs[0].extrema)
+		maxv->x = d->cfgs[0].extrema_xmax;
+	if (EXTREMA_YMAX & d->cfgs[0].extrema)
+		maxv->y = d->cfgs[0].extrema_ymax;
+}
+
+static void
+kdata_extrema_single(const struct kplotdat *d, 
 	struct kpair *minv, struct kpair *maxv)
 {
 	size_t	 	 i;
 	struct kpair	*p;
 
-	p = d->data->pairs;
+	p = d->datas[0]->pairs;
 
-	for (i = 0; i < d->data->pairsz; i++) {
+	for (i = 0; i < d->datas[0]->pairsz; i++) {
 		if (0.0 != p[i].x && ! isnormal(p[i].x))
 			continue;
 		if (0.0 != p[i].y && ! isnormal(p[i].y))
@@ -59,14 +111,14 @@ kdata_extrema(const struct kplotdat *d,
 			maxv->y = p[i].y;
 	}
 
-	if (EXTREMA_XMIN & d->cfg.extrema)
-		minv->x = d->cfg.extrema_xmin;
-	if (EXTREMA_YMIN & d->cfg.extrema)
-		minv->y = d->cfg.extrema_ymin;
-	if (EXTREMA_XMAX & d->cfg.extrema)
-		maxv->x = d->cfg.extrema_xmax;
-	if (EXTREMA_YMAX & d->cfg.extrema)
-		maxv->y = d->cfg.extrema_ymax;
+	if (EXTREMA_XMIN & d->cfgs[0].extrema)
+		minv->x = d->cfgs[0].extrema_xmin;
+	if (EXTREMA_YMIN & d->cfgs[0].extrema)
+		minv->y = d->cfgs[0].extrema_ymin;
+	if (EXTREMA_XMAX & d->cfgs[0].extrema)
+		maxv->x = d->cfgs[0].extrema_xmax;
+	if (EXTREMA_YMAX & d->cfgs[0].extrema)
+		maxv->y = d->cfgs[0].extrema_ymax;
 }
 
 static inline void
@@ -108,17 +160,17 @@ kplotctx_draw_lines(struct kplotctx *ctx, const struct kplotdat *d)
 	int		 rc;
 
 	/* Skip past bad points to get to initial. */
-	for (rc = 0, i = 0; 0 == rc && i < d->data->pairsz; i++)
+	for (rc = 0, i = 0; 0 == rc && i < d->datas[0]->pairsz; i++)
 		rc = kplotctx_point_to_real
-			(&d->data->pairs[i], &pair, ctx);
+			(&d->datas[0]->pairs[i], &pair, ctx);
 
-	kplotctx_line_init(ctx, &d->cfg.line);
+	kplotctx_line_init(ctx, &d->cfgs[0].line);
 	cairo_move_to(ctx->cr, pair.x, pair.y);
 
 	/* Mark remaining. */
-	for ( ; i < d->data->pairsz; i++) {
+	for ( ; i < d->datas[0]->pairsz; i++) {
 		rc = kplotctx_point_to_real
-			(&d->data->pairs[i], &pair, ctx);
+			(&d->datas[0]->pairs[i], &pair, ctx);
 		if (rc > 0)
 			cairo_line_to(ctx->cr, pair.x, pair.y);
 	}
@@ -132,16 +184,16 @@ kplotctx_draw_points(struct kplotctx *ctx, const struct kplotdat *d)
 	struct kpair	 pair;
 	int		 rc;
 
-	kplotctx_point_init(ctx, &d->cfg.point);
+	kplotctx_point_init(ctx, &d->cfgs[0].point);
 
-	for (i = 0; i < d->data->pairsz; i++) {
+	for (i = 0; i < d->datas[0]->pairsz; i++) {
 		/* Skip bad points. */
 		rc = kplotctx_point_to_real
-			(&d->data->pairs[i], &pair, ctx);
+			(&d->datas[0]->pairs[i], &pair, ctx);
 		if (0 == rc)
 			continue;
 		cairo_arc(ctx->cr, pair.x, pair.y, 
-			d->cfg.point.radius, 0, 2 * M_PI);
+			d->cfgs[0].point.radius, 0, 2 * M_PI);
 		cairo_stroke(ctx->cr);
 	}
 }
@@ -233,7 +285,16 @@ kplot_draw(const struct kplot *p, double w,
 		ctx.cfg = *cfg;
 
 	for (i = 0; i < p->datasz; i++) 
-		kdata_extrema(&p->datas[i], &ctx.minv, &ctx.maxv);
+		switch (p->datas[i].stype) {
+		case (KPLOTS_YERRORLINE):
+			kdata_extrema_yerror(&p->datas[i], 
+				&ctx.minv, &ctx.maxv);
+			break;
+		default:
+			kdata_extrema_single(&p->datas[i], 
+				&ctx.minv, &ctx.maxv);
+			break;
+		}
 
 	/*
 	 * If we've read in no points, then initialise ourselves to be
@@ -256,13 +317,18 @@ kplot_draw(const struct kplot *p, double w,
 	ctx.w = ctx.dims.x;
 
 	for (i = 0; i < p->datasz; i++)
-		switch (p->datas[i].type) {
-		case (KPLOT_POINTS):
-			kplotctx_draw_points(&ctx, &p->datas[i]);
+		switch (p->datas[i].stype) {
+		case (KPLOTS_SINGLE):
+			switch (p->datas[i].types[0]) {
+			case (KPLOT_POINTS):
+				kplotctx_draw_points(&ctx, &p->datas[i]);
+				break;
+			case (KPLOT_LINES):
+				kplotctx_draw_lines(&ctx, &p->datas[i]);
+				break;
+			}
 			break;
-		case (KPLOT_LINES):
-			kplotctx_draw_lines(&ctx, &p->datas[i]);
+		default:
 			break;
 		}
 }
-

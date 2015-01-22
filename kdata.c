@@ -39,6 +39,9 @@ kdata_destroy(struct kdata *d)
 	if (--d->refs > 0)
 		return;
 
+	if (KDATA_MEAN == d->type)
+		free(d->d.mean.ns);
+
 	/* Destroy dependeants along with ourselves. */
 	for (i = 0; i < d->depsz; i++)
 		kdata_destroy(d->deps[i].dep);

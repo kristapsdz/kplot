@@ -77,9 +77,11 @@ struct	kdata {
 };
 
 struct	kplotdat {
-	struct kdata	*data; /* referenced data */
-	struct kdatacfg	 cfg; /* plot configuration */
-	enum kplottype	 type; /* plot type */
+	struct kdata	**datas; /* referenced data */
+	size_t		  datasz; /* number of data sets */
+	struct kdatacfg	 *cfgs; /* plot configurations */
+	enum kplottype	 *types; /* plot types */
+	enum kplotstype	  stype; /* multiplot type */
 };
 
 struct	kplot {

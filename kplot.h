@@ -27,6 +27,11 @@ enum	kplottype {
 	KPLOT_LINES /* data points joined by lines */
 };
 
+enum	kplotstype {
+	KPLOTS_SINGLE, /* single line/points */
+	KPLOTS_YERRORLINE /* line/points with bounds */
+};
+
 struct	kplotclr {
 	double		 r; /* [0,1] */
 	double		 g; /* [0,1] */
@@ -170,6 +175,11 @@ void		 kplotcfg_defaults(struct kplotcfg *);
 struct kplot	*kplot_alloc(void);
 int		 kplot_data_attach(struct kplot *, struct kdata *, 
 			enum kplottype, const struct kdatacfg *);
+#if 0
+int		 kplot_datas_attach(struct kplot *,
+			struct kdata **, size_t, enum kplotstype,
+			const struct kdatacfg *const *, size_t);
+#endif
 void		 kplot_data_remove_all(struct kplot *);
 void		 kplot_draw(const struct kplot *, 
 			double, double, cairo_t *, 
