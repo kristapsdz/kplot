@@ -4,6 +4,8 @@ CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
 CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/usr/X11/include/cairo'`
 VERSION		= 0.1.5
 LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcairo'`
+#If you're on GNU/Linux, you'll need to uncomment this.
+#LDADD		+= -lbsd
 VERSIONS	= version_0_1_4.xml \
 		  version_0_1_5.xml
 PNGS		= example0.png \

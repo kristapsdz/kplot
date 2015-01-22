@@ -20,6 +20,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#ifdef __linux__
+#include <bsd/stdlib.h>
+#endif
 
 #include "kplot.h"
 
@@ -42,14 +45,12 @@ main(int argc, char *argv[])
 	size_t		 i;
 	cairo_t		*cr;
 	cairo_status_t	 st;
-	time_t		 t;
 	int		 rc;
 
 	rc = EXIT_FAILURE;
 
 	d1 = NULL;
 	p = NULL;
-	t = time(NULL);
 
 	for (i = 0; i < 10; i++) {
 		points1[i].x = time(NULL) + i * 24 * 60 * 60;
