@@ -132,3 +132,13 @@ kplot_data_attach(struct kplot *p, struct kdata *d,
 	return(kplotdat_attach(p, 1, &d, &cfg, &t, KPLOTS_SINGLE));
 }
 
+int
+kplot_datas_attach(struct kplot *p, size_t sz, 
+	struct kdata **d, const enum kplottype *t, 
+	const struct kdatacfg *const *cfg, enum kplotstype st)
+{
+
+	if (sz < 2)
+		return(0);
+	return(kplotdat_attach(p, sz, d, cfg, t, st));
+}
