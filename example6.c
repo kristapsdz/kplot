@@ -130,6 +130,5 @@ out:
 		kdata_destroy(d[i]);
 	kdata_destroy(md[0]);
 	kdata_destroy(md[1]);
-	cairo_debug_reset_static_data();
 	return(rc);
 }

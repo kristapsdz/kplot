@@ -127,6 +127,5 @@ out:
 	for (i = 0; i < 20; i++)
 		kdata_destroy(d[i]);
 	kdata_destroy(md);
-	cairo_debug_reset_static_data();
 	return(rc);
 }
