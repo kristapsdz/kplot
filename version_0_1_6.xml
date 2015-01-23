@@ -7,5 +7,6 @@
 	<aside>
 		Added the <a href="kdata_stddev_alloc.3.html">kdata_stddev_alloc(3)</a> function family for computing the running standard
 		deviation of a data source (by way of its unbiased sample variance).
+		Also added the <a href="kplot_datas_attach.3.html">kplot_datas_attach(3)</a> function for multi-set plots, e.g., y-error lines.
 	</aside>
 </article>

@@ -18,6 +18,7 @@
 #include <cairo.h>
 #include <float.h>
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -33,6 +34,17 @@ enum	defclr {
 	DEFCLR_BLACK,
 	DEFCLR__MAX
 };
+
+static inline int
+kpair_vrfy(const struct kpair *data)
+{
+
+	if (0.0 != data->x && ! isnormal(data->x))
+		return(0);
+	if (0.0 != data->y && ! isnormal(data->y))
+		return(0);
+	return(1);
+}
 
 static void
 kdata_extrema_yerr(const struct kplotdat *d, 
@@ -52,11 +64,7 @@ kdata_extrema_yerr(const struct kplotdat *d,
 		d->datas[0]->pairsz : d->datas[1]->pairsz;
 
 	for (i = 0; i < sz; i++) {
-		if (0.0 != p[i].x && ! isnormal(p[i].x))
-			continue;
-		if (0.0 != p[i].y && ! isnormal(p[i].y))
-			continue;
-		if (0.0 != err[i].y && ! isnormal(err[i].y))
+		if ( ! (kpair_vrfy(&p[i]) && kpair_vrfy(&err[i])))
 			continue;
 		if (p[i].x < minv->x)
 			minv->x = p[i].x;
@@ -118,17 +126,6 @@ kdata_extrema_single(const struct kplotdat *d,
 		maxv->x = d->cfgs[0].extrema_xmax;
 	if (EXTREMA_YMAX & d->cfgs[0].extrema)
 		maxv->y = d->cfgs[0].extrema_ymax;
-}
-
-static inline int
-kpair_vrfy(const struct kpair *data)
-{
-
-	if (0.0 != data->x && ! isnormal(data->x))
-		return(0);
-	if (0.0 != data->y && ! isnormal(data->y))
-		return(0);
-	return(1);
 }
 
 static inline void
@@ -517,6 +514,9 @@ kplot_draw(const struct kplot *p, double w,
 				kplotctx_draw_yerrline_baselines
 					(&ctx, start, end, &p->datas[i]);
 				break;
+			default:
+				abort();
+				break;
 			}
 			switch (p->datas[i].types[1]) {
 			case (KPLOT_POINTS):
@@ -526,6 +526,9 @@ kplot_draw(const struct kplot *p, double w,
 			case (KPLOT_LINES):
 				kplotctx_draw_yerrline_pairlines
 					(&ctx, start, end, &p->datas[i]);
+				break;
+			default:
+				abort();
 				break;
 			}
 			break;

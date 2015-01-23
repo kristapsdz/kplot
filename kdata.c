@@ -48,6 +48,8 @@ kdata_destroy(struct kdata *d)
 		free(d->d.stddev.m1s);
 		free(d->d.stddev.m2s);
 		break;
+	default:
+		break;
 	}
 
 	/* Destroy dependeants along with ourselves. */

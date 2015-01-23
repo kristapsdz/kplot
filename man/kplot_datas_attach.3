@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 16 2015 $
+.Dd $Mdocdate: January 22 2015 $
 .Dt KPLOT_DATAS_ATTACH 3
 .Os
 .Sh NAME
@@ -30,33 +30,44 @@ reference-counting the data sources in the process.
 See
 .Xr kplot_data_attach 3
 for a more general description of attaching data.
-Multi-data source sets describe, e.g., error-bar or error-line graphs
-that consist of a baseline plot and one or more depending on it.
-The most common usage is for graphing mean and standard deviation via
+Multi-data source sets consist of a baseline and one or more pair lines,
+for example, a curve and its error bars.
+The most common usage is for graphing mean (the baseline) and standard
+deviation above and below (pair lines) via
 .Xr kdata_mean_alloc 3
 and
 .Xr kdata_stddev_alloc 3 .
-The order in which you arrange the array parameters: the first is the baseline
-and subsequent are defined by the plot type
+The order in which you arrange the array parameters
+.Fa d ,
+.Fa t ,
+and
+.Fa cfg :
+the first is for the baseline, subsequent are for pair lines as defined
+by
 .Fa st .
-Only the
+The
 .Fa cfg
 argument can be
 .Dv NULL
-.Pq as can individual array entries .
+.Pq as can individual array entries ;
+all other parameters and indexes must not be
+.Dv NULL .
 The plot types are as follows:
 .Bl -tag -width Ds
 .It Dv KPLOTS_YERRORLINE
 Draw a baseline using the first element in
 .Fa d .
-The next element is used to draw error lines above and below the baseline.
+The next element is used to draw error lines above (adding to the
+y-position) and below (subtracting) the baseline.
 Subsequent lines are ignored.
-Error lines are indexed by bucket, not by x-value.
+Data sources are matched by bucket index,
+.Em not
+x-axis value, which is ignored for all pair data sources.
 .El
 .Sh RETURN VALUES
 .Nm
 returns 0 if allocation of internal structures fails due to memory
-exhaustion.
+exhaustion, or not enough data sources have been provided.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES

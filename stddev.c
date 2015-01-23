@@ -144,6 +144,7 @@ kdata_stddev_attach(struct kdata *d, struct kdata *dep)
 		/* FIXME: don't loop, just do the math. */
 		for (i = d->pairsz; i < dep->pairsz; i++)
 			memset(&d->pairs[i], 0, sizeof(struct kpair));
+
 		p = reallocarray(d->d.stddev.ns, 
 			dep->pairsz, sizeof(size_t));
 		if (NULL == p)
@@ -151,6 +152,7 @@ kdata_stddev_attach(struct kdata *d, struct kdata *dep)
 		d->d.stddev.ns = p;
 		for (i = d->pairsz; i < dep->pairsz; i++) 
 			d->d.stddev.ns[i] = 0;
+
 		p = reallocarray(d->d.stddev.m1s, 
 			dep->pairsz, sizeof(double));
 		if (NULL == p)
@@ -158,6 +160,7 @@ kdata_stddev_attach(struct kdata *d, struct kdata *dep)
 		d->d.stddev.m1s = p;
 		for (i = d->pairsz; i < dep->pairsz; i++) 
 			d->d.stddev.m1s[i] = 0.0;
+
 		p = reallocarray(d->d.stddev.m2s, 
 			dep->pairsz, sizeof(double));
 		if (NULL == p)
@@ -165,6 +168,7 @@ kdata_stddev_attach(struct kdata *d, struct kdata *dep)
 		d->d.stddev.m2s = p;
 		for (i = d->pairsz; i < dep->pairsz; i++) 
 			d->d.stddev.m2s[i] = 0.0;
+
 		d->pairsz = dep->pairsz;
 		for (i = 0; i < dep->pairsz; i++)
 			d->pairs[i].x = dep->pairs[i].x;
