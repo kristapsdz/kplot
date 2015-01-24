@@ -30,7 +30,8 @@ enum	kplottype {
 
 enum	ksmthtype {
 	KSMOOTH_NONE,
-	KSMOOTH_MOVAVG
+	KSMOOTH_MOVAVG,
+	KSMOOTH_CDF
 };
 
 enum	kplotstype {

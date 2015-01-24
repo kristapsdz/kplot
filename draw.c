@@ -95,25 +95,58 @@ kdata_extrema_yerr(const struct kplotdat *d,
 }
 
 static void
+kpair_set(const struct kplotdat *d, size_t pos, struct kpair *kp)
+{
+	size_t		 j, sz, samps;
+	ssize_t		 start;
+
+	switch (d->smthtype) {
+	case (KSMOOTH_CDF):
+		kp->x = d->datas[0]->pairs[pos].x;
+		kp->y += d->datas[0]->pairs[pos].y;
+		break;
+	case (KSMOOTH_MOVAVG):
+		*kp = d->datas[0]->pairs[pos];
+		samps = d->smth.movsamples / 2;
+		start = pos - samps;
+		sz = pos + samps;
+		if (start < 0 || sz >= d->datas[0]->pairsz)
+			break;
+		for (kp->y = 0.0, j = start; j <= sz; j++) {
+			if ( ! kpair_vrfy(&d->datas[0]->pairs[j]))
+				break;
+			kp->y += d->datas[0]->pairs[j].y;
+		}
+		kp->y /= (double)d->smth.movsamples;
+		if (j <= sz)
+			*kp = d->datas[0]->pairs[pos];
+		break;
+	default:
+		*kp = d->datas[0]->pairs[pos];
+		break;
+	}
+}
+
+static void
 kdata_extrema_single(const struct kplotdat *d, 
 	struct kpair *minv, struct kpair *maxv)
 {
 	size_t	 	 i;
-	struct kpair	*p;
+	struct kpair	 kp;
 
-	p = d->datas[0]->pairs;
-
+	memset(&kp, 0, sizeof(struct kpair));
 	for (i = 0; i < d->datas[0]->pairsz; i++) {
-		if ( ! kpair_vrfy(&p[i]))
+		if ( ! kpair_vrfy(&d->datas[0]->pairs[i]))
 			continue;
-		if (p[i].x < minv->x)
-			minv->x = p[i].x;
-		if (p[i].y < minv->y)
-			minv->y = p[i].y;
-		if (p[i].x > maxv->x)
-			maxv->x = p[i].x;
-		if (p[i].y > maxv->y)
-			maxv->y = p[i].y;
+		kpair_set(d, i, &kp);
+		if (kp.x < minv->x)
+			minv->x = kp.x;
+		if (kp.y < minv->y)
+			minv->y = kp.y;
+		if (kp.x > maxv->x)
+			maxv->x = kp.x;
+		if (kp.y > maxv->y)
+			maxv->y = kp.y;
 	}
 
 	if (EXTREMA_XMIN & d->cfgs[0].extrema)
@@ -313,34 +346,6 @@ kplotctx_draw_yerrline_pairlines(struct kplotctx *ctx,
 	cairo_stroke(ctx->cr);
 }
 
-static void
-kpair_set(const struct kplotdat *d, size_t pos, struct kpair *kp)
-{
-	size_t		 j, sz, samps;
-	ssize_t		 start;
-
-	switch (d->smthtype) {
-	case (KSMOOTH_MOVAVG):
-		*kp = d->datas[0]->pairs[pos];
-		samps = d->smth.movsamples / 2;
-		start = pos - samps;
-		sz = pos + samps;
-		if (start < 0 || sz >= d->datas[0]->pairsz)
-			break;
-		for (kp->y = 0.0, j = start; j <= sz; j++) {
-			if ( ! kpair_vrfy(&d->datas[0]->pairs[j]))
-				break;
-			kp->y += d->datas[0]->pairs[j].y;
-		}
-		kp->y /= (double)d->smth.movsamples;
-		if (j <= sz)
-			*kp = d->datas[0]->pairs[pos];
-		break;
-	default:
-		*kp = d->datas[0]->pairs[pos];
-		break;
-	}
-}
 
 static void
 kplotctx_draw_lines(struct kplotctx *ctx, const struct kplotdat *d)
@@ -356,9 +361,12 @@ kplotctx_draw_lines(struct kplotctx *ctx, const struct kplotdat *d)
 	if (i == d->datas[0]->pairsz)
 		return;
 
+	memset(&kp, 0, sizeof(struct kpair));
 	kplotctx_line_init(ctx, &d->cfgs[0].line);
 	cairo_move_to(ctx->cr, pair.x, pair.y);
 	for ( ; i < d->datas[0]->pairsz; i++) {
+		if ( ! kpair_vrfy(&d->datas[0]->pairs[i]))
+			continue;
 		kpair_set(d, i, &kp);
 		rc = kplotctx_point_to_real(&kp, &pair, ctx);
 		if ( ! rc)
@@ -375,9 +383,11 @@ kplotctx_draw_points(struct kplotctx *ctx, const struct kplotdat *d)
 	struct kpair	 kp, pair;
 	int		 rc;
 
+	memset(&kp, 0, sizeof(struct kpair));
 	kplotctx_point_init(ctx, &d->cfgs[0].point);
-
 	for (i = 0; i < d->datas[0]->pairsz; i++) {
+		if ( ! kpair_vrfy(&d->datas[0]->pairs[i]))
+			continue;
 		kpair_set(d, i, &kp);
 		rc = kplotctx_point_to_real(&kp, &pair, ctx);
 		if (0 == rc)

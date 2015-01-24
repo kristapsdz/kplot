@@ -13,7 +13,7 @@
 			<div><a href="example0.png"><img src="example0.png" alt="Example" /></a></div>
 			<div><a href="example1.png"><img src="example1.png" alt="Example" /></a></div>
 			<div><a href="example2.png"><img src="example2.png" alt="Example" /></a></div>
-			<div><a href="example3.png"><img src="example3.png" alt="Example" /></a></div>
+			<div><a href="example7.png"><img src="example7.png" alt="Example" /></a></div>
 			<div><a href="example4.png"><img src="example4.png" alt="Example" /></a></div>
 			<div><a href="example5.png"><img src="example5.png" alt="Example" /></a></div>
 		</figure>
@@ -54,8 +54,8 @@ main(void)
 	d1 = <a href="kdata_array_alloc.3.html">kdata_array_alloc</a>(points1, 50);
 	d2 = <a href="kdata_array_alloc.3.html">kdata_array_alloc</a>(points2, 50);
 	p = <a href="kplot_alloc.3.html">kplot_alloc</a>();
-	<a href="kplot_data_add.3.html">kplot_data_add</a>(p, d1, KPLOT_POINTS, NULL);
-	<a href="kplot_data_add.3.html">kplot_data_add</a>(p, d2, KPLOT_LINES, NULL);
+	<a href="kplot_attach_data.3.html">kplot_attach_data</a>(p, d1, KPLOT_POINTS, NULL);
+	<a href="kplot_attach_data.3.html">kplot_attach_data</a>(p, d2, KPLOT_LINES, NULL);
 	<a href="kdata_destroy.3.html">kdata_destroy</a>(d1);
 	<a href="kdata_destroy.3.html">kdata_destroy</a>(d2);
 	surf = cairo_image_surface_create

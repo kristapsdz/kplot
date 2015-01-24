@@ -10,6 +10,14 @@ VERSIONS	= version_0_1_4.xml \
 		  version_0_1_5.xml \
 		  version_0_1_6.xml \
 		  version_0_1_7.xml
+EXAMPLES	= example0 \
+		  example1 \
+		  example2 \
+		  example3 \
+		  example4 \
+		  example5 \
+		  example6 \
+		  example7
 PNGS		= example0.png \
 		  example1.png \
 		  example2.png \
@@ -118,7 +126,7 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kplot_free.3 \
 	 	  man/kplotcfg_defaults.3
 
-all: libkplot.a example0 example1 example2 example3 example4 example5 example6 example7
+all: libkplot.a $(EXAMPLES)
 
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/lib
@@ -139,7 +147,7 @@ installwww: www
 	install -m 0444 kplot-$(VERSION).tgz $(PREFIX)/snapshots
 	install -m 0444 kplot-$(VERSION).tgz.sha512 $(PREFIX)/snapshots
 
-example0 example1 example2: libkplot.a
+$(EXAMPLES): libkplot.a
 
 example0: example0.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -lm -o $@ $< libkplot.a
@@ -221,7 +229,7 @@ kplot-$(VERSION).tgz:
 
 clean:
 	rm -f libkplot.a compat.h test-reallocarray 
-	rm -f example0 example1 example2 example3 example4 example5 example6 example7
+	rm -f $(EXAMPLES)
 	rm -rf *.dSYM
 	rm -f $(OBJS)
 	rm -f $(HTMLS) $(PNGS)
