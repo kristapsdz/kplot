@@ -2,7 +2,7 @@
 
 CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
 CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/usr/X11/include/cairo'`
-VERSION		= 0.1.6
+VERSION		= 0.1.7
 LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcairo'`
 #If you're on GNU/Linux, you'll need to uncomment this.
 #LDADD		+= -lbsd
@@ -17,7 +17,8 @@ EXAMPLES	= example0 \
 		  example4 \
 		  example5 \
 		  example6 \
-		  example7
+		  example7 \
+		  example8
 PNGS		= example0.png \
 		  example1.png \
 		  example2.png \
@@ -25,7 +26,8 @@ PNGS		= example0.png \
 		  example4.png \
 		  example5.png \
 		  example6.png \
-		  example7.png
+		  example7.png \
+		  example8.png
 SRCS		= Makefile \
 		  compat.post.h \
 		  compat.pre.h \
@@ -45,6 +47,7 @@ SRCS		= Makefile \
 		  example5.c \
 		  example6.c \
 		  example7.c \
+		  example8.c \
 		  grid.c \
 		  hist.c \
 		  label.c \
@@ -173,6 +176,9 @@ example6: example6.c libkplot.a
 example7: example7.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
 
+example8: example8.c libkplot.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
+
 example0.png: example0
 	./example0
 
@@ -196,6 +202,9 @@ example6.png: example6
 
 example7.png: example7
 	./example7
+
+example8.png: example8
+	./example8
 
 libkplot.a: $(OBJS)
 	$(AR) rs $@ $(OBJS)

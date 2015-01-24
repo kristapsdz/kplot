@@ -354,9 +354,12 @@ kplotctx_draw_lines(struct kplotctx *ctx, const struct kplotdat *d)
 	struct kpair	 kp, pair;
 	int		 rc;
 
-	for (rc = 0, i = 0; ! rc && i < d->datas[0]->pairsz; i++)
-		rc = kplotctx_point_to_real
-			(&d->datas[0]->pairs[i], &pair, ctx);
+	for (i = 0; i < d->datas[0]->pairsz; i++) {
+		kpair_set(d, i, &kp);
+		rc = kplotctx_point_to_real(&kp, &pair, ctx);
+		if (rc > 0)
+			break;
+	}
 
 	if (i == d->datas[0]->pairsz)
 		return;

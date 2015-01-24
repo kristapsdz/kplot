@@ -10,7 +10,7 @@
 			href="kplot_attach_datas.3.html">kplot_attach_datas(3)</a>, respectively.
 		Added a <code>KPLOT_LINESPOINTS</code> plotting type to <a href="kplot_attach_data.3.html">kplot_attach_data(3)</a>.
 		Added <a href="kplot_attach_smooth.3.html">kplot_attach_smooth(3)</a> functionality, for the time being with only a moving
-		average utility.
+		average and CDF generator.
 		Removed <code>kplot_data_remove_all(3)</code> (to be re-added and re-named when necssary).
 	</aside>
 </article>
