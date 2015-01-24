@@ -23,13 +23,19 @@ struct 	kpair {
 };
 
 enum	kplottype {
-	KPLOT_POINTS, /* set of points */
-	KPLOT_LINES /* data points joined by lines */
+	KPLOT_POINTS,
+	KPLOT_LINES,
+	KPLOT_LINESPOINTS
+};
+
+enum	ksmthtype {
+	KSMOOTH_NONE,
+	KSMOOTH_MOVAVG
 };
 
 enum	kplotstype {
-	KPLOTS_SINGLE, /* single line/points */
-	KPLOTS_YERRORLINE /* line/points with bounds */
+	KPLOTS_SINGLE,
+	KPLOTS_YERRORLINE
 };
 
 struct	kplotclr {
@@ -73,6 +79,10 @@ struct	kplotline {
 	double	 	  dashoff;
 	cairo_line_join_t join;
 	size_t		  clr;
+};
+
+struct	ksmthcfg {
+	size_t		  movsamples;
 };
 
 struct	kdatacfg {
@@ -173,10 +183,15 @@ int		 kdata_vector_append(struct kdata *, double, double);
 
 void		 kdatacfg_defaults(struct kdatacfg *);
 void		 kplotcfg_defaults(struct kplotcfg *);
+void		 ksmthcfg_defaults(struct ksmthcfg *);
 
 struct kplot	*kplot_alloc(void);
 int		 kplot_data_attach(struct kplot *, struct kdata *, 
 			enum kplottype, const struct kdatacfg *);
+int		 kplot_smthdata_attach(struct kplot *, 
+			struct kdata *, enum kplottype, 
+			const struct kdatacfg *,
+			enum ksmthtype, const struct ksmthcfg *);
 int		 kplot_datas_attach(struct kplot *, size_t, 
 			struct kdata **, const enum kplottype *, 
 			const struct kdatacfg *const *, 

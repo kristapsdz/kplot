@@ -15,7 +15,8 @@ PNGS		= example0.png \
 		  example3.png \
 		  example4.png \
 		  example5.png \
-		  example6.png
+		  example6.png \
+		  example7.png
 SRCS		= Makefile \
 		  compat.post.h \
 		  compat.pre.h \
@@ -34,6 +35,7 @@ SRCS		= Makefile \
 		  example4.c \
 		  example5.c \
 		  example6.c \
+		  example7.c \
 		  grid.c \
 		  hist.c \
 		  label.c \
@@ -115,7 +117,7 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kplot_free.3 \
 	 	  man/kplotcfg_defaults.3
 
-all: libkplot.a example0 example1 example2 example3 example4 example5 example6
+all: libkplot.a example0 example1 example2 example3 example4 example5 example6 example7
 
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/lib
@@ -159,6 +161,9 @@ example5: example5.c libkplot.a
 example6: example6.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
 
+example7: example7.c libkplot.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
+
 example0.png: example0
 	./example0
 
@@ -179,6 +184,9 @@ example5.png: example5
 
 example6.png: example6
 	./example6
+
+example7.png: example7
+	./example7
 
 libkplot.a: $(OBJS)
 	$(AR) rs $@ $(OBJS)
@@ -212,7 +220,7 @@ kplot-$(VERSION).tgz:
 
 clean:
 	rm -f libkplot.a compat.h test-reallocarray 
-	rm -f example0 example1 example2 example3 example4 example5 example6
+	rm -f example0 example1 example2 example3 example4 example5 example6 example7
 	rm -rf *.dSYM
 	rm -f $(OBJS)
 	rm -f $(HTMLS) $(PNGS)

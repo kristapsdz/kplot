@@ -90,6 +90,8 @@ struct	kplotdat {
 	struct kdatacfg	 *cfgs; /* plot configurations */
 	enum kplottype	 *types; /* plot types */
 	enum kplotstype	  stype; /* multiplot type */
+	enum ksmthtype	  smthtype; /* smoothing type */
+	struct ksmthcfg	  smth; /* smooth configuration */
 };
 
 struct	kplot {

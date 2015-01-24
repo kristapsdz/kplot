@@ -62,6 +62,13 @@ kplot_free(struct kplot *p)
 }
 
 void
+ksmthcfg_defaults(struct ksmthcfg *p)
+{
+
+	p->movsamples = 3;
+}
+
+void
 kplot_data_remove_all(struct kplot *p)
 {
 	size_t	 i;
@@ -75,11 +82,10 @@ kplot_data_remove_all(struct kplot *p)
 }
 
 static int
-kplotdat_attach(struct kplot *p, size_t sz,
-	struct kdata **d, 
+kplotdat_attach(struct kplot *p, size_t sz, struct kdata **d, 
 	const struct kdatacfg *const *cfg,
-	const enum kplottype *types, 
-	enum kplotstype stype)
+	const enum kplottype *types, enum kplotstype stype, 
+	enum ksmthtype smthtype, const struct ksmthcfg *smth)
 {
 	void	*pp;
 	size_t	 i;
@@ -117,6 +123,14 @@ kplotdat_attach(struct kplot *p, size_t sz,
 		d[i]->refs++;
 	}
 
+	p->datas[p->datasz].smthtype = smthtype;
+	if (NULL != smth)  {
+		p->datas[p->datasz].smth = *smth;
+		/* Make sure we're odd around the sample. */
+		if (0 == (2 % p->datas[p->datasz].smth.movsamples))
+			p->datas[p->datasz].smth.movsamples++;
+	} else
+		ksmthcfg_defaults(&p->datas[p->datasz].smth);
 	p->datas[p->datasz].datasz = sz;
 	p->datas[p->datasz].stype = stype;
 	p->datasz++;
@@ -124,11 +138,22 @@ kplotdat_attach(struct kplot *p, size_t sz,
 }
 
 int
+kplot_smthdata_attach(struct kplot *p, struct kdata *d, 
+	enum kplottype t, const struct kdatacfg *cfg,
+	enum ksmthtype smthtype, const struct ksmthcfg *smth)
+{
+
+	return(kplotdat_attach(p, 1, &d, &cfg, 
+		&t, KPLOTS_SINGLE, smthtype, smth));
+}
+
+int
 kplot_data_attach(struct kplot *p, struct kdata *d, 
 	enum kplottype t, const struct kdatacfg *cfg)
 {
 
-	return(kplotdat_attach(p, 1, &d, &cfg, &t, KPLOTS_SINGLE));
+	return(kplotdat_attach(p, 1, &d, &cfg, 
+		&t, KPLOTS_SINGLE, KSMOOTH_NONE, NULL));
 }
 
 int
@@ -139,5 +164,6 @@ kplot_datas_attach(struct kplot *p, size_t sz,
 
 	if (sz < 2)
 		return(0);
-	return(kplotdat_attach(p, sz, d, cfg, t, st));
+	return(kplotdat_attach(p, sz, d, 
+		cfg, t, st, KSMOOTH_NONE, NULL));
 }
