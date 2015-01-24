@@ -57,12 +57,12 @@ main(int argc, char *argv[])
 		goto out;
 	}
 
-	if ( ! kplot_data_attach(p, d, KPLOT_LINESPOINTS, NULL)) {
+	if ( ! kplot_attach_data(p, d, KPLOT_LINESPOINTS, NULL)) {
 		perror(NULL);
 		goto out;
 	} 
 	
-	if ( ! kplot_smthdata_attach(p, d, KPLOT_LINESPOINTS, 
+	if ( ! kplot_attach_smooth(p, d, KPLOT_LINESPOINTS, 
 			NULL, KSMOOTH_MOVAVG, NULL)) {
 		perror(NULL);
 		goto out;

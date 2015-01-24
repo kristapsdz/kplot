@@ -64,12 +64,12 @@ main(int argc, char *argv[])
 	}
 
 	for (i = 0; i < 20; i++) {
-		if ( ! kplot_data_attach(p, d[i], KPLOT_POINTS, NULL)) {
+		if ( ! kplot_attach_data(p, d[i], KPLOT_POINTS, NULL)) {
 			perror(NULL);
 			goto out;
 		}
 	}
-	if ( ! kplot_data_attach(p, md, KPLOT_LINES, NULL)) {
+	if ( ! kplot_attach_data(p, md, KPLOT_LINES, NULL)) {
 		perror(NULL);
 		goto out;
 	}

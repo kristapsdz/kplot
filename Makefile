@@ -8,7 +8,8 @@ LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcai
 #LDADD		+= -lbsd
 VERSIONS	= version_0_1_4.xml \
 		  version_0_1_5.xml \
-		  version_0_1_6.xml
+		  version_0_1_6.xml \
+		  version_0_1_7.xml
 PNGS		= example0.png \
 		  example1.png \
 		  example2.png \
@@ -86,9 +87,9 @@ HTMLS		= index.html \
 		  man/kdatacfg_defaults.3.html \
 		  man/kplot.3.html \
 		  man/kplot_alloc.3.html \
-		  man/kplot_data_attach.3.html \
-		  man/kplot_data_remove_all.3.html \
-		  man/kplot_datas_attach.3.html \
+		  man/kplot_attach_data.3.html \
+		  man/kplot_attach_datas.3.html \
+		  man/kplot_attach_smooth.3.html \
 		  man/kplot_draw.3.html \
 		  man/kplot_free.3.html \
 	 	  man/kplotcfg_defaults.3.html
@@ -110,9 +111,9 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kdatacfg_defaults.3 \
 		  man/kplot.3 \
 		  man/kplot_alloc.3 \
-		  man/kplot_data_attach.3 \
-		  man/kplot_data_remove_all.3 \
-		  man/kplot_datas_attach.3 \
+		  man/kplot_attach_data.3 \
+		  man/kplot_attach_datas.3 \
+		  man/kplot_attach_smooth.3 \
 		  man/kplot_draw.3 \
 		  man/kplot_free.3 \
 	 	  man/kplotcfg_defaults.3

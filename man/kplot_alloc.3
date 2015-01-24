@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 19 2014 $
+.Dd $Mdocdate: January 16 2015 $
 .Dt KPLOT_ALLOC 3
 .Os
 .Sh NAME
@@ -15,9 +15,9 @@
 The
 .Nm
 function allocates a plotting context for later use by
-.Xr kplot_data_attach 3
-and
-.Xr kplot_draw 3 .
+.Xr kplot_attach_data 3 ,
+.Xr kplot_draw 3 ,
+and so on.
 It must be freed with
 .Xr kplot_free 3 .
 .Sh RETURN VALUES
@@ -36,6 +36,7 @@ on memory allocation failure.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kplot_free 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

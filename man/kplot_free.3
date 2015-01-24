@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 19 2014 $
+.Dd $Mdocdate: January 16 2015 $
 .Dt KPLOT_FREE 3
 .Os
 .Sh NAME
@@ -19,7 +19,10 @@ The
 function frees a plotting context created by
 .Xr kplot_alloc 3 .
 In doing so, it dereferences (possibly freeing) all data sources added with
-.Xr kplot_data_attach 3 .
+.Xr kplot_attach_data 3 ,
+.Xr kplot_attach_datas 3
+and
+.Xr kplot_attach_smooth 3 .
 .\" .Sh RETURN VALUES
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
@@ -32,6 +35,7 @@ In doing so, it dereferences (possibly freeing) all data sources added with
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kplot_alloc 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

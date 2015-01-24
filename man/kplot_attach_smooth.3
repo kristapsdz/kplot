@@ -1,0 +1,83 @@
+.Dd $Mdocdate: January 24 2015 $
+.Dt KPLOT_ATTACH_SMOOTH 3
+.Os
+.Sh NAME
+.Nm kplot_attach_smooth
+.Nd assign smoothed plot data to plotting context
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft int
+.Fo kplot_attach_smooth
+.Fa "const struct kplot *p"
+.Fa "struct kdata *d"
+.Fa "enum kplottype t"
+.Fa "const struct kdatacfg *cfg"
+.Fa "enum ksmthtype smthtype"
+.Fa "const struct ksmthcfg *smth"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm
+function assigns a smoothed data source
+.Fa d
+to a plotting context
+.Fa p ,
+reference-counting the data source in the process.
+See
+.Xr kplot_attach_data 3
+for details on the
+.Fa p ,
+.Fa d ,
+.Fa t ,
+and
+.Fa cfg
+parameters.
+The remaining
+.Fa smthtype
+and
+.Fa smth
+configure smoothing options, which manipulate the data as it's being
+drawn.
+The following smoothing types are available:
+.Bl -tag -width Ds
+.It Dv KSMOOTH_MOVAVG
+Replace each point with the average of the surrounding
+.Va movsamples
+points.
+If
+.Va movsamples
+if not an odd number, it is increased by one.
+If the point is not surrounded completely by
+.Va movsamples ,
+say by being at the initial or trailing points of the data set, or the
+points surrounding are not valid numbers, then the point is not
+averaged.
+.El
+.Sh RETURN VALUES
+.Nm
+returns 0 if allocation of internal structures fails due to memory
+exhaustion.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot_attach_data 3 ,
+.Xr kplot_attach_datas 3 ,
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

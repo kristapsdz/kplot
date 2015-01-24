@@ -186,17 +186,14 @@ void		 kplotcfg_defaults(struct kplotcfg *);
 void		 ksmthcfg_defaults(struct ksmthcfg *);
 
 struct kplot	*kplot_alloc(void);
-int		 kplot_data_attach(struct kplot *, struct kdata *, 
+int		 kplot_attach_data(struct kplot *, struct kdata *, 
 			enum kplottype, const struct kdatacfg *);
-int		 kplot_smthdata_attach(struct kplot *, 
-			struct kdata *, enum kplottype, 
-			const struct kdatacfg *,
+int		 kplot_attach_smooth(struct kplot *, struct kdata *, 
+			enum kplottype, const struct kdatacfg *,
 			enum ksmthtype, const struct ksmthcfg *);
-int		 kplot_datas_attach(struct kplot *, size_t, 
+int		 kplot_attach_datas(struct kplot *, size_t, 
 			struct kdata **, const enum kplottype *, 
-			const struct kdatacfg *const *, 
-			enum kplotstype);
-void		 kplot_data_remove_all(struct kplot *);
+			const struct kdatacfg *const *, enum kplotstype);
 void		 kplot_draw(const struct kplot *, 
 			double, double, cairo_t *, 
 			const struct kplotcfg *);

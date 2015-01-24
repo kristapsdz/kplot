@@ -59,10 +59,10 @@ main(int argc, char *argv[])
 	if (NULL == (p = kplot_alloc())) {
 		perror(NULL);
 		goto out;
-	} else if ( ! kplot_data_attach(p, d, KPLOT_POINTS, NULL)) {
+	} else if ( ! kplot_attach_data(p, d, KPLOT_POINTS, NULL)) {
 		perror(NULL);
 		goto out;
-	} else if ( ! kplot_data_attach(p, md, KPLOT_LINES, NULL)) {
+	} else if ( ! kplot_attach_data(p, md, KPLOT_LINES, NULL)) {
 		perror(NULL);
 		goto out;
 	}

@@ -1,8 +1,8 @@
-.Dd $Mdocdate: January 22 2015 $
-.Dt KPLOT_DATA_ATTACH 3
+.Dd $Mdocdate: January 24 2015 $
+.Dt KPLOT_ATTACH_DATA 3
 .Os
 .Sh NAME
-.Nm kplot_data_attach
+.Nm kplot_attach_data
 .Nd assign plot data to plotting context
 .Sh LIBRARY
 .Lb libkplot
@@ -10,7 +10,7 @@
 .In cairo.h
 .In kplot.h
 .Ft int
-.Fo kplot_data_attach
+.Fo kplot_attach_data
 .Fa "const struct kplot *p"
 .Fa "struct kdata *d"
 .Fa "enum kplottype t"
@@ -82,6 +82,8 @@ exhaustion.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kplot_attach_datas 3 ,
+.Xr kplot_attach_smooth 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

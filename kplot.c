@@ -49,6 +49,19 @@ kplot_alloc(void)
 	return(calloc(1, sizeof(struct kplot)));
 }
 
+static void
+kplot_data_remove_all(struct kplot *p)
+{
+	size_t	 i;
+
+	for (i = 0; i < p->datasz; i++)
+		kplotdat_free(&p->datas[i]);
+
+	free(p->datas);
+	p->datas = NULL;
+	p->datasz = 0;
+}
+
 void
 kplot_free(struct kplot *p)
 {
@@ -66,19 +79,6 @@ ksmthcfg_defaults(struct ksmthcfg *p)
 {
 
 	p->movsamples = 3;
-}
-
-void
-kplot_data_remove_all(struct kplot *p)
-{
-	size_t	 i;
-
-	for (i = 0; i < p->datasz; i++)
-		kplotdat_free(&p->datas[i]);
-
-	free(p->datas);
-	p->datas = NULL;
-	p->datasz = 0;
 }
 
 static int
@@ -138,7 +138,7 @@ kplotdat_attach(struct kplot *p, size_t sz, struct kdata **d,
 }
 
 int
-kplot_smthdata_attach(struct kplot *p, struct kdata *d, 
+kplot_attach_smooth(struct kplot *p, struct kdata *d, 
 	enum kplottype t, const struct kdatacfg *cfg,
 	enum ksmthtype smthtype, const struct ksmthcfg *smth)
 {
@@ -148,7 +148,7 @@ kplot_smthdata_attach(struct kplot *p, struct kdata *d,
 }
 
 int
-kplot_data_attach(struct kplot *p, struct kdata *d, 
+kplot_attach_data(struct kplot *p, struct kdata *d, 
 	enum kplottype t, const struct kdatacfg *cfg)
 {
 
@@ -157,7 +157,7 @@ kplot_data_attach(struct kplot *p, struct kdata *d,
 }
 
 int
-kplot_datas_attach(struct kplot *p, size_t sz, 
+kplot_attach_datas(struct kplot *p, size_t sz, 
 	struct kdata **d, const enum kplottype *t, 
 	const struct kdatacfg *const *cfg, enum kplotstype st)
 {

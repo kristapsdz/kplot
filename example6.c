@@ -70,7 +70,7 @@ main(int argc, char *argv[])
 
 	ts[0] = KPLOT_POINTS;
 	ts[1] = KPLOT_LINES;
-	if ( ! kplot_datas_attach(p, 2, md, ts, NULL, KPLOTS_YERRORLINE)) {
+	if ( ! kplot_attach_datas(p, 2, md, ts, NULL, KPLOTS_YERRORLINE)) {
 		perror(NULL);
 		goto out;
 	}
