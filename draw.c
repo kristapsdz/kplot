@@ -516,13 +516,20 @@ kplot_draw(const struct kplot *p, double w,
 	kplotctx_tic_init(&ctx);
 	
 	cairo_translate(ctx.cr, ctx.offs.x, ctx.offs.y);
-	ux = 0.0;
-	uy = 0.0;
+	/*
+	 * Here we create a subwindow.
+	 * This is important because we can arbitrarily set window
+	 * minima and maxima and then scribble outside of the window.
+	 * This makes sure that we don't do that: we'll scribble into
+	 * nowhere.
+	 */
+#if 1
+	/* GTK will have its surface be much bigger than the cr. */
+	ux = uy = 0.0;
 	cairo_user_to_device(cr, &ux, &uy);
-
 	surf = cairo_surface_create_for_rectangle
 		(cairo_get_target(cr),
-		 ctx.offs.x, uy, ctx.dims.x, ctx.dims.y + 2.0);
+		 ux, uy, ctx.dims.x, ctx.dims.y + 2.0);
 	st = cairo_surface_status(surf);
 	if (CAIRO_STATUS_SUCCESS != st) {
 		cairo_surface_destroy(surf);
@@ -535,6 +542,7 @@ kplot_draw(const struct kplot *p, double w,
 		cairo_destroy(ctx.cr);
 		return;
 	}
+#endif
 
 	ctx.h = ctx.dims.y;
 	ctx.w = ctx.dims.x;
@@ -609,5 +617,7 @@ kplot_draw(const struct kplot *p, double w,
 		}
 	}
 
+#if 1
 	cairo_destroy(ctx.cr);
+#endif
 }
