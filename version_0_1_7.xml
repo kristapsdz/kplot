@@ -2,7 +2,7 @@
 	<header>
 		<h1>0.1.7</h1>
 		<address>Kristaps Dzonsons</address>
-		<time datetime="2015-01-24">2015-01-24</time>
+		<time datetime="2015-01-25">2015-01-25</time>
 	</header>
 	<aside>
 		Renamed <code>kplot_data_attach(3)</code> and <code>kplot_datas_attach(3)</code> to <a
@@ -14,5 +14,7 @@
 		Removed <code>kplot_data_remove_all(3)</code> (to be re-added and re-named when necssary).
 		Added <a href="kdata_max.3.html">kdata_max(3)</a> and <a href="kdata_min.3.html">kdata_min(3)</a>.
 		Modified <a href="kdata_bucket_add.3.html">kdata_bucket_set(3)</a> to accept both the x and y values.
+		Fixed <a href="kdata_hist_add.3.html">kdata_hist_add(3)</a> and <a href="kdata_hist_set.3.html">kdata_hist_set(3)</a> range
+		checks.
 	</aside>
 </article>
