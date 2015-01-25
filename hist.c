@@ -17,6 +17,7 @@
 #include <assert.h>
 #include <cairo.h>
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -69,13 +70,13 @@ kdata_hist_checkrange(const struct kdata *d, double v)
 	frac = (v - d->d.hist.rmin) / 
 		(d->d.hist.rmax - d->d.hist.rmin);
 	assert(frac >= 0.0 && frac < 1.0);
-	bucket = d->pairsz * frac;
+	bucket = floor((double)d->pairsz * frac);
 
 	if ((size_t)bucket == d->pairsz - 1) {
-		assert(d->pairs[bucket].x <= frac);
+		assert(d->pairs[bucket].x <= v);
 	} else {
-		assert(d->pairs[bucket].x <= frac);
-		assert(d->pairs[bucket + 1].x >= frac);
+		assert(d->pairs[bucket].x <= v);
+		assert(d->pairs[bucket + 1].x >= v);
 	}
 
 	return(bucket);

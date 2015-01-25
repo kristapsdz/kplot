@@ -72,12 +72,11 @@ kdata_max(const struct kdata *d, struct kpair *kp)
 
 	max = 0;
 	pair = d->pairs[max];
-	for (i = 1; i < d->pairsz; i++) {
-		if (pair.y > d->pairs[i].y)
-			continue;
-		pair = d->pairs[i];
-		max = i;
-	}
+	for (i = 1; i < d->pairsz; i++)
+		if (d->pairs[i].y > pair.y) {
+			pair = d->pairs[i];
+			max = i;
+		}
 	if (NULL != kp)
 		*kp = pair;
 	return(max);
@@ -94,12 +93,11 @@ kdata_min(const struct kdata *d, struct kpair *kp)
 
 	min = 0;
 	pair = d->pairs[min];
-	for (i = 1; i < d->pairsz; i++) {
-		if (pair.y < d->pairs[i].y)
-			continue;
-		pair = d->pairs[i];
-		min = i;
-	}
+	for (i = 1; i < d->pairsz; i++) 
+		if (d->pairs[i].y < pair.y) {
+			pair = d->pairs[i];
+			min = i;
+		}
 	if (NULL != kp)
 		*kp = pair;
 	return(min);
