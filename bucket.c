@@ -65,12 +65,13 @@ kdata_bucket_checkrange(const struct kdata *d, size_t v)
 }
 
 int
-kdata_bucket_set(struct kdata *d, size_t v, double val)
+kdata_bucket_set(struct kdata *d, size_t v, double x, double y)
 {
 
 	if ( ! kdata_bucket_checkrange(d, v))
 		return(0);
-	d->pairs[v - d->d.bucket.rmin].y = val;
+	d->pairs[v - d->d.bucket.rmin].x = x;
+	d->pairs[v - d->d.bucket.rmin].y = y;
 	return(kdata_dep_run(d, v - d->d.bucket.rmin));
 }
 

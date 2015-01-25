@@ -1,9 +1,9 @@
 .SUFFIXES: .3 .3.html
 
 CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
-CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/usr/X11/include/cairo'`
+CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/Users/kristaps/gtk/inst/include/cairo'`
 VERSION		= 0.1.7
-LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcairo'`
+LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/Users/kristaps/gtk/inst/lib/ -lcairo'`
 #If you're on GNU/Linux, you'll need to uncomment this.
 #LDADD		+= -lbsd
 VERSIONS	= version_0_1_4.xml \
@@ -89,8 +89,10 @@ HTMLS		= index.html \
 		  man/kdata_destroy.3.html \
 		  man/kdata_hist_alloc.3.html \
 		  man/kdata_hist_add.3.html \
+		  man/kdata_max.3.html \
 		  man/kdata_mean_alloc.3.html \
 		  man/kdata_mean_attach.3.html \
+		  man/kdata_min.3.html \
 		  man/kdata_stddev_alloc.3.html \
 		  man/kdata_stddev_attach.3.html \
 		  man/kdata_vector_append.3.html \
@@ -113,8 +115,10 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kdata_destroy.3 \
 		  man/kdata_hist_alloc.3 \
 		  man/kdata_hist_add.3 \
+		  man/kdata_max.3 \
 		  man/kdata_mean_alloc.3 \
 		  man/kdata_mean_attach.3 \
+		  man/kdata_min.3 \
 		  man/kdata_stddev_alloc.3 \
 		  man/kdata_stddev_attach.3 \
 		  man/kdata_vector_append.3 \

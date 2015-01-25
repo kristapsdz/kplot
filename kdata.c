@@ -61,6 +61,50 @@ kdata_destroy(struct kdata *d)
 	free(d);
 }
 
+ssize_t
+kdata_max(const struct kdata *d, struct kpair *kp)
+{
+	size_t	 	i, max;
+	struct kpair	pair;
+
+	if (0 == d->pairsz)
+		return(-1);
+
+	max = 0;
+	pair = d->pairs[max];
+	for (i = 1; i < d->pairsz; i++) {
+		if (pair.y > d->pairs[i].y)
+			continue;
+		pair = d->pairs[i];
+		max = i;
+	}
+	if (NULL != kp)
+		*kp = pair;
+	return(max);
+}
+
+ssize_t
+kdata_min(const struct kdata *d, struct kpair *kp)
+{
+	size_t	 	i, min;
+	struct kpair	pair;
+
+	if (0 == d->pairsz)
+		return(-1);
+
+	min = 0;
+	pair = d->pairs[min];
+	for (i = 1; i < d->pairsz; i++) {
+		if (pair.y < d->pairs[i].y)
+			continue;
+		pair = d->pairs[i];
+		min = i;
+	}
+	if (NULL != kp)
+		*kp = pair;
+	return(min);
+}
+
 void
 kdatacfg_defaults(struct kdatacfg *cfg)
 {

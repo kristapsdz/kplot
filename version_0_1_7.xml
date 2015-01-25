@@ -12,5 +12,7 @@
 		Added <a href="kplot_attach_smooth.3.html">kplot_attach_smooth(3)</a> functionality, for the time being with only a moving
 		average and CDF generator.
 		Removed <code>kplot_data_remove_all(3)</code> (to be re-added and re-named when necssary).
+		Added <a href="kdata_max.3.html">kdata_max(3)</a> and <a href="kdata_min.3.html">kdata_min(3)</a>.
+		Modified <a href="kdata_bucket_add.3.html">kdata_bucket_set(3)</a> to accept both the x and y values.
 	</aside>
 </article>

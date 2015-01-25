@@ -168,15 +168,17 @@ int		 kdata_array_fill(struct kdata *, void *,
 int		 kdata_array_set(struct kdata *, size_t, double);
 int		 kdata_bucket_add(struct kdata *, size_t, double);
 struct kdata	*kdata_bucket_alloc(size_t, size_t);
-int		 kdata_bucket_set(struct kdata *, size_t, double);
+int		 kdata_bucket_set(struct kdata *, size_t, double, double);
 struct kdata	*kdata_buffer_alloc(size_t);
 int		 kdata_buffer_copy(struct kdata *, const struct kdata *);
 void		 kdata_destroy(struct kdata *);
 int		 kdata_hist_add(struct kdata *, double, double);
 struct kdata	*kdata_hist_alloc(double, double, size_t);
 int		 kdata_hist_set(struct kdata *, double, double);
+ssize_t		 kdata_max(const struct kdata *, struct kpair *);
 struct kdata	*kdata_mean_alloc(struct kdata *);
 int		 kdata_mean_attach(struct kdata *, struct kdata *);
+ssize_t		 kdata_min(const struct kdata *, struct kpair *);
 struct kdata	*kdata_stddev_alloc(struct kdata *);
 int		 kdata_stddev_attach(struct kdata *, struct kdata *);
 struct kdata	*kdata_vector_alloc(size_t);

@@ -473,6 +473,8 @@ kplot_draw(const struct kplot *p, double w,
 {
 	size_t	 	 i, start, end;
 	struct kplotctx	 ctx;
+	cairo_surface_t	*surf;
+	cairo_status_t	 st;
 	struct kplotdat	*d;
 
 	memset(&ctx, 0, sizeof(struct kplotctx));
@@ -510,8 +512,32 @@ kplot_draw(const struct kplot *p, double w,
 	kplotctx_grid_init(&ctx);
 	kplotctx_border_init(&ctx);
 	kplotctx_tic_init(&ctx);
-
+	
 	cairo_translate(ctx.cr, ctx.offs.x, ctx.offs.y);
+
+#if 0
+	surf = cairo_surface_create_for_rectangle
+		(cairo_get_target(cr),
+		 ctx.offs.x, ctx.offs.y, ctx.dims.x, ctx.dims.y);
+#else
+	surf = cairo_surface_create_similar_image
+		(cairo_get_target(cr),
+		 CAIRO_FORMAT_ARGB32,
+		 ctx.dims.x, ctx.dims.y);
+#endif
+
+	st = cairo_surface_status(surf);
+	if (CAIRO_STATUS_SUCCESS != st) {
+		cairo_surface_destroy(surf);
+		return;
+	}
+	ctx.cr = cairo_create(surf);
+	cairo_surface_destroy(surf);
+	st = cairo_status(ctx.cr);
+	if (CAIRO_STATUS_SUCCESS != st) {
+		cairo_destroy(ctx.cr);
+		return;
+	}
 
 	ctx.h = ctx.dims.y;
 	ctx.w = ctx.dims.x;
@@ -585,4 +611,6 @@ kplot_draw(const struct kplot *p, double w,
 			break;
 		}
 	}
+
+	cairo_destroy(ctx.cr);
 }

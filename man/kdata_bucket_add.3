@@ -13,12 +13,13 @@
 .Ft int
 .Fo kdata_bucket_add
 .Fa "struct kdata *d"
-.Fa "size_t x"
+.Fa "size_t bucket"
 .Fa "double y"
 .Fc
 .Ft int
 .Fo kdata_bucket_set
 .Fa "struct kdata *d"
+.Fa "size_t bucket"
 .Fa "size_t x"
 .Fa "double y"
 .Fc
@@ -27,18 +28,23 @@ The
 .Nm kdata_bucket_add
 and
 .Nm kdata_bucket_set
-functions add or set
-.Fa y
-.Pq which is not checked for any restrictions
-to the bucket
+functions add or set the
 .Fa x
+and
+.Fa y
+values
+.Pq which are not checked for any restrictions
+to the bucket index
+.Fa bucket
 within the range provided to
 .Xr kdata_bucket_alloc 3 .
 .Sh RETURN VALUES
 .Nm kdata_bucket_add
 and
 .Nm kdata_bucket_set
-return 0 if the requested bucket is outside of the bucket range, 
+return 0 if the
+.Fa bucket
+is outside of the bucket range, 
 a dependant modification failed, or
 the source was not created with
 .Xr kdata_bucket_alloc 3 ;
