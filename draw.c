@@ -354,6 +354,7 @@ kplotctx_draw_lines(struct kplotctx *ctx, const struct kplotdat *d)
 	struct kpair	 kp, pair;
 	int		 rc;
 
+	memset(&kp, 0, sizeof(struct kpair));
 	for (i = 0; i < d->datas[0]->pairsz; i++) {
 		kpair_set(d, i, &kp);
 		rc = kplotctx_point_to_real(&kp, &pair, ctx);
@@ -364,9 +365,9 @@ kplotctx_draw_lines(struct kplotctx *ctx, const struct kplotdat *d)
 	if (i == d->datas[0]->pairsz)
 		return;
 
-	memset(&kp, 0, sizeof(struct kpair));
 	kplotctx_line_init(ctx, &d->cfgs[0].line);
 	cairo_move_to(ctx->cr, pair.x, pair.y);
+	memset(&kp, 0, sizeof(struct kpair));
 	for ( ; i < d->datas[0]->pairsz; i++) {
 		if ( ! kpair_vrfy(&d->datas[0]->pairs[i]))
 			continue;
@@ -472,6 +473,7 @@ kplot_draw(const struct kplot *p, double w,
 	double h, cairo_t *cr, const struct kplotcfg *cfg)
 {
 	size_t	 	 i, start, end;
+	double		 ux, uy;
 	struct kplotctx	 ctx;
 	cairo_surface_t	*surf;
 	cairo_status_t	 st;
@@ -514,18 +516,13 @@ kplot_draw(const struct kplot *p, double w,
 	kplotctx_tic_init(&ctx);
 	
 	cairo_translate(ctx.cr, ctx.offs.x, ctx.offs.y);
+	ux = 0.0;
+	uy = 0.0;
+	cairo_user_to_device(cr, &ux, &uy);
 
-#if 0
 	surf = cairo_surface_create_for_rectangle
 		(cairo_get_target(cr),
-		 ctx.offs.x, ctx.offs.y, ctx.dims.x, ctx.dims.y);
-#else
-	surf = cairo_surface_create_similar_image
-		(cairo_get_target(cr),
-		 CAIRO_FORMAT_ARGB32,
-		 ctx.dims.x, ctx.dims.y);
-#endif
-
+		 ctx.offs.x, uy, ctx.dims.x, ctx.dims.y + 2.0);
 	st = cairo_surface_status(surf);
 	if (CAIRO_STATUS_SUCCESS != st) {
 		cairo_surface_destroy(surf);
