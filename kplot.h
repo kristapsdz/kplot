@@ -36,7 +36,8 @@ enum	ksmthtype {
 
 enum	kplotstype {
 	KPLOTS_SINGLE,
-	KPLOTS_YERRORLINE
+	KPLOTS_YERRORLINE,
+	KPLOTS_YERRORBAR
 };
 
 struct	kplotclr {

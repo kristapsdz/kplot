@@ -231,6 +231,39 @@ kplotctx_draw_yerrline_basepoints(struct kplotctx *ctx,
 }
 
 static void
+kplotctx_draw_yerrline_pairbars(struct kplotctx *ctx, 
+	size_t start, size_t end, const struct kplotdat *d)
+{
+	size_t	 	i;
+	struct kpair	bot, top, pair;
+	int		rc;
+
+	/* Now line above. */
+	kplotctx_line_init(ctx, &d->cfgs[1].line);
+	for (i = start; i < end; i++) {
+		if ( ! (kpair_vrfy(&d->datas[0]->pairs[i]) &&
+			kpair_vrfy(&d->datas[1]->pairs[i])))
+			continue;
+
+		bot.x = top.x = d->datas[0]->pairs[i].x;
+		bot.y = d->datas[0]->pairs[i].y -
+			 d->datas[1]->pairs[i].y;
+		top.y = d->datas[0]->pairs[i].y +
+			 d->datas[1]->pairs[i].y;
+
+		rc = kplotctx_point_to_real(&bot, &pair, ctx);
+		assert(0 != rc);
+		cairo_move_to(ctx->cr, pair.x, pair.y);
+
+		rc = kplotctx_point_to_real(&top, &pair, ctx);
+		assert(0 != rc);
+		cairo_line_to(ctx->cr, pair.x, pair.y);
+	}
+
+	cairo_stroke(ctx->cr);
+}
+
+static void
 kplotctx_draw_yerrline_pairpoints(struct kplotctx *ctx, 
 	size_t start, size_t end, const struct kplotdat *d)
 {
@@ -495,6 +528,7 @@ kplot_draw(const struct kplot *p, double w,
 	for (i = 0; i < p->datasz; i++) {
 		d = &p->datas[i];
 		switch (d->stype) {
+		case (KPLOTS_YERRORBAR):
 		case (KPLOTS_YERRORLINE):
 			kdata_extrema_yerr(d, &ctx.minv, &ctx.maxv);
 			break;
@@ -523,7 +557,6 @@ kplot_draw(const struct kplot *p, double w,
 	 * This makes sure that we don't do that: we'll scribble into
 	 * nowhere.
 	 */
-#if 1
 	/* GTK will have its surface be much bigger than the cr. */
 	ux = uy = 0.0;
 	cairo_user_to_device(cr, &ux, &uy);
@@ -542,7 +575,6 @@ kplot_draw(const struct kplot *p, double w,
 		cairo_destroy(ctx.cr);
 		return;
 	}
-#endif
 
 	ctx.h = ctx.dims.y;
 	ctx.w = ctx.dims.x;
@@ -567,6 +599,7 @@ kplot_draw(const struct kplot *p, double w,
 				break;
 			}
 			break;
+		case (KPLOTS_YERRORBAR):
 		case (KPLOTS_YERRORLINE):
 			start = kplotctx_draw_yerrline_start
 				(&ctx, d, &end);
@@ -611,13 +644,14 @@ kplot_draw(const struct kplot *p, double w,
 				abort();
 				break;
 			}
+			if (KPLOTS_YERRORBAR == d->stype)
+				kplotctx_draw_yerrline_pairbars
+					(&ctx, start, end, d);
 			break;
 		default:
 			break;
 		}
 	}
 
-#if 1
 	cairo_destroy(ctx.cr);
-#endif
 }

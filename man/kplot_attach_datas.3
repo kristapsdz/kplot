@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 23 2015 $
+.Dd $Mdocdate: January 24 2015 $
 .Dt KPLOT_ATTACH_DATAS 3
 .Os
 .Sh NAME
@@ -12,6 +12,7 @@
 .Ft int
 .Fo kplot_attach_datas
 .Fa "const struct kplot *p"
+.Fa "size_t sz"
 .Fa "struct kdata **d"
 .Fa "const enum kplottype *t"
 .Fa "const struct kdatacfg *const *cfg"
@@ -55,10 +56,21 @@ all other parameters and indexes must not be
 The plot types are as follows:
 .Bl -tag -width Ds
 .It Dv KPLOTS_YERRORLINE
-Draw a baseline using the first element in
+Draw a baseline (or points) using the first element in
 .Fa d .
-The next element is used to draw error lines above (adding to the
-y-position) and below (subtracting) the baseline.
+The next element is used to draw error lines (or points) above (adding
+to the y-position) and below (subtracting) the baseline.
+Subsequent lines are ignored.
+Data sources are matched by bucket index,
+.Em not
+x-axis value, which is ignored for all pair data sources.
+.It Dv KPLOTS_YERRORBAR
+Draw a baseline (or points) using the first element in
+.Fa d .
+The next element is used to draw error lines (or point) above (adding to
+the y-position) and below (subtracting) the baseline.
+A bar is then drawn between these points using the line configuration of
+this element.
 Subsequent lines are ignored.
 Data sources are matched by bucket index,
 .Em not
@@ -79,9 +91,9 @@ exhaustion, or not enough data sources have been provided.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kplot 3 ,
 .Xr kplot_attach_data 3 ,
-.Xr kplot_attach_smooth 3 ,
-.Xr kplot 3
+.Xr kplot_attach_smooth 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
 .\" .Sh AUTHORS

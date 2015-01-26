@@ -16,5 +16,6 @@
 		Modified <a href="kdata_bucket_add.3.html">kdata_bucket_set(3)</a> to accept both the x and y values.
 		Fixed <a href="kdata_hist_add.3.html">kdata_hist_add(3)</a> and <a href="kdata_hist_set.3.html">kdata_hist_set(3)</a> range
 		checks.
+		Added <code>KPLOTS_YERRORBAR</code> to <a href="kplot_attach_datas.3.html">kplot_attach_datas(3)</a>.
 	</aside>
 </article>
