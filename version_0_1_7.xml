@@ -2,7 +2,7 @@
 	<header>
 		<h1>0.1.7</h1>
 		<address>Kristaps Dzonsons</address>
-		<time datetime="2015-01-25">2015-01-25</time>
+		<time datetime="2015-01-26">2015-01-26</time>
 	</header>
 	<aside>
 		Renamed <code>kplot_data_attach(3)</code> and <code>kplot_datas_attach(3)</code> to <a
