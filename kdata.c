@@ -61,48 +61,6 @@ kdata_destroy(struct kdata *d)
 	free(d);
 }
 
-ssize_t
-kdata_max(const struct kdata *d, struct kpair *kp)
-{
-	size_t	 	i, max;
-	struct kpair	pair;
-
-	if (0 == d->pairsz)
-		return(-1);
-
-	max = 0;
-	pair = d->pairs[max];
-	for (i = 1; i < d->pairsz; i++)
-		if (d->pairs[i].y > pair.y) {
-			pair = d->pairs[i];
-			max = i;
-		}
-	if (NULL != kp)
-		*kp = pair;
-	return(max);
-}
-
-ssize_t
-kdata_min(const struct kdata *d, struct kpair *kp)
-{
-	size_t	 	i, min;
-	struct kpair	pair;
-
-	if (0 == d->pairsz)
-		return(-1);
-
-	min = 0;
-	pair = d->pairs[min];
-	for (i = 1; i < d->pairsz; i++) 
-		if (d->pairs[i].y < pair.y) {
-			pair = d->pairs[i];
-			min = i;
-		}
-	if (NULL != kp)
-		*kp = pair;
-	return(min);
-}
-
 void
 kdatacfg_defaults(struct kdatacfg *cfg)
 {
@@ -161,3 +119,144 @@ kdata_dep_add(struct kdata *data, struct kdata *dep, ksetfunc fp)
 	data->refs++;
 	return(1);
 }
+
+double
+kdata_xmean(const struct kdata *data)
+{
+	double	 sum;
+	size_t	 i;
+
+	if (0 == data->pairsz)
+		return(0.0);
+	for (sum = 0.0, i = 0; i < data->pairsz; i++)
+		sum += data->pairs[i].x;
+	return(sum / (double)data->pairsz);
+}
+
+double
+kdata_ymean(const struct kdata *data)
+{
+	double	 sum;
+	size_t	 i;
+
+	if (0 == data->pairsz)
+		return(0.0);
+	for (sum = 0.0, i = 0; i < data->pairsz; i++)
+		sum += data->pairs[i].y;
+	return(sum / (double)data->pairsz);
+}
+
+double
+kdata_xstddev(const struct kdata *data)
+{
+	double	 sum, mean;
+	size_t	 i;
+
+	if (0 == data->pairsz)
+		return(0.0);
+	mean = kdata_xmean(data);
+	for (sum = 0.0, i = 0; i < data->pairsz; i++)
+		sum += (data->pairs[i].x - mean) *
+		       (data->pairs[i].x - mean);
+	return(sqrt(sum / (double)data->pairsz));
+}
+
+double
+kdata_ystddev(const struct kdata *data)
+{
+	double	 sum, mean;
+	size_t	 i;
+
+	if (0 == data->pairsz)
+		return(0.0);
+	mean = kdata_xmean(data);
+	for (sum = 0.0, i = 0; i < data->pairsz; i++)
+		sum += (data->pairs[i].y - mean) *
+		       (data->pairs[i].y - mean);
+	return(sqrt(sum / (double)data->pairsz));
+}
+
+ssize_t
+kdata_xmax(const struct kdata *d, struct kpair *kp)
+{
+	size_t	 	i, max;
+	struct kpair	pair;
+
+	if (0 == d->pairsz)
+		return(-1);
+
+	max = 0;
+	pair = d->pairs[max];
+	for (i = 1; i < d->pairsz; i++)
+		if (d->pairs[i].x > pair.x) {
+			pair = d->pairs[i];
+			max = i;
+		}
+	if (NULL != kp)
+		*kp = pair;
+	return(max);
+}
+
+ssize_t
+kdata_xmin(const struct kdata *d, struct kpair *kp)
+{
+	size_t	 	i, min;
+	struct kpair	pair;
+
+	if (0 == d->pairsz)
+		return(-1);
+
+	min = 0;
+	pair = d->pairs[min];
+	for (i = 1; i < d->pairsz; i++) 
+		if (d->pairs[i].x < pair.x) {
+			pair = d->pairs[i];
+			min = i;
+		}
+	if (NULL != kp)
+		*kp = pair;
+	return(min);
+}
+
+ssize_t
+kdata_ymax(const struct kdata *d, struct kpair *kp)
+{
+	size_t	 	i, max;
+	struct kpair	pair;
+
+	if (0 == d->pairsz)
+		return(-1);
+
+	max = 0;
+	pair = d->pairs[max];
+	for (i = 1; i < d->pairsz; i++)
+		if (d->pairs[i].y > pair.y) {
+			pair = d->pairs[i];
+			max = i;
+		}
+	if (NULL != kp)
+		*kp = pair;
+	return(max);
+}
+
+ssize_t
+kdata_ymin(const struct kdata *d, struct kpair *kp)
+{
+	size_t	 	i, min;
+	struct kpair	pair;
+
+	if (0 == d->pairsz)
+		return(-1);
+
+	min = 0;
+	pair = d->pairs[min];
+	for (i = 1; i < d->pairsz; i++) 
+		if (d->pairs[i].y < pair.y) {
+			pair = d->pairs[i];
+			min = i;
+		}
+	if (NULL != kp)
+		*kp = pair;
+	return(min);
+}
+

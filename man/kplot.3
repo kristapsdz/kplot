@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 22 2015 $
+.Dd $Mdocdate: January 24 2015 $
 .Dt KPLOT 3
 .Os
 .Sh NAME
@@ -92,6 +92,25 @@ plots easier.
 Thus, calling
 .Xr kdata_destroy 3
 will dereference, only freeing when nobody references the source.
+.Ss Statistics
+The
+.Nm
+library is not built for high-level statistics, but some primitive
+statistics may be collected from the underlying data sources:
+arithmetic mean via
+.Xr kdata_xmean 3
+and
+.Xr kdata_ymean 3 ,
+population standard deviation via
+.Xr kdata_xstddev 3
+and
+.Xr kdata_ystddev 3 ,
+and extrema via
+.Xr kdata_xmin 3 ,
+.Xr kdata_xmax 3 ,
+.Xr kdata_ymin 3
+and
+.Xr kdata_ymax 3 .
 .\" .Sh RETURN VALUES
 .\" For sections 2, 3, and 9 function return values only.
 .\" .Sh ENVIRONMENT

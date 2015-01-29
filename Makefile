@@ -9,7 +9,8 @@ LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcai
 VERSIONS	= version_0_1_4.xml \
 		  version_0_1_5.xml \
 		  version_0_1_6.xml \
-		  version_0_1_7.xml
+		  version_0_1_7.xml \
+		  version_0_1_8.xml
 EXAMPLES	= example0 \
 		  example1 \
 		  example2 \
@@ -92,14 +93,16 @@ HTMLS		= index.html \
 		  man/kdata_destroy.3.html \
 		  man/kdata_hist_alloc.3.html \
 		  man/kdata_hist_add.3.html \
-		  man/kdata_max.3.html \
 		  man/kdata_mean_alloc.3.html \
 		  man/kdata_mean_attach.3.html \
-		  man/kdata_min.3.html \
 		  man/kdata_stddev_alloc.3.html \
 		  man/kdata_stddev_attach.3.html \
 		  man/kdata_vector_append.3.html \
 		  man/kdata_vector_alloc.3.html \
+		  man/kdata_xmax.3.html \
+		  man/kdata_xmean.3.html \
+		  man/kdata_xmin.3.html \
+		  man/kdata_xstddev.3.html \
 		  man/kdatacfg_defaults.3.html \
 		  man/kplot.3.html \
 		  man/kplot_alloc.3.html \
@@ -118,14 +121,16 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kdata_destroy.3 \
 		  man/kdata_hist_alloc.3 \
 		  man/kdata_hist_add.3 \
-		  man/kdata_max.3 \
 		  man/kdata_mean_alloc.3 \
 		  man/kdata_mean_attach.3 \
-		  man/kdata_min.3 \
 		  man/kdata_stddev_alloc.3 \
 		  man/kdata_stddev_attach.3 \
 		  man/kdata_vector_append.3 \
 		  man/kdata_vector_alloc.3 \
+		  man/kdata_xmax.3 \
+		  man/kdata_xmean.3 \
+		  man/kdata_min.3 \
+		  man/kdata_xstddev.3 \
 		  man/kdatacfg_defaults.3 \
 		  man/kplot.3 \
 		  man/kplot_alloc.3 \

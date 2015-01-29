@@ -1,33 +1,43 @@
-.Dd $Mdocdate: November 16 2014 $
-.Dt KDATA_MAX 3
+.Dd $Mdocdate: January 26 2015 $
+.Dt KDATA_XMIN 3
 .Os
 .Sh NAME
-.Nm kdata_max
-.Nd find maximum y-point in a data source
+.Nm kdata_xmin ,
+.Nm kdata_ymin
+.Nd find minima in a data source
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
 .Ft ssize_t
-.Fo kdata_max
+.Fo kdata_xmin
+.Fa "const struct kdata *data"
+.Fa "struct kpair *kp"
+.Fc
+.Ft ssize_t
+.Fo kdata_ymin
 .Fa "const struct kdata *data"
 .Fa "struct kpair *kp"
 .Fc
 .Sh DESCRIPTION
 The
-.Nm
-function finds the maximum point in a data source, filling in
+.Nm kdata_xmin
+and
+.Nm kdata_ymin
+functions find the minimum point in a data source, filling in
 .Fa kp
 if it is not
 .Dv NULL .
-The maximum point is the first maximum: thus, if multiple minima exist
+The minimum point is the first minimum: thus, if multiple minima exist
 of the same value, the first will be returned.
 .Sh RETURN VALUES
 If the data source has zero entries,
-.Nm
-returns -1.
-Otherwise, it returns the index of the maximum.
+.Nm kdata_xmin
+and
+.Nm kdata_ymin
+return -1.
+Otherwise, they return the index of the minimum.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
@@ -39,7 +49,8 @@ Otherwise, it returns the index of the maximum.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
-.Xr kdata_min 3 ,
+.Xr kdata_xmax 3 ,
+.Xr kdata_ymax 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

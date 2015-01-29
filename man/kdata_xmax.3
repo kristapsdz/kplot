@@ -1,0 +1,61 @@
+.Dd $Mdocdate: January 26 2015 $
+.Dt KDATA_XMAX 3
+.Os
+.Sh NAME
+.Nm kdata_xmax ,
+.Nm kdata_ymax ,
+.Nd find maxima in a data source
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft ssize_t
+.Fo kdata_xmax
+.Fa "const struct kdata *data"
+.Fa "struct kpair *kp"
+.Fc
+.Ft ssize_t
+.Fo kdata_ymax
+.Fa "const struct kdata *data"
+.Fa "struct kpair *kp"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm kdata_xmax
+and
+.Nm kdata_ymax
+functio find the maximum point in a data source, filling in
+.Fa kp
+if it is not
+.Dv NULL .
+The maximum point is the first maximum: thus, if multiple minima exist
+of the same value, the first will be returned.
+.Sh RETURN VALUES
+If the data source has zero entries,
+.Nm kdata_xmax
+and
+.Nm kdata_ymax
+return -1.
+Otherwise, they return the index of the maximum.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kdata_xmin 3 ,
+.Xr kdata_ymin 3 ,
+.Xr kplot 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

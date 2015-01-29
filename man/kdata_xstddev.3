@@ -1,33 +1,37 @@
-.Dd $Mdocdate: November 16 2014 $
-.Dt KDATA_MIN 3
+.Dd $Mdocdate: January 26 2015 $
+.Dt KDATA_XSTDDEV 3
 .Os
 .Sh NAME
-.Nm kdata_min
-.Nd find minimum y-point in a data source
+.Nm kdata_xstddev ,
+.Nm kdata_ystddev
+.Nd compute population standard deviation of data
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
-.Ft ssize_t
-.Fo kdata_min
+.Ft double
+.Fo kdata_xstddev
 .Fa "const struct kdata *data"
-.Fa "struct kpair *kp"
+.Fc
+.Ft double
+.Fo kdata_ystddev
+.Fa "const struct kdata *data"
 .Fc
 .Sh DESCRIPTION
 The
-.Nm
-function finds the minimum point in a data source, filling in
-.Fa kp
-if it is not
-.Dv NULL .
-The minimum point is the first minimum: thus, if multiple minima exist
-of the same value, the first will be returned.
+.Nm kdata_xstddev
+and
+.Nm kdata_ystddev
+functions compute the population standard deviation of the arithmetic
+mean of data.
 .Sh RETURN VALUES
 If the data source has zero entries,
-.Nm
-returns -1.
-Otherwise, it returns the index of the minimum.
+.Nm kdata_xstddev
+and
+.Nm kdata_ystddev
+return 0.0.
+Otherwise, they returns the standard deviation value.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
@@ -39,7 +43,8 @@ Otherwise, it returns the index of the minimum.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
-.Xr kdata_max 3 ,
+.Xr kdata_xmean 3 ,
+.Xr kdata_ymean 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
