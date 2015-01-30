@@ -1,40 +1,43 @@
-.Dd $Mdocdate: January 16 2015 $
-.Dt KDATA_VECTOR_ADD 3
+.Dd $Mdocdate: November 16 2014 $
+.Dt KDATA_SET 3
 .Os
 .Sh NAME
-.Nm kdata_vector_append
-.Nd append data to a vector data source
+.Nm kdata_set
+.Nd set points in a data set
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
 .Ft int
-.Fo kdata_vector_append
+.Fo kdata_set
 .Fa "struct kdata *data"
+.Fa "size_t pos"
 .Fa "double x"
 .Fa "double y"
 .Fc
 .Sh DESCRIPTION
 The
 .Nm
-function invokes
-.Xr kdata_set 3
-with the point values
+function sets the
 .Fa x
-and
+and  
 .Fa y
-after (possibly) growing a vector data source allocated with
-.Xr kdata_vector_alloc 3 .
+points for absolute (i.e., internal bucket) position
+.Fa pos
+in a
+.Xr kplot 3
+data set
+.Fa data .
+Once assigned, any sources dependant upon the data sources, e.g., those
+attached via
+.Xr kdata_mean_attach 3 ,
+are updated as well.
 .Sh RETURN VALUES
 .Nm
-returns 0 if the vector reallocation failed, the data source was not
-created with
-.Xr kdata_vector_alloc 3 ,
-or if
-.Xr kdata_set 3
-fails.
-Otherwise it returns non-zero.
+returns 0 if the position
+.Fa pos
+is not within the allocated number of pairs, else it returns non-zero.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
@@ -46,8 +49,6 @@ Otherwise it returns non-zero.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
-.Xr kdata_vector_alloc 3 ,
-.Xr kdata_set 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

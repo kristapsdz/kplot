@@ -27,22 +27,28 @@ The
 .Nm kdata_hist_add
 and
 .Nm kdata_hist_set
-functions add or set
+invoke
+.Xr kdata_set 3
+to set or add
 .Fa y
-.Pq which is not checked for restrictions
-to the bucket into which
+to the position mapped from
 .Fa x
-falls.
-It is used for data sources created with
+after checking that
+.Fa x
+lies in the range provided to
 .Xr kdata_hist_alloc 3 .
 .Sh RETURN VALUES
 .Nm kdata_hist_add
 and
 .Nm kdata_hist_set
-return 0 if the requested bucket is outside of the bucket range, a
-dependant modification failed, or the source was not created with
-.Xr kdata_hist_alloc 3 ;
-otherwise it returns non-zero.
+return 0 if
+.Fa x
+is outside of the histogram range, the source was not created with
+.Xr kdata_hist_alloc 3 ,
+or if
+.Xr kdata_set 3
+fails.
+Otherwise it returns non-zero.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
@@ -55,6 +61,7 @@ otherwise it returns non-zero.
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
 .Xr kdata_hist_alloc 3 ,
+.Xr kdata_set 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
