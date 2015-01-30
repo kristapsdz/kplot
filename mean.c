@@ -27,7 +27,7 @@
 static int
 kdata_mean_set(struct kdata *d, size_t pos, double x, double y)
 {
-	double	 delta, delta_n;
+	double	 delta, delta_n, newy;
 	void	*p;
 
 	assert(KDATA_MEAN == d->type);
@@ -60,9 +60,8 @@ kdata_mean_set(struct kdata *d, size_t pos, double x, double y)
 	d->d.mean.ns[pos]++;
         delta = y - d->pairs[pos].y;
         delta_n = delta / (double)d->d.mean.ns[pos];
-	d->pairs[pos].y += delta_n;
-	d->pairs[pos].x = x;
-	return(kdata_dep_run(d, pos));
+	newy = d->pairs[pos].y + delta_n;
+	return(kdata_set(d, pos, x, newy));
 }
 
 struct kdata *

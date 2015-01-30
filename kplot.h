@@ -182,6 +182,7 @@ struct kdata	*kdata_stddev_alloc(struct kdata *);
 int		 kdata_stddev_attach(struct kdata *, struct kdata *);
 struct kdata	*kdata_vector_alloc(size_t);
 int		 kdata_vector_append(struct kdata *, double, double);
+int		 kdata_set(struct kdata *, size_t, double, double);
 ssize_t		 kdata_xmax(const struct kdata *, struct kpair *);
 double		 kdata_xmean(const struct kdata *);
 ssize_t		 kdata_xmin(const struct kdata *, struct kpair *);

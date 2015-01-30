@@ -54,15 +54,16 @@ int
 kdata_array_fill(struct kdata *d, void *arg, 
 	void (*fp)(size_t, struct kpair *, void *))
 {
-	size_t	 i;
-	int	 rc;
+	size_t		i;
+	int		rc;
+	struct kpair	kp;
 
 	if (KDATA_ARRAY != d->type)
 		return(0);
 	
 	for (rc = 1, i = 0; 0 != rc && i < d->pairsz; i++) {
-		(*fp)(i, &d->pairs[i], arg);
-		rc = kdata_dep_run(d, i);
+		(*fp)(i, &kp, arg);
+		rc = kdata_set(d, i, kp.x, kp.y);
 	}
 
 	return(rc);
@@ -83,19 +84,22 @@ kdata_array_checkrange(const struct kdata *d, size_t v)
 int
 kdata_array_add(struct kdata *d, size_t v, double val)
 {
+	double	 x, y;
 
 	if ( ! kdata_array_checkrange(d, v))
 		return(0);
-	d->pairs[v].y += val;
-	return(kdata_dep_run(d, v));
+	x = d->pairs[v].x;
+	y = d->pairs[v].y + val;
+	return(kdata_set(d, v, x, y));
 }
 
 int
-kdata_array_set(struct kdata *d, size_t v, double val)
+kdata_array_set(struct kdata *d, size_t v, double y)
 {
+	double	 x;
 
 	if ( ! kdata_array_checkrange(d, v))
 		return(0);
-	d->pairs[v].y = val;
-	return(kdata_dep_run(d, v));
+	x = d->pairs[v].x;
+	return(kdata_set(d, v, x, y));
 }

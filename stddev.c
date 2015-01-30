@@ -27,7 +27,7 @@
 static int
 kdata_stddev_set(struct kdata *d, size_t pos, double x, double y)
 {
-	double	 delta, delta_n, term1;
+	double	 delta, delta_n, term1, newy;
 	void	*p;
 	size_t	 n1;
 
@@ -76,14 +76,12 @@ kdata_stddev_set(struct kdata *d, size_t pos, double x, double y)
 	d->d.stddev.m1s[pos] += delta_n;
 	d->d.stddev.m2s[pos] += term1;
 	if (d->d.stddev.ns[pos] < 2) 
-		d->pairs[pos].y = 0.0;
+		newy = 0.0;
 	else
-		d->pairs[pos].y = sqrt
-			(d->d.stddev.m2s[pos] / 
+		newy = sqrt(d->d.stddev.m2s[pos] / 
 			 ((double)d->d.stddev.ns[pos] - 1.0));
 
-	d->pairs[pos].x = x;
-	return(kdata_dep_run(d, pos));
+	return(kdata_set(d, pos, x, newy));
 }
 
 struct kdata *

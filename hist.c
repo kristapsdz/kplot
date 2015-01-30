@@ -86,20 +86,23 @@ int
 kdata_hist_add(struct kdata *d, double v, double val)
 {
 	ssize_t	 bucket;
+	double	 x, y;
 
 	if ((bucket = kdata_hist_checkrange(d, v)) < 0)
 		return(0);
-	d->pairs[bucket].y += val;
-	return(kdata_dep_run(d, bucket));
+	x = d->pairs[bucket].x;
+	y = d->pairs[bucket].y + val;
+	return(kdata_set(d, bucket, x, y));
 }
 
 int
-kdata_hist_set(struct kdata *d, double v, double val)
+kdata_hist_set(struct kdata *d, double v, double y)
 {
 	ssize_t	 bucket;
+	double 	 x;
 
 	if ((bucket = kdata_hist_checkrange(d, v)) < 0)
 		return(0);
-	d->pairs[bucket].y = val;
-	return(kdata_dep_run(d, bucket));
+	x = d->pairs[bucket].x;
+	return(kdata_set(d, bucket, x, y));
 }

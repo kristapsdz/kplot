@@ -54,8 +54,6 @@ kdata_vector_append(struct kdata *d, double x, double y)
 		d->pairs = p;
 	}
 
-	d->pairs[d->pairsz].x = x;
-	d->pairs[d->pairsz].y = y;
 	d->pairsz++;
-	return(kdata_dep_run(d, d->pairsz - 1));
+	return(kdata_set(d, d->pairsz - 1, x, y));
 }
