@@ -129,7 +129,7 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kdata_vector_alloc.3 \
 		  man/kdata_xmax.3 \
 		  man/kdata_xmean.3 \
-		  man/kdata_min.3 \
+		  man/kdata_xmin.3 \
 		  man/kdata_xstddev.3 \
 		  man/kdatacfg_defaults.3 \
 		  man/kplot.3 \
