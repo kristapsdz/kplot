@@ -1,43 +1,28 @@
-.Dd $Mdocdate: January 30 2015 $
-.Dt KDATA_SET 3
+.Dd $Mdocdate: January 29 2015 $
+.Dt KDATA_PMFMEAN 3
 .Os
 .Sh NAME
-.Nm kdata_set
-.Nd set points in a data set
+.Nm kdata_pmfmean
+.Nd compute probability mass function mean of data
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
-.Ft int
-.Fo kdata_set
-.Fa "struct kdata *data"
-.Fa "size_t pos"
-.Fa "double x"
-.Fa "double y"
+.Ft double
+.Fo kdata_pmfmean
+.Fa "const struct kdata *data"
 .Fc
 .Sh DESCRIPTION
 The
-.Nm
-function sets the
-.Fa x
-and
-.Fa y
-points for absolute (i.e., internal bucket) position
-.Fa pos
-in a
-.Xr kplot 3
-data set
-.Fa data .
-Once assigned, any sources dependant upon the data sources, e.g., those
-attached via
-.Xr kdata_mean_attach 3 ,
-are updated as well.
+.Nm kdata_pmfmean
+function compute the mean (i.e., expected value) of its data as if it
+were a probability mass function.
 .Sh RETURN VALUES
-.Nm
-returns 0 if the position
-.Fa pos
-is not within the allocated number of pairs, else it returns non-zero.
+If the data source has zero entries or the sum of the y values is 0.0,
+.Nm kdata_pmfmean
+returns 0.0.
+Otherwise, it returns the mean value.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
@@ -49,6 +34,8 @@ is not within the allocated number of pairs, else it returns non-zero.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kdata_pmfstddev 3 ,
+.Xr kdata_pmfvar 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

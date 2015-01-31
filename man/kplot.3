@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 29 2015 $
+.Dd $Mdocdate: January 30 2015 $
 .Dt KPLOT 3
 .Os
 .Sh NAME
@@ -111,6 +111,12 @@ and extrema via
 .Xr kdata_ymin 3
 and
 .Xr kdata_ymax 3 .
+If the data describes a probability mass function, the
+.Xr kdata_pmfmean 3 ,
+.Xr kdata_pmfstddev 3 ,
+and
+.Xr kdata_pmfvar 3
+functions are also provided.
 .\" .Sh RETURN VALUES
 .\" For sections 2, 3, and 9 function return values only.
 .\" .Sh ENVIRONMENT
@@ -135,6 +141,9 @@ and
 .Xr kdata_hist_alloc 3 ,
 .Xr kdata_mean_add 3 ,
 .Xr kdata_mean_alloc 3 ,
+.Xr kdata_pmfmean 3 ,
+.Xr kdata_pmfstddev 3 ,
+.Xr kdata_pmfvar 3 ,
 .Xr kdata_stddev_add 3 ,
 .Xr kdata_stddev_alloc 3 ,
 .Xr kdata_vector_alloc 3 ,

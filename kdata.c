@@ -121,6 +121,60 @@ kdata_dep_add(struct kdata *data, struct kdata *dep, ksetfunc fp)
 }
 
 double
+kdata_pmfvar(const struct kdata *data)
+{
+	double	 ysum, mean, var;
+	size_t	 i;
+
+	if (0 == data->pairsz)
+		return(0.0);
+
+	for (ysum = 0.0, i = 0; i < data->pairsz; i++)
+		ysum += data->pairs[i].y;
+
+	if (ysum == 0.0)
+		return(0.0);
+
+	for (mean = 0.0, i = 0; i < data->pairsz; i++)
+		mean += data->pairs[i].y / ysum * data->pairs[i].x;
+
+	for (var = 0.0, i = 0; i < data->pairsz; i++)
+		var += data->pairs[i].y / ysum *
+			(data->pairs[i].x - mean) *
+			(data->pairs[i].x - mean);
+	
+	return(var);
+}
+
+double
+kdata_pmfstddev(const struct kdata *data)
+{
+
+	return(sqrt(kdata_pmfvar(data)));
+}
+
+double
+kdata_pmfmean(const struct kdata *data)
+{
+	double	 ysum, sum;
+	size_t	 i;
+
+	if (0 == data->pairsz)
+		return(0.0);
+
+	for (ysum = 0.0, i = 0; i < data->pairsz; i++)
+		ysum += data->pairs[i].y;
+
+	if (ysum == 0.0)
+		return(0.0);
+
+	for (sum = 0.0, i = 0; i < data->pairsz; i++)
+		sum += data->pairs[i].y / ysum * data->pairs[i].x;
+
+	return(sum);
+}
+
+double
 kdata_xmean(const struct kdata *data)
 {
 	double	 sum;
