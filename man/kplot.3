@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 30 2015 $
+.Dd $Mdocdate: January 31 2015 $
 .Dt KPLOT 3
 .Os
 .Sh NAME
@@ -21,7 +21,11 @@ Allocate plot data sources with
 .Xr kdata_mean_alloc 3 ,
 .Xr kdata_stddev_alloc 3 ,
 and
-.Xr kdata_vector_alloc 3 ,
+.Xr kdata_vector_alloc 3 .
+Modify using data source's individual functions or the generic
+.Xr kdata_get 3
+and
+.Xr kdata_set 3 .
 .It
 Allocate plots with
 .Xr kplot_alloc 3 .
@@ -55,7 +59,11 @@ may be styled in different ways.
 .Ss Numerical Precision
 All values in
 .Nm
-are double-precision floating-point.
+are double-precision floating-point, though some (such as
+.Xr kdata_mean_alloc 3 )
+will use the
+.Vt size_t
+integral type for internal counters.
 If a plot is handed non-normal numbers (infinite, subnormal, NaN), the
 entire coordinate pair is discarded from range/domain calculation and
 plotting.
@@ -87,7 +95,7 @@ Thus, a margin of zero will directly abut the plot area.
 .Ss Memory Model
 .Nm
 uses the usual libc memory functions for allocation.
-Howeer, plot data sources are reference-counted to make sharing between
+However, plot data sources are reference-counted to make sharing between
 plots easier.
 Thus, calling
 .Xr kdata_destroy 3
@@ -137,6 +145,7 @@ functions are also provided.
 .Xr kdata_buffer_alloc 3 ,
 .Xr kdata_buffer_copy 3 ,
 .Xr kdata_destroy 3 ,
+.Xr kdata_get 3 ,
 .Xr kdata_hist_add 3 ,
 .Xr kdata_hist_alloc 3 ,
 .Xr kdata_mean_add 3 ,
@@ -144,6 +153,7 @@ functions are also provided.
 .Xr kdata_pmfmean 3 ,
 .Xr kdata_pmfstddev 3 ,
 .Xr kdata_pmfvar 3 ,
+.Xr kdata_set 3 ,
 .Xr kdata_stddev_add 3 ,
 .Xr kdata_stddev_alloc 3 ,
 .Xr kdata_vector_alloc 3 ,

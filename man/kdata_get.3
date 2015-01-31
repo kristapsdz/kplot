@@ -1,38 +1,29 @@
 .Dd $Mdocdate: January 31 2015 $
-.Dt KDATA_SET 3
+.Dt KDATA_GET 3
 .Os
 .Sh NAME
-.Nm kdata_set
-.Nd set points in a data set
+.Nm kdata_get
+.Nd get points in a data set
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
 .Ft int
-.Fo kdata_set
-.Fa "struct kdata *data"
+.Fo kdata_get
+.Fa "const struct kdata *data"
 .Fa "size_t pos"
-.Fa "double x"
-.Fa "double y"
+.Fa "struct kpair *kp"
 .Fc
 .Sh DESCRIPTION
 The
 .Nm
-function sets the
-.Fa x
-and
-.Fa y
-points for absolute (i.e., internal bucket) position
+function loads the
+.Fa kp
+pair object with the data at absolute position
 .Fa pos
-in a
-.Xr kplot 3
-data set
+of data souce
 .Fa data .
-Once assigned, any sources dependant upon the data sources, e.g., those
-attached via
-.Xr kdata_mean_attach 3 ,
-are updated as well.
 .Sh RETURN VALUES
 .Nm
 returns 0 if the position
@@ -49,7 +40,7 @@ is not within the allocated number of pairs, else it returns non-zero.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
-.Xr kdata_get 3 ,
+.Xr kdata_set 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

@@ -2,7 +2,7 @@
 	<header>
 		<h1>0.1.8</h1>
 		<address>Kristaps Dzonsons</address>
-		<time datetime="2015-01-30">2015-01-30</time>
+		<time datetime="2015-01-31">2015-01-31</time>
 	</header>
 	<aside>
 		Renamed <code>kdata_min(3)</code> and <code>kdata_max(3)</code> to <a href="kdata_xmin.3.html">kdata_ymin(3)</a> and <a
@@ -10,7 +10,8 @@
 		Added <a href="kdata_xmin.3.html">kdata_xmin(3)</a> and <a href="kdata_xmax.3.html">kdata_xmax(3)</a>.
 		Added <a href="kdata_xmean.3.html">kdata_xmean(3)</a>, <a href="kdata_xmean.3.html">kdata_ymean(3)</a>,
 		<a href="kdata_xstddev.3.html">kdata_xstddev(3)</a>, and <a href="kdata_xstddev.3.html">kdata_ystddev(3)</a>.
-		Added (or rather, exposed) <a href="kdata_set.3.html">kdata_set(3)</a> for generically modifying bucket contents.
+		Added (or rather, exposed) <a href="kdata_set.3.html">kdata_set(3)</a> for generically modifying bucket contents and
+		<a href="kdata_get.3.html">kdata_get(3)</a> for getting.
 		Added <a href="kdata_pmfmean.3.html">kdata_pmfmean(3)</a>, <a href="kdata_pmfstddev.3.html">kdata_pmfstddev(3)</a>, and <a
 			href="kdata_pmfvar.3.html">kdata_pmfvar(3)</a>.
 	</aside>

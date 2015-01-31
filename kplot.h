@@ -173,6 +173,7 @@ int		 kdata_bucket_set(struct kdata *, size_t, double, double);
 struct kdata	*kdata_buffer_alloc(size_t);
 int		 kdata_buffer_copy(struct kdata *, const struct kdata *);
 void		 kdata_destroy(struct kdata *);
+int		 kdata_get(const struct kdata *, size_t, struct kpair *);
 int		 kdata_hist_add(struct kdata *, double, double);
 struct kdata	*kdata_hist_alloc(double, double, size_t);
 int		 kdata_hist_set(struct kdata *, double, double);

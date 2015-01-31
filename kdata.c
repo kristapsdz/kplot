@@ -315,6 +315,16 @@ kdata_ymin(const struct kdata *d, struct kpair *kp)
 }
 
 int
+kdata_get(const struct kdata *d, size_t pos, struct kpair *kp)
+{
+
+	if (pos >= d->pairsz)
+		return(0);
+	*kp = d->pairs[pos];
+	return(1);
+}
+
+int
 kdata_set(struct kdata *d, size_t pos, double x, double y)
 {
 
@@ -324,5 +334,3 @@ kdata_set(struct kdata *d, size_t pos, double x, double y)
 	d->pairs[pos].y = y;
 	return(kdata_dep_run(d, pos));
 }
-
-

@@ -2,7 +2,7 @@
 
 CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
 CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/usr/X11/include/cairo'`
-VERSION		= 0.1.7
+VERSION		= 0.1.8
 LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcairo'`
 #If you're on GNU/Linux, you'll need to uncomment this.
 #LDADD		+= -lbsd
@@ -91,6 +91,7 @@ HTMLS		= index.html \
 		  man/kdata_buffer_alloc.3.html \
 		  man/kdata_buffer_copy.3.html \
 		  man/kdata_destroy.3.html \
+		  man/kdata_get.3.html \
 		  man/kdata_hist_alloc.3.html \
 		  man/kdata_hist_add.3.html \
 		  man/kdata_mean_alloc.3.html \
@@ -98,6 +99,7 @@ HTMLS		= index.html \
 		  man/kdata_pmfmean.3.html \
 		  man/kdata_pmfstddev.3.html \
 		  man/kdata_pmfvar.3.html \
+		  man/kdata_set.3.html \
 		  man/kdata_stddev_alloc.3.html \
 		  man/kdata_stddev_attach.3.html \
 		  man/kdata_vector_append.3.html \
@@ -122,12 +124,14 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kdata_buffer_alloc.3 \
 		  man/kdata_buffer_copy.3 \
 		  man/kdata_destroy.3 \
+		  man/kdata_get.3 \
 		  man/kdata_hist_alloc.3 \
 		  man/kdata_hist_add.3 \
 		  man/kdata_mean_alloc.3 \
 		  man/kdata_mean_attach.3 \
 		  man/kdata_pmfmean.3 \
 		  man/kdata_pmfstddev.3 \
+		  man/kdata_set.3 \
 		  man/kdata_pmfvar.3 \
 		  man/kdata_stddev_alloc.3 \
 		  man/kdata_stddev_attach.3 \

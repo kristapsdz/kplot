@@ -45,7 +45,8 @@ kdata_vector_append(struct kdata *d, double x, double y)
 	assert(KDATA_VECTOR == d->type);
 
 	if (d->pairsz + 1 >= d->d.vector.pairbufsz) {
-		d->d.vector.pairbufsz += d->d.vector.stepsz;
+		while (d->pairsz + 1 >= d->d.vector.pairbufsz) 
+			d->d.vector.pairbufsz += d->d.vector.stepsz;
 		assert(d->d.vector.pairbufsz > d->pairsz + 1);
 		p = reallocarray(d->pairs, 
 			d->d.vector.pairbufsz, sizeof(struct kpair));
