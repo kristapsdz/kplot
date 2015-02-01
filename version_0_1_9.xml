@@ -1,0 +1,17 @@
+<article data-sblg-article="1" data-sblg-tags="version">
+	<header>
+		<h1>0.1.9</h1>
+		<address>Kristaps Dzonsons</address>
+		<time datetime="2015-01-31">2015-01-31</time>
+	</header>
+	<aside>
+		Stipulated that <a href="kplot_draw.3.html">kplot_draw(3)</a> can return NULL.
+		Overhauled colour management: colours may either be palette-driven, which indexes into a list of patterns; a custom pattern; or
+		a default that depends on the colour context.
+		By default, grid components (e.g., tic and grid lines) are assigned specific colours and lines and points are assigned a
+		palette.
+		The palette itself is also most robust.
+		This overhaul works much nicer with the Cairo colour model itself and allows for all sorts of customiation, e.g., linear fading
+		and so on.
+	</aside>
+</article>

@@ -18,7 +18,6 @@
 #include <cairo.h>
 #include <float.h>
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -439,11 +438,12 @@ void
 kplotfont_defaults(struct kplotfont *font)
 {
 
+	memset(font, 0, sizeof(struct kplotfont));
+
 	font->family = "serif";
 	font->sz = 12.0;
 	font->slant = CAIRO_FONT_SLANT_NORMAL;
 	font->weight = CAIRO_FONT_WEIGHT_NORMAL;
-	font->clr = DEFCLR_BLACK;
 }
 
 void
@@ -468,7 +468,6 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 
 	/* Five left and bottom grey tic labels. */
 	kplotfont_defaults(&cfg->ticlabelfont);
-	cfg->ticlabelfont.clr = DEFCLR_GREY;
 	cfg->ticlabel = TICLABEL_LEFT | TICLABEL_BOTTOM;
 	cfg->xticlabelpad = cfg->yticlabelpad = 15.0;
 	cfg->xtics = cfg->ytics = 5;
@@ -479,13 +478,11 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	
 	/* Innie tics, grey. */
 	cfg->tic = TIC_LEFT_IN | TIC_BOTTOM_IN;
-	cfg->ticline.clr = DEFCLR_BLACK;
 	cfg->ticline.len = 5.0;
 	cfg->ticline.sz = 1.0;
 
 	/* Grid line: dotted, grey. */
 	cfg->grid = GRID_ALL;
-	cfg->gridline.clr = DEFCLR_GREY;
 	cfg->gridline.sz = 1.0;
 	cfg->gridline.dashes[0] = 1.0;
 	cfg->gridline.dashes[1] = 4.0;
@@ -493,7 +490,6 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 
 	/* Border line: solid, grey. */
 	cfg->border = BORDER_LEFT | BORDER_BOTTOM;
-	cfg->borderline.clr = DEFCLR_BLACK;
 	cfg->borderline.sz = 1.0;
 
 	/* Black axis labels. */
@@ -501,7 +497,7 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	cfg->xaxislabelpad = cfg->yaxislabelpad = 15.0;
 }
 
-void
+int
 kplot_draw(const struct kplot *p, double w, 
 	double h, cairo_t *cr, const struct kplotcfg *cfg)
 {
@@ -510,10 +506,14 @@ kplot_draw(const struct kplot *p, double w,
 	struct kplotctx	 ctx;
 	cairo_surface_t	*surf;
 	cairo_status_t	 st;
+	cairo_t		*subcr;
 	struct kplotdat	*d;
+	int		 rc;
 
 	memset(&ctx, 0, sizeof(struct kplotctx));
 
+	subcr = NULL;
+	surf = NULL;
 	ctx.w = w;
 	ctx.h = h;
 	ctx.cr = cr;
@@ -524,6 +524,31 @@ kplot_draw(const struct kplot *p, double w,
 		kplotcfg_defaults(&ctx.cfg);
 	else 
 		ctx.cfg = *cfg;
+
+	rc = kplotccfg_init_rgb
+		(&ctx.cfg.borderline.clr, 0.0, 0.0, 0.0);
+	if ( ! rc)
+		goto out;
+
+	rc = kplotccfg_init_rgb
+		(&ctx.cfg.ticline.clr, 0.0, 0.0, 0.0);
+	if ( ! rc)
+		goto out;
+
+	rc = kplotccfg_init_rgb
+		(&ctx.cfg.gridline.clr, 0.5, 0.5, 0.5);
+	if ( ! rc)
+		goto out;
+
+	rc = kplotccfg_init_rgb
+		(&ctx.cfg.ticlabelfont.clr, 0.5, 0.5, 0.5);
+	if ( ! rc)
+		goto out;
+
+	rc = kplotccfg_init_rgb
+		(&ctx.cfg.axislabelfont.clr, 0.0, 0.0, 0.0);
+	if ( ! rc)
+		goto out;
 
 	for (i = 0; i < p->datasz; i++) {
 		d = &p->datas[i];
@@ -564,17 +589,14 @@ kplot_draw(const struct kplot *p, double w,
 		(cairo_get_target(cr),
 		 ux, uy, ctx.dims.x, ctx.dims.y + 2.0);
 	st = cairo_surface_status(surf);
-	if (CAIRO_STATUS_SUCCESS != st) {
-		cairo_surface_destroy(surf);
-		return;
-	}
-	ctx.cr = cairo_create(surf);
+	if (CAIRO_STATUS_SUCCESS != st)
+		goto out;
+	subcr = ctx.cr = cairo_create(surf);
 	cairo_surface_destroy(surf);
+	surf = NULL;
 	st = cairo_status(ctx.cr);
-	if (CAIRO_STATUS_SUCCESS != st) {
-		cairo_destroy(ctx.cr);
-		return;
-	}
+	if (CAIRO_STATUS_SUCCESS != st)
+		goto out;
 
 	ctx.h = ctx.dims.y;
 	ctx.w = ctx.dims.x;
@@ -653,5 +675,16 @@ kplot_draw(const struct kplot *p, double w,
 		}
 	}
 
-	cairo_destroy(ctx.cr);
+	rc = 1;
+out:
+	if (NULL != subcr)
+		cairo_destroy(subcr);
+	if (NULL != surf)
+		cairo_surface_destroy(surf);
+	kplotccfg_destroy(&ctx.cfg.borderline.clr);
+	kplotccfg_destroy(&ctx.cfg.ticline.clr);
+	kplotccfg_destroy(&ctx.cfg.gridline.clr);
+	kplotccfg_destroy(&ctx.cfg.ticlabelfont.clr);
+	kplotccfg_destroy(&ctx.cfg.axislabelfont.clr);
+	return(rc);
 }

@@ -68,10 +68,10 @@ kdatacfg_defaults(struct kdatacfg *cfg)
 	memset(cfg, 0, sizeof(struct kdatacfg));
 	cfg->point.radius = 3.0;
 	cfg->point.sz = 2.0;
-	cfg->point.clr = SIZE_MAX;
+	cfg->point.clr.type = KPLOTCTYPE_DEFAULT;
 	cfg->line.sz = 2.0;
 	cfg->line.join = CAIRO_LINE_JOIN_ROUND;
-	cfg->line.clr = SIZE_MAX;
+	cfg->line.clr.type = KPLOTCTYPE_DEFAULT;
 }
 
 /*

@@ -34,8 +34,11 @@ kplotdat_free(struct kplotdat *p)
 	if (NULL == p)
 		return;
 
-	for (i = 0; i < p->datasz; i++)
+	for (i = 0; i < p->datasz; i++) {
 		kdata_destroy(p->datas[i]);
+		kplotccfg_destroy(&p->cfgs[i].line.clr);
+		kplotccfg_destroy(&p->cfgs[i].point.clr);
+	}
 
 	free(p->datas);
 	free(p->cfgs);
@@ -87,8 +90,9 @@ kplotdat_attach(struct kplot *p, size_t sz, struct kdata **d,
 	const enum kplottype *types, enum kplotstype stype, 
 	enum ksmthtype smthtype, const struct ksmthcfg *smth)
 {
-	void	*pp;
-	size_t	 i;
+	void		*pp;
+	size_t		 i;
+	struct kdatacfg	*dcfg;
 
 	pp = reallocarray(p->datas, 
 		p->datasz + 1, sizeof(struct kplotdat));
@@ -112,14 +116,15 @@ kplotdat_attach(struct kplot *p, size_t sz, struct kdata **d,
 	for (i = 0; i < sz; i++) {
 		p->datas[p->datasz].datas[i] = d[i];
 		p->datas[p->datasz].types[i] = types[i];
+		dcfg = &p->datas[p->datasz].cfgs[i];
 		if (NULL == cfg || NULL == cfg[i])
-			kdatacfg_defaults(&p->datas[p->datasz].cfgs[i]);
+			kdatacfg_defaults(dcfg);
 		else
-			p->datas[p->datasz].cfgs[i] = *cfg[i];
-		if (SIZE_MAX == p->datas[p->datasz].cfgs[i].point.clr)
-			p->datas[p->datasz].cfgs[i].point.clr = p->datasz;
-		if (SIZE_MAX == p->datas[p->datasz].cfgs[i].line.clr)
-			p->datas[p->datasz].cfgs[i].line.clr = p->datasz;
+			*dcfg = *cfg[i];
+		kplotccfg_init_palette
+			(&dcfg->point.clr, p->datasz);
+		kplotccfg_init_palette
+			(&dcfg->line.clr, p->datasz);
 		d[i]->refs++;
 	}
 

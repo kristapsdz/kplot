@@ -88,7 +88,8 @@ main(int argc, char *argv[])
 
 	}
 
-	kplot_draw(p, 600.0, 400.0, cr, NULL);
+	if ( ! kplot_draw(p, 600.0, 400.0, cr, NULL))
+		perror(NULL);
 
 	st = cairo_surface_write_to_png
 		(cairo_get_target(cr), "example0.png");
@@ -106,5 +107,8 @@ out:
 	kplot_free(p);
 	kdata_destroy(d1);
 	kdata_destroy(d2);
+#ifdef	__APPLE__
+	cairo_debug_reset_static_data();
+#endif
 	return(rc);
 }

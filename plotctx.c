@@ -39,52 +39,62 @@ kplotctx_colour_init(struct kplotctx *ctx,
 		*res = ctx->cfg.clrs[idx % ctx->cfg.clrsz];
 }
 
-
-void
-kplotctx_font_init(struct kplotctx *ctx, const struct kplotfont *font)
+static void
+kplotctx_ccfg_init(struct kplotctx *ctx, struct kplotccfg *cfg)
 {
-	struct kplotclr	 clr;
+	struct kplotclr	 res;
 
-	kplotctx_colour_init(ctx, font->clr, &clr);
-	cairo_select_font_face
-		(ctx->cr, font->family,
-		 font->slant,
-		 font->weight);
-	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
-	cairo_set_font_size(ctx->cr, font->sz);
+	switch (cfg->type) {
+	case (KPLOTCTYPE_PALETTE):
+		kplotctx_colour_init(ctx, cfg->palette, &res);
+		cairo_set_source_rgba(ctx->cr, 
+			res.r, res.g, res.b, res.a);
+		break;
+	case (KPLOTCTYPE_PATTERN):
+		cairo_set_source(ctx->cr, cfg->pattern);
+		break;
+	default:
+		abort();
+	}
 }
 
 void
-kplotctx_point_init(struct kplotctx *ctx, const struct kplotpoint *pnt)
+kplotctx_ticln_init(struct kplotctx *ctx, struct kplotticln *line)
 {
-	struct kplotclr	 clr;
 
-	kplotctx_colour_init(ctx, pnt->clr, &clr);
-	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
-	cairo_set_line_width(ctx->cr, pnt->sz);
-	cairo_set_dash(ctx->cr, pnt->dashes, 
-		pnt->dashesz, pnt->dashoff);
-}
-
-void
-kplotctx_ticln_init(struct kplotctx *ctx, const struct kplotticln *line)
-{
-	struct kplotclr	 clr;
-
-	kplotctx_colour_init(ctx, line->clr, &clr);
-	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
+	kplotctx_ccfg_init(ctx, &line->clr);
 	cairo_set_line_width(ctx->cr, line->sz);
 	cairo_set_dash(ctx->cr, line->dashes, 
 		line->dashesz, line->dashoff);
 }
 
 void
-kplotctx_line_init(struct kplotctx *ctx, const struct kplotline *line)
+kplotctx_font_init(struct kplotctx *ctx, struct kplotfont *font)
 {
-	struct kplotclr	 clr;
 
-	kplotctx_colour_init(ctx, line->clr, &clr);
-	cairo_set_source_rgba(ctx->cr, clr.r, clr.g, clr.b, clr.a);
+	kplotctx_ccfg_init(ctx, &font->clr);
+	cairo_select_font_face
+		(ctx->cr, font->family,
+		 font->slant,
+		 font->weight);
+	cairo_set_font_size(ctx->cr, font->sz);
+}
+
+void
+kplotctx_point_init(struct kplotctx *ctx, struct kplotpoint *pnt)
+{
+
+	kplotctx_ccfg_init(ctx, &pnt->clr);
+	cairo_set_line_width(ctx->cr, pnt->sz);
+	cairo_set_dash(ctx->cr, pnt->dashes, 
+		pnt->dashesz, pnt->dashoff);
+}
+
+void
+kplotctx_line_init(struct kplotctx *ctx, struct kplotline *line)
+{
+
+	kplotctx_ccfg_init(ctx, &line->clr);
 	cairo_set_line_width(ctx->cr, line->sz);
 	cairo_set_dash(ctx->cr, line->dashes, 
 		line->dashesz, line->dashoff);

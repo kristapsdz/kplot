@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 24 2015 $
+.Dd $Mdocdate: January 26 2015 $
 .Dt KPLOT_ATTACH_DATAS 3
 .Os
 .Sh NAME
@@ -80,6 +80,7 @@ x-axis value, which is ignored for all pair data sources.
 .Nm
 returns 0 if allocation of internal structures fails due to memory
 exhaustion, or not enough data sources have been provided.
+In this case, all allocations and references will be dropped.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES

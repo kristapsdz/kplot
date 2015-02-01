@@ -47,12 +47,24 @@ struct	kplotclr {
 	double		 a; /* [0,1] */
 };
 
+enum	kplotctype {
+	KPLOTCTYPE_DEFAULT = 0,
+	KPLOTCTYPE_PALETTE,
+	KPLOTCTYPE_PATTERN
+};
+
+struct	kplotccfg {
+	enum kplotctype	 type;
+	size_t		 palette;
+	cairo_pattern_t	*pattern;
+};
+
 struct 	kplotfont {
 	cairo_font_slant_t   slant;
 	cairo_font_weight_t  weight;
 	const char	    *family;
 	double		     sz;
-	size_t		     clr;
+	struct kplotccfg     clr;
 };
 
 struct	kplotticln {
@@ -62,7 +74,7 @@ struct	kplotticln {
 	double	  	  dashes[KPLOT_DASH_MAX];
 	size_t		  dashesz;
 	double	 	  dashoff;
-	size_t		  clr;
+	struct kplotccfg  clr;
 };
 
 struct	kplotpoint {
@@ -71,7 +83,7 @@ struct	kplotpoint {
 	double	  	  dashes[KPLOT_DASH_MAX];
 	size_t		  dashesz;
 	double	 	  dashoff;
-	size_t		  clr;
+	struct kplotccfg  clr;
 };
 
 struct	kplotline {
@@ -80,7 +92,7 @@ struct	kplotline {
 	size_t		  dashesz;
 	double	 	  dashoff;
 	cairo_line_join_t join;
-	size_t		  clr;
+	struct kplotccfg  clr;
 };
 
 struct	ksmthcfg {
@@ -103,6 +115,7 @@ struct	kdatacfg {
 
 struct	kplotcfg {
 #define	COLOURS_MAX	  10
+	/*cairo_palette_t	 *clrs[COLOURS_MAX];*/
 	struct kplotclr	  clrs[COLOURS_MAX]; 
 	size_t		  clrsz; 
 	double		  marginsz; 
@@ -120,7 +133,6 @@ struct	kplotcfg {
 #define	BORDER_BOTTOM	  0x08
 #define	BORDER_ALL	  0xf
 	unsigned int	  border;
-	size_t		  borderclr;
 	size_t		  xtics;
 	size_t		  ytics;
 	struct kplotticln ticline;
@@ -209,7 +221,7 @@ int		 kplot_attach_smooth(struct kplot *, struct kdata *,
 int		 kplot_attach_datas(struct kplot *, size_t, 
 			struct kdata **, const enum kplottype *, 
 			const struct kdatacfg *const *, enum kplotstype);
-void		 kplot_draw(const struct kplot *, 
+int		 kplot_draw(const struct kplot *, 
 			double, double, cairo_t *, 
 			const struct kplotcfg *);
 void		 kplot_free(struct kplot *);

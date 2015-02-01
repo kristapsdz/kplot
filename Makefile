@@ -10,7 +10,8 @@ VERSIONS	= version_0_1_4.xml \
 		  version_0_1_5.xml \
 		  version_0_1_6.xml \
 		  version_0_1_7.xml \
-		  version_0_1_8.xml
+		  version_0_1_8.xml \
+		  version_0_1_9.xml
 EXAMPLES	= example0 \
 		  example1 \
 		  example2 \
@@ -20,7 +21,8 @@ EXAMPLES	= example0 \
 		  example6 \
 		  example7 \
 		  example8 \
-		  example9
+		  example9 \
+		  example10
 PNGS		= example0.png \
 		  example1.png \
 		  example2.png \
@@ -30,11 +32,13 @@ PNGS		= example0.png \
 		  example6.png \
 		  example7.png \
 		  example8.png \
-		  example9.png
+		  example9.png \
+		  example10.png
 SRCS		= Makefile \
 		  compat.post.h \
 		  compat.pre.h \
 		  compat.sh \
+		  colours.c \
 		  extern.h \
 		  kplot.h \
 		  array.c \
@@ -52,6 +56,7 @@ SRCS		= Makefile \
 		  example7.c \
 		  example8.c \
 		  example9.c \
+		  example10.c \
 		  grid.c \
 		  hist.c \
 		  label.c \
@@ -69,6 +74,7 @@ OBJS		= array.o \
 		  border.o \
 		  bucket.o \
 		  buffer.o \
+		  colours.o \
 		  draw.o \
 		  grid.o \
 		  hist.o \
@@ -204,6 +210,9 @@ example8: example8.c libkplot.a
 example9: example9.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
 
+example10: example10.c libkplot.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
+
 example0.png: example0
 	./example0
 
@@ -234,6 +243,8 @@ example8.png: example8
 example9.png: example9
 	./example9
 
+example10.png: example10
+	./example10
 libkplot.a: $(OBJS)
 	$(AR) rs $@ $(OBJS)
 

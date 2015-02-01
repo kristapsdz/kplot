@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 19 2014 $
+.Dd $Mdocdate: November 24 2014 $
 .Dt KPLOT_DRAW 3
 .Os
 .Sh NAME
@@ -9,7 +9,7 @@
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
-.Ft void
+.Ft int
 .Fo kplot_draw
 .Fa "const struct kplot *p"
 .Fa double w
@@ -94,6 +94,9 @@ or
 .Dv BORDER_ALL .
 .It Va borderline
 The configuration of the border line.
+See
+.Xr kplot_attach_data 3
+for an explanation of the line structure.
 .It Va clrs
 Array of RGBA colours for the colour index.
 Each RGBA value is clamped to the unit interval.
@@ -123,6 +126,9 @@ or
 .Dv TIC_BOTTOM_OUT .
 .It Va ticline
 The configuration of the tic line.
+See
+.Xr kplot_attach_data 3
+for an explanation of the line structure.
 .It Va xaxislabel
 The label for the x-axis, shown below the bottom x-axis tic labels (if
 specified).
@@ -160,7 +166,10 @@ The configuration of grid lines.
 If
 .Dv NULL
 is passed as a configuration, reasonable defaults are used.
-.\" .Sh RETURN VALUES
+.Sh RETURN VALUES
+.Nm
+returns 0 if memory allocation failed (e.g., allocating colours in
+Cairo), else it returns non-zero.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES

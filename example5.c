@@ -127,5 +127,8 @@ out:
 	for (i = 0; i < 20; i++)
 		kdata_destroy(d[i]);
 	kdata_destroy(md);
+#ifdef	__APPLE__
+	cairo_debug_reset_static_data();
+#endif
 	return(rc);
 }

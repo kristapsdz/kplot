@@ -116,5 +116,8 @@ out:
 	kplot_free(p);
 	kdata_destroy(d);
 	kdata_destroy(md);
+#ifdef	__APPLE__
+	cairo_debug_reset_static_data();
+#endif
 	return(rc);
 }

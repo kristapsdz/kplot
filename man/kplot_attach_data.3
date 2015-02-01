@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 24 2015 $
+.Dd $Mdocdate: January 26 2015 $
 .Dt KPLOT_ATTACH_DATA 3
 .Os
 .Sh NAME
@@ -43,6 +43,8 @@ A bit-field allowing arbitrary assignment of xy-ranges:
 .Dv EXTREMA_YMIN ,
 and/or
 .Dv EXTREMA_YMAX .
+This fixates the ranges unconditionally (i.e., no auto-scaling will
+occur and points or lines drawn outside will be clipped).
 .It Va extrema_xmin
 If
 .Dv EXTREMA_XMIN
@@ -64,13 +66,100 @@ and
 types.
 .El
 .Pp
+The
+.Vt "struct kplotline"
+structure is arranged as follows:
+.Bl -tag -width Ds
+.It Va sz
+The diameter of the line in pixels as defined by Cairo's
+.Fn cairo_set_line_width .
+By default, this is 1.0.
+.It Va dashes
+An dash configuration as described by Cairo's
+.Fn cairo_set_dash
+function.
+By default, solid lines are used.
+.It Va dashesz
+See
+.Va dashes .
+.It Va dashoff
+See
+.Va dashoff .
+.It Va join
+The line join as defined by Cairo's
+.Fn cairo_set_line_join .
+By default, use
+.Dv CAIRO_LINE_JOIN_ROUND .
+.It Va clr
+The colour configuration.
+By default, use
+.Dv KPLOTCTYPE_DEFAULT .
+.El
+.Pp
+The
+.Vt "struct kplotpoint"
+structure is arranged as follows:
+.Bl -tag -width Ds
+.It Va sz
+The diameter of the point line in pixels as defined by Cairo's
+.Fn cairo_set_line_width .
+By default, this is 1.0.
+.It Va radius
+The circle radius defaulting to 3.0.
+.It Va dashes
+An dash configuration as described by Cairo's
+.Fn cairo_set_dash
+function.
+By default, solid lines are used.
+.It Va dashesz
+See
+.Va dashes .
+.It Va dashoff
+See
+.Va dashoff .
+.It Va clr
+The colour configuration.
+By default, use
+.Dv KPLOTCTYPE_DEFAULT .
+.El
+.Pp
+Line-drawing colours are dictated by
+.Vt "struct kplotccfg" ,
+which is defined as follows:
+.Bl -tag -width Ds
+.It Va type
+The type of colour.
+If set to
+.Dv KPLOTCTYPE_DEFAULT
+.Pq the default ,
+the
+.Dv KPLOTCTYPE_PALETTE
+option will be set during
+.Xr kplot_draw 3
+to the index of the line in the set of lines.
+If
+.Dv KPLOTCTYPE_PALETTE ,
+.Va palette
+is used as an index into the colour palette matrix.
+This is clamped (modulo) to the palette size.
+Lastly,
+.Dv KPLOTCTYPE_PATTERN
+will have use
+.Va pattern ,
+which may not be
+.Dv NULL .
+The pattern is referenced when attached and dereferenced when the data
+source is removed from the plot.
+.El
+.Pp
 If
 .Dv NULL
-is passed as a configuration, reasonable defaults are used.
+is passed as a configuration, the defaults will be used.
 .Sh RETURN VALUES
 .Nm
 returns 0 if allocation of internal structures fails due to memory
 exhaustion.
+In this case, all allocations and references will be dropped.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES

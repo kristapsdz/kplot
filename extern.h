@@ -133,14 +133,17 @@ double	 kplotctx_line_fix(const struct kplotctx *, double, double);
 
 void	 kplotctx_colour_init(struct kplotctx *, 
 		size_t, struct kplotclr *);
-void	 kplotctx_font_init(struct kplotctx *, 
-		const struct kplotfont *);
-void	 kplotctx_line_init(struct kplotctx *, 
-		const struct kplotline *);
-void	 kplotctx_point_init(struct kplotctx *, 
-		const struct kplotpoint *);
-void	 kplotctx_ticln_init(struct kplotctx *, 
-		const struct kplotticln *);
+void	 kplotctx_font_init(struct kplotctx *, struct kplotfont *);
+void	 kplotctx_line_init(struct kplotctx *, struct kplotline *);
+void	 kplotctx_point_init(struct kplotctx *, struct kplotpoint *);
+void	 kplotctx_ticln_init(struct kplotctx *, struct kplotticln *);
+
+int	 kplotccfg_init_rgb(struct kplotccfg *, 
+		double, double, double);
+int	 kplotccfg_init_rgba(struct kplotccfg *, 
+		double, double, double, double);
+void	 kplotccfg_init_palette(struct kplotccfg *, size_t);
+void	 kplotccfg_destroy(struct kplotccfg *);
 
 __END_DECLS
 
