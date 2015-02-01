@@ -452,20 +452,6 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 
 	memset(cfg, 0, sizeof(struct kplotcfg));
 
-	/* Colours: red, green, black, grey. */
-	cfg->clrsz = DEFCLR__MAX;
-	cfg->clrs[DEFCLR_RED].r = 1.0;
-	cfg->clrs[DEFCLR_RED].a = 1.0;
-	cfg->clrs[DEFCLR_GREEN].g = 1.0;
-	cfg->clrs[DEFCLR_GREEN].a = 1.0;
-	cfg->clrs[DEFCLR_BLUE].b = 1.0;
-	cfg->clrs[DEFCLR_BLUE].a = 1.0;
-	cfg->clrs[DEFCLR_BLACK].a = 1.0;
-	cfg->clrs[DEFCLR_GREY].r = 0.5;
-	cfg->clrs[DEFCLR_GREY].g = 0.5;
-	cfg->clrs[DEFCLR_GREY].b = 0.5;
-	cfg->clrs[DEFCLR_GREY].a = 1.0;
-
 	/* Five left and bottom grey tic labels. */
 	kplotfont_defaults(&cfg->ticlabelfont);
 	cfg->ticlabel = TICLABEL_LEFT | TICLABEL_BOTTOM;
@@ -524,6 +510,36 @@ kplot_draw(const struct kplot *p, double w,
 		kplotcfg_defaults(&ctx.cfg);
 	else 
 		ctx.cfg = *cfg;
+
+	if (0 == ctx.cfg.clrsz) {
+		ctx.cfg.clrsz = 7;
+		ctx.cfg.clrs = calloc
+			(ctx.cfg.clrsz, 
+			 sizeof(cairo_pattern_t *));
+		if (NULL == ctx.cfg.clrs)
+			return(0);
+		ctx.cfg.clrs[0] = cairo_pattern_create_rgb
+			(0x94 / 255.0, 0x00 / 255.0, 0xd3 / 255.0);
+		ctx.cfg.clrs[1] = cairo_pattern_create_rgb
+			(0x00 / 255.0, 0x9e / 255.0, 0x73 / 255.0);
+		ctx.cfg.clrs[2] = cairo_pattern_create_rgb
+			(0x56 / 255.0, 0xb4 / 255.0, 0xe9 / 255.0);
+		ctx.cfg.clrs[3] = cairo_pattern_create_rgb
+			(0xe6 / 255.0, 0x9f / 255.0, 0x00 / 255.0);
+		ctx.cfg.clrs[4] = cairo_pattern_create_rgb
+			(0xf0 / 255.0, 0xe4 / 255.0, 0x42 / 255.0);
+		ctx.cfg.clrs[5] = cairo_pattern_create_rgb
+			(0x00 / 255.0, 0x72 / 255.0, 0xb2 / 255.0);
+		ctx.cfg.clrs[6] = cairo_pattern_create_rgb
+			(0xe5 / 255.0, 0x1e / 255.0, 0x10 / 255.0);
+		for (i = 0; i < ctx.cfg.clrsz; i++) {
+			st = cairo_pattern_status(ctx.cfg.clrs[i]);
+			if (CAIRO_STATUS_SUCCESS != st)
+				goto out;
+		}
+	} else 
+		for (i = 0; i < ctx.cfg.clrsz; i++)
+			cairo_pattern_reference(ctx.cfg.clrs[i]);
 
 	rc = kplotccfg_init_rgb
 		(&ctx.cfg.borderline.clr, 0.0, 0.0, 0.0);
@@ -686,5 +702,7 @@ out:
 	kplotccfg_destroy(&ctx.cfg.gridline.clr);
 	kplotccfg_destroy(&ctx.cfg.ticlabelfont.clr);
 	kplotccfg_destroy(&ctx.cfg.axislabelfont.clr);
+	for (i = 0; i < ctx.cfg.clrsz; i++)
+		cairo_pattern_destroy(ctx.cfg.clrs[i]);
 	return(rc);
 }

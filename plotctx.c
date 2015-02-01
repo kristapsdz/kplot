@@ -25,30 +25,14 @@
 #include "compat.h"
 #include "extern.h"
 
-void
-kplotctx_colour_init(struct kplotctx *ctx, 
-	size_t idx, struct kplotclr *res)
-{
-
-	if (0 == ctx->cfg.clrsz) {
-		res->r = 0.0;
-		res->g = 0.0;
-		res->b = 0.0;
-		res->a = 1.0;
-	} else
-		*res = ctx->cfg.clrs[idx % ctx->cfg.clrsz];
-}
-
 static void
 kplotctx_ccfg_init(struct kplotctx *ctx, struct kplotccfg *cfg)
 {
-	struct kplotclr	 res;
 
 	switch (cfg->type) {
 	case (KPLOTCTYPE_PALETTE):
-		kplotctx_colour_init(ctx, cfg->palette, &res);
-		cairo_set_source_rgba(ctx->cr, 
-			res.r, res.g, res.b, res.a);
+		cairo_set_source(ctx->cr, 
+			ctx->cfg.clrs[cfg->palette % ctx->cfg.clrsz]);
 		break;
 	case (KPLOTCTYPE_PATTERN):
 		cairo_set_source(ctx->cr, cfg->pattern);

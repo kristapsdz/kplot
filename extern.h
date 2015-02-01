@@ -131,8 +131,6 @@ void	 kplotctx_label_init(struct kplotctx *);
 
 double	 kplotctx_line_fix(const struct kplotctx *, double, double);
 
-void	 kplotctx_colour_init(struct kplotctx *, 
-		size_t, struct kplotclr *);
 void	 kplotctx_font_init(struct kplotctx *, struct kplotfont *);
 void	 kplotctx_line_init(struct kplotctx *, struct kplotline *);
 void	 kplotctx_point_init(struct kplotctx *, struct kplotpoint *);

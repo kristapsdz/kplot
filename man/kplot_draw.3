@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 24 2014 $
+.Dd $Mdocdate: February 1 2015 $
 .Dt KPLOT_DRAW 3
 .Os
 .Sh NAME
@@ -98,9 +98,9 @@ See
 .Xr kplot_attach_data 3
 for an explanation of the line structure.
 .It Va clrs
-Array of RGBA colours for the colour index.
-Each RGBA value is clamped to the unit interval.
-If no colours are specified, opaque black is used.
+Array of Cairo patterns for the colour index.
+If no colours are specified, which is the default, a default palette
+will be installed.
 .It Va clrsz
 The number of colours in clrs.
 Colour indices index into the

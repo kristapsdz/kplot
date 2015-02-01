@@ -114,9 +114,7 @@ struct	kdatacfg {
 };
 
 struct	kplotcfg {
-#define	COLOURS_MAX	  10
-	/*cairo_palette_t	 *clrs[COLOURS_MAX];*/
-	struct kplotclr	  clrs[COLOURS_MAX]; 
+	cairo_pattern_t	**clrs;
 	size_t		  clrsz; 
 	double		  marginsz; 
 #define	MARGIN_LEFT	  0x01
