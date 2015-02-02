@@ -11,7 +11,7 @@
 		By default, grid components (e.g., tic and grid lines) are assigned specific colours and lines and points are assigned a
 		palette.
 		The palette itself is also most robust.
-		This overhaul works much nicer with the Cairo colour model itself and allows for all sorts of customiation, e.g., linear fading
+		This overhaul works much nicer with the Cairo colour model itself and allows for all sorts of customisation, e.g., linear fading
 		and so on.
 	</aside>
 </article>

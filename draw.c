@@ -512,31 +512,9 @@ kplot_draw(const struct kplot *p, double w,
 		ctx.cfg = *cfg;
 
 	if (0 == ctx.cfg.clrsz) {
-		ctx.cfg.clrsz = 7;
-		ctx.cfg.clrs = calloc
-			(ctx.cfg.clrsz, 
-			 sizeof(cairo_pattern_t *));
-		if (NULL == ctx.cfg.clrs)
+		if ( ! kplotcfg_default_palette
+			 (&ctx.cfg.clrs, &ctx.cfg.clrsz))
 			return(0);
-		ctx.cfg.clrs[0] = cairo_pattern_create_rgb
-			(0x94 / 255.0, 0x00 / 255.0, 0xd3 / 255.0);
-		ctx.cfg.clrs[1] = cairo_pattern_create_rgb
-			(0x00 / 255.0, 0x9e / 255.0, 0x73 / 255.0);
-		ctx.cfg.clrs[2] = cairo_pattern_create_rgb
-			(0x56 / 255.0, 0xb4 / 255.0, 0xe9 / 255.0);
-		ctx.cfg.clrs[3] = cairo_pattern_create_rgb
-			(0xe6 / 255.0, 0x9f / 255.0, 0x00 / 255.0);
-		ctx.cfg.clrs[4] = cairo_pattern_create_rgb
-			(0xf0 / 255.0, 0xe4 / 255.0, 0x42 / 255.0);
-		ctx.cfg.clrs[5] = cairo_pattern_create_rgb
-			(0x00 / 255.0, 0x72 / 255.0, 0xb2 / 255.0);
-		ctx.cfg.clrs[6] = cairo_pattern_create_rgb
-			(0xe5 / 255.0, 0x1e / 255.0, 0x10 / 255.0);
-		for (i = 0; i < ctx.cfg.clrsz; i++) {
-			st = cairo_pattern_status(ctx.cfg.clrs[i]);
-			if (CAIRO_STATUS_SUCCESS != st)
-				goto out;
-		}
 	} else 
 		for (i = 0; i < ctx.cfg.clrsz; i++)
 			cairo_pattern_reference(ctx.cfg.clrs[i]);
@@ -705,4 +683,44 @@ out:
 	for (i = 0; i < ctx.cfg.clrsz; i++)
 		cairo_pattern_destroy(ctx.cfg.clrs[i]);
 	return(rc);
+}
+
+int
+kplotcfg_default_palette(cairo_pattern_t ***pp, size_t *szp)
+{
+	cairo_status_t	 st;
+	size_t		 i;
+
+	*szp = 7;
+	if (NULL == (*pp = calloc(*szp, sizeof(cairo_pattern_t *))))
+		return(0);
+
+	(*pp)[0] = cairo_pattern_create_rgb
+		(0x94 / 255.0, 0x00 / 255.0, 0xd3 / 255.0);
+	(*pp)[1] = cairo_pattern_create_rgb
+		(0x00 / 255.0, 0x9e / 255.0, 0x73 / 255.0);
+	(*pp)[2] = cairo_pattern_create_rgb
+		(0x56 / 255.0, 0xb4 / 255.0, 0xe9 / 255.0);
+	(*pp)[3] = cairo_pattern_create_rgb
+		(0xe6 / 255.0, 0x9f / 255.0, 0x00 / 255.0);
+	(*pp)[4] = cairo_pattern_create_rgb
+		(0xf0 / 255.0, 0xe4 / 255.0, 0x42 / 255.0);
+	(*pp)[5] = cairo_pattern_create_rgb
+		(0x00 / 255.0, 0x72 / 255.0, 0xb2 / 255.0);
+	(*pp)[6] = cairo_pattern_create_rgb
+		(0xe5 / 255.0, 0x1e / 255.0, 0x10 / 255.0);
+
+	for (i = 0; i < *szp; i++) {
+		st = cairo_pattern_status((*pp)[i]);
+		if (CAIRO_STATUS_SUCCESS != st)
+			break;
+	}
+
+	if (i == *szp)
+		return(1);
+
+	for (i = 0; i < *szp; i++) 
+		cairo_pattern_destroy((*pp)[i]);
+	free(*pp);
+	return(0);
 }

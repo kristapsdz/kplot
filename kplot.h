@@ -40,13 +40,6 @@ enum	kplotstype {
 	KPLOTS_YERRORBAR
 };
 
-struct	kplotclr {
-	double		 r; /* [0,1] */
-	double		 g; /* [0,1] */
-	double		 b; /* [0,1] */
-	double		 a; /* [0,1] */
-};
-
 enum	kplotctype {
 	KPLOTCTYPE_DEFAULT = 0,
 	KPLOTCTYPE_PALETTE,
@@ -208,6 +201,7 @@ ssize_t		 kdata_ymin(const struct kdata *, struct kpair *);
 
 void		 kdatacfg_defaults(struct kdatacfg *);
 void		 kplotcfg_defaults(struct kplotcfg *);
+int		 kplotcfg_default_palette(cairo_pattern_t ***, size_t *);
 void		 ksmthcfg_defaults(struct ksmthcfg *);
 
 struct kplot	*kplot_alloc(void);
