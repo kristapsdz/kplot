@@ -5,7 +5,7 @@
 		<time datetime="2015-01-31">2015-01-31</time>
 	</header>
 	<aside>
-		Stipulated that <a href="kplot_draw.3.html">kplot_draw(3)</a> can return NULL.
+		Stipulated that <a href="kplot_draw.3.html">kplot_draw(3)</a> can return error.
 		Overhauled colour management: colours may either be palette-driven, which indexes into a list of patterns; a custom pattern; or
 		a default that depends on the colour context.
 		By default, grid components (e.g., tic and grid lines) are assigned specific colours and lines and points are assigned a
@@ -13,5 +13,7 @@
 		The palette itself is also most robust.
 		This overhaul works much nicer with the Cairo colour model itself and allows for all sorts of customisation, e.g., linear fading
 		and so on.
+		Backed out <code>kdata_set(3)</code>, as some sources do extra bookkeeping that this would bypass in general use.
+		Added <a href="kdata_vector_append.3.html">kdata_vector_set(3)</a>.
 	</aside>
 </article>

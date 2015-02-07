@@ -332,5 +332,5 @@ kdata_set(struct kdata *d, size_t pos, double x, double y)
 		return(0);
 	d->pairs[pos].x = x;
 	d->pairs[pos].y = y;
-	return(kdata_dep_run(d, pos));
+	return(d->depsz ? kdata_dep_run(d, pos) : 1);
 }

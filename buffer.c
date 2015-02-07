@@ -33,7 +33,8 @@ kdata_buffer_alloc(size_t hint)
 		return(NULL);
 
 	d->pairsz = hint;
-	if (NULL == (d->pairs = calloc(d->pairsz, sizeof(struct kpair)))) {
+	d->pairs = calloc(d->pairsz, sizeof(struct kpair));
+	if (NULL == d->pairs) {
 		free(d);
 		return(NULL);
 	}
@@ -47,6 +48,8 @@ int
 kdata_buffer_copy(struct kdata *dst, const struct kdata *src)
 {
 	void	*p;
+	size_t	 i;
+	int	 rc = 1;
 
 	/* 
 	 * FIXME: use a pairbufsz-type of construct.
@@ -62,9 +65,16 @@ kdata_buffer_copy(struct kdata *dst, const struct kdata *src)
 			return(0);
 		dst->pairs = p;
 	}
-
 	dst->pairsz = src->pairsz;
-	memcpy(dst->pairs, src->pairs, 
-		dst->pairsz * sizeof(struct kpair));
-	return(1);
+
+	if (dst->depsz) 
+		for (i = 0; 0 != rc && i < dst->pairsz; i++)
+			rc = kdata_set(dst, i, 
+				src->pairs[i].x, 
+				src->pairs[i].y);
+	else
+		memcpy(dst->pairs, src->pairs, 
+			dst->pairsz * sizeof(struct kpair));
+
+	return(rc);
 }

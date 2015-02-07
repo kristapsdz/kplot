@@ -95,15 +95,6 @@ struct	ksmthcfg {
 struct	kdatacfg {
 	struct kplotline  line;
 	struct kplotpoint point;
-#define	EXTREMA_XMIN	  0x01
-#define	EXTREMA_XMAX	  0x02
-#define	EXTREMA_YMIN	  0x04
-#define	EXTREMA_YMAX	  0x08
-	unsigned int	  extrema; /* assumed bounds */
-	double		  extrema_xmin;
-	double		  extrema_xmax;
-	double		  extrema_ymin;
-	double		  extrema_ymax;
 };
 
 struct	kplotcfg {
@@ -159,40 +150,61 @@ struct	kplotcfg {
 	struct kplotfont  axislabelfont;
 	double		  xaxislabelrot;
 	double		  yaxislabelrot;
+#define	EXTREMA_XMIN	  0x01
+#define	EXTREMA_XMAX	  0x02
+#define	EXTREMA_YMIN	  0x04
+#define	EXTREMA_YMAX	  0x08
+	unsigned int	  extrema;
+	double		  extrema_xmin;
+	double		  extrema_xmax;
+	double		  extrema_ymin;
+	double		  extrema_ymax;
 };
 
 struct 	kdata;
 
 __BEGIN_DECLS
 
+void		 kdata_destroy(struct kdata *);
+int		 kdata_get(const struct kdata *, size_t, struct kpair *);
+
 int		 kdata_array_add(struct kdata *, size_t, double);
 struct kdata	*kdata_array_alloc(const struct kpair *, size_t);
 int		 kdata_array_fill(struct kdata *, void *,
 			void (*)(size_t, struct kpair *, void *));
-int		 kdata_array_set(struct kdata *, size_t, double);
+int		 kdata_array_fill_ydoubles(struct kdata *, const double *);
+int		 kdata_array_fill_ysizes(struct kdata *, const size_t *);
+int		 kdata_array_set(struct kdata *, size_t, double, double);
+
 int		 kdata_bucket_add(struct kdata *, size_t, double);
 struct kdata	*kdata_bucket_alloc(size_t, size_t);
 int		 kdata_bucket_set(struct kdata *, size_t, double, double);
+
 struct kdata	*kdata_buffer_alloc(size_t);
 int		 kdata_buffer_copy(struct kdata *, const struct kdata *);
-void		 kdata_destroy(struct kdata *);
-int		 kdata_get(const struct kdata *, size_t, struct kpair *);
+
 int		 kdata_hist_add(struct kdata *, double, double);
 struct kdata	*kdata_hist_alloc(double, double, size_t);
 int		 kdata_hist_set(struct kdata *, double, double);
+
 struct kdata	*kdata_mean_alloc(struct kdata *);
 int		 kdata_mean_attach(struct kdata *, struct kdata *);
+
 struct kdata	*kdata_stddev_alloc(struct kdata *);
 int		 kdata_stddev_attach(struct kdata *, struct kdata *);
+
 struct kdata	*kdata_vector_alloc(size_t);
 int		 kdata_vector_append(struct kdata *, double, double);
-int		 kdata_set(struct kdata *, size_t, double, double);
+int		 kdata_vector_set(struct kdata *, size_t, double, double);
+
 double		 kdata_pmfmean(const struct kdata *);
 double		 kdata_pmfvar(const struct kdata *);
 double		 kdata_pmfstddev(const struct kdata *);
+
 ssize_t		 kdata_xmax(const struct kdata *, struct kpair *);
 double		 kdata_xmean(const struct kdata *);
 ssize_t		 kdata_xmin(const struct kdata *, struct kpair *);
+
 double		 kdata_xstddev(const struct kdata *);
 ssize_t		 kdata_ymax(const struct kdata *, struct kpair *);
 double		 kdata_ymean(const struct kdata *);

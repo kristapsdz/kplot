@@ -32,6 +32,7 @@ main(int argc, char *argv[])
 	cairo_t		*cr;
 	cairo_status_t	 st;
 	int		 rc;
+	struct kplotcfg	 cfg;
 
 	rc = EXIT_FAILURE;
 
@@ -43,6 +44,11 @@ main(int argc, char *argv[])
 		points1[i].y = log((i + 1) / 50.0);
 		points2[i].y = -log((i + 1) / 50.0) + points1[0].y;
 	}
+
+	kplotcfg_defaults(&cfg);
+	cfg.extrema_xmax = 0.51;
+	cfg.extrema_ymax = -1.95;
+	cfg.extrema = EXTREMA_XMAX;
 
 	if (NULL == (d1 = kdata_array_alloc(points1, 50))) {
 		perror(NULL);
@@ -88,7 +94,10 @@ main(int argc, char *argv[])
 
 	}
 
-	if ( ! kplot_draw(p, 600.0, 400.0, cr, NULL))
+	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0); 
+	cairo_rectangle(cr, 0.0, 0.0, 600.0, 400.0);
+	cairo_fill(cr);
+	if ( ! kplot_draw(p, 600.0, 400.0, cr, &cfg))
 		perror(NULL);
 
 	st = cairo_surface_write_to_png

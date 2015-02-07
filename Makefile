@@ -105,7 +105,6 @@ HTMLS		= index.html \
 		  man/kdata_pmfmean.3.html \
 		  man/kdata_pmfstddev.3.html \
 		  man/kdata_pmfvar.3.html \
-		  man/kdata_set.3.html \
 		  man/kdata_stddev_alloc.3.html \
 		  man/kdata_stddev_attach.3.html \
 		  man/kdata_vector_append.3.html \
@@ -137,7 +136,6 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kdata_mean_attach.3 \
 		  man/kdata_pmfmean.3 \
 		  man/kdata_pmfstddev.3 \
-		  man/kdata_set.3 \
 		  man/kdata_pmfvar.3 \
 		  man/kdata_stddev_alloc.3 \
 		  man/kdata_stddev_attach.3 \

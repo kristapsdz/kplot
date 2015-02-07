@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 15 2015 $
+.Dd $Mdocdate: January 16 2015 $
 .Dt KDATA_ARRAY_FILL 3
 .Os
 .Sh NAME
@@ -15,7 +15,7 @@
 .Fo kdata_array_add
 .Fa "struct kdata *data"
 .Fa "size_t pos"
-.Fa "double val"
+.Fa "double y"
 .Fc
 .Ft int
 .Fo kdata_array_fill
@@ -27,7 +27,8 @@
 .Fo kdata_array_set
 .Fa "struct kdata *data"
 .Fa "size_t pos"
-.Fa "double val"
+.Fa "double x"
+.Fa "double y"
 .Fc
 .Sh DESCRIPTION
 The

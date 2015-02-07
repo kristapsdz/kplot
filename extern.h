@@ -92,6 +92,10 @@ struct	kplotdat {
 	enum kplotstype	  stype; /* multiplot type */
 	enum ksmthtype	  smthtype; /* smoothing type */
 	struct ksmthcfg	  smth; /* smooth configuration */
+	struct kpair	  rminv; /* minimum real point */
+	struct kpair	  rmaxv; /* maximum real point */
+	struct kpair	  dminv; /* minimum drawn point */
+	struct kpair	  dmaxv; /* maximum drawn point */
 };
 
 struct	kplot {
@@ -122,6 +126,7 @@ __BEGIN_DECLS
 
 int	 kdata_dep_add(struct kdata *, struct kdata *, ksetfunc);
 int	 kdata_dep_run(struct kdata *, size_t);
+int	 kdata_set(struct kdata *, size_t, double, double);
 
 void	 kplotctx_border_init(struct kplotctx *);
 void	 kplotctx_grid_init(struct kplotctx *);

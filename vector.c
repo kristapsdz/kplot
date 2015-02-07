@@ -42,7 +42,8 @@ kdata_vector_append(struct kdata *d, double x, double y)
 {
 	void	*p;
 
-	assert(KDATA_VECTOR == d->type);
+	if (KDATA_VECTOR != d->type)
+		return(0);
 
 	if (d->pairsz + 1 >= d->d.vector.pairbufsz) {
 		while (d->pairsz + 1 >= d->d.vector.pairbufsz) 
@@ -57,4 +58,13 @@ kdata_vector_append(struct kdata *d, double x, double y)
 
 	d->pairsz++;
 	return(kdata_set(d, d->pairsz - 1, x, y));
+}
+
+int
+kdata_vector_set(struct kdata *d, size_t v, double x, double y)
+{
+
+	if (KDATA_VECTOR != d->type || v >= d->pairsz)
+		return(0);
+	return(kdata_set(d, v, x, y));
 }

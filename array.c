@@ -31,6 +31,7 @@ struct kdata *
 kdata_array_alloc(const struct kpair *np, size_t npsz)
 {
 	struct kdata	*d;
+	size_t		 i;
 
 	if (NULL == (d = calloc(1, sizeof(struct kdata))))
 		return(NULL);
@@ -42,7 +43,10 @@ kdata_array_alloc(const struct kpair *np, size_t npsz)
 		return(NULL);
 	}
 
-	if (NULL != np)
+	if (NULL == np)
+		for (i = 0; i < d->pairsz; i++)
+			d->pairs[i].x = i;
+	else
 		memcpy(d->pairs, np, d->pairsz * sizeof(struct kpair));
 
 	d->refs = 1;
@@ -51,20 +55,63 @@ kdata_array_alloc(const struct kpair *np, size_t npsz)
 }
 
 int
+kdata_array_fill_ysizes(struct kdata *d, const size_t *v)
+{
+	size_t		i;
+	int		rc = 1;
+
+	if (KDATA_ARRAY != d->type)
+		return(0);
+
+	if (d->depsz)
+		for (i = 0; 0 != rc && i < d->pairsz; i++)
+			rc = kdata_set(d, i, d->pairs[i].x, v[i]);
+	else
+		for (i = 0; i < d->pairsz; i++)
+			d->pairs[i].y = v[i];
+
+	return(rc);
+}
+
+int
+kdata_array_fill_ydoubles(struct kdata *d, const double *v)
+{
+	size_t		i;
+	int		rc = 1;
+
+	if (KDATA_ARRAY != d->type)
+		return(0);
+
+	if (d->depsz)
+		for (i = 0; 0 != rc && i < d->pairsz; i++)
+			rc = kdata_set(d, i, d->pairs[i].x, v[i]);
+	else
+		for (i = 0; i < d->pairsz; i++)
+			d->pairs[i].y = v[i];
+
+	return(rc);
+}
+
+int
 kdata_array_fill(struct kdata *d, void *arg, 
 	void (*fp)(size_t, struct kpair *, void *))
 {
 	size_t		i;
-	int		rc;
+	int		rc = 1;
 	struct kpair	kp;
 
 	if (KDATA_ARRAY != d->type)
 		return(0);
-	
-	for (rc = 1, i = 0; 0 != rc && i < d->pairsz; i++) {
-		(*fp)(i, &kp, arg);
-		rc = kdata_set(d, i, kp.x, kp.y);
-	}
+
+	/* Act directly on the data if not having deps. */
+	if (d->depsz)
+		for (i = 0; 0 != rc && i < d->pairsz; i++) {
+			(*fp)(i, &kp, arg);
+			rc = kdata_set(d, i, kp.x, kp.y);
+		}
+	else
+		for (i = 0; i < d->pairsz; i++)
+			(*fp)(i, &d->pairs[i], arg);
 
 	return(rc);
 }
@@ -73,12 +120,7 @@ static int
 kdata_array_checkrange(const struct kdata *d, size_t v)
 {
 
-	if (KDATA_ARRAY != d->type)
-		return(0);
-	else if (v >= d->pairsz)
-		return(0);
-
-	return(1);
+	return(KDATA_ARRAY == d->type && v < d->pairsz);
 }
 
 int
@@ -94,12 +136,10 @@ kdata_array_add(struct kdata *d, size_t v, double val)
 }
 
 int
-kdata_array_set(struct kdata *d, size_t v, double y)
+kdata_array_set(struct kdata *d, size_t v, double x, double y)
 {
-	double	 x;
 
 	if ( ! kdata_array_checkrange(d, v))
 		return(0);
-	x = d->pairs[v].x;
 	return(kdata_set(d, v, x, y));
 }

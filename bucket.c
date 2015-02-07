@@ -54,14 +54,8 @@ static int
 kdata_bucket_checkrange(const struct kdata *d, size_t v)
 {
 
-	if (KDATA_BUCKET != d->type)
-		return(0);
-	else if (v < d->d.bucket.rmin)
-		return(0);
-	else if (v >= d->d.bucket.rmax)
-		return(0);
-
-	return(1);
+	return(KDATA_BUCKET == d->type && 
+		v >= d->d.bucket.rmin && v < d->d.bucket.rmax);
 }
 
 int

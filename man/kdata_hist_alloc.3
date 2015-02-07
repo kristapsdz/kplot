@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 18 2014 $
+.Dd $Mdocdate: January 16 2015 $
 .Dt KDATA_HIST_ALLOC 3
 .Os
 .Sh NAME
@@ -20,6 +20,8 @@ The
 .Nm kdata_hist_alloc
 function creates a reference-counted data sources for
 .Xr kplot 3 .
+The histogram is initialised with x-values set to the bucket minimum and
+y-values set to zero.
 It uses a histogram data model: the data array is laid out in
 uniformly-spaced buckets of size (rmax - rmin) / bins, with a given
 value x falling into bucket [i / bins * (rmax - rmin) <= x < (i + 1) /

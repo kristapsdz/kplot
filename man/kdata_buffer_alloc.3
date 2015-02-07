@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 15 2015 $
+.Dd $Mdocdate: January 16 2015 $
 .Dt KDATA_BUFFER_ALLOC 3
 .Os
 .Sh NAME
@@ -19,7 +19,8 @@ The
 function creates a reference-counted data sources for
 .Xr kplot 3 ,
 initially sized to
-.Fa hintsz .
+.Fa hintsz
+with all x-values and y-values set to zero.
 It's primarily used to copy other data sources into an immutable one.
 Bucket values are copied into this structure via
 .Xr kdata_buffer_copy 3 .

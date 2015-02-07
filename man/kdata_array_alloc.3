@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 15 2015 $
+.Dd $Mdocdate: January 16 2015 $
 .Dt KDATA_ARRAY_ALLOC 3
 .Os
 .Sh NAME
@@ -20,13 +20,12 @@ The
 function creates a reference-counted data sources for
 .Xr kplot 3 .
 It is set to an array of data points
-.Fa pairs .
-If passed a
+.Fa pairs
+unless passed a
 .Dv NULL
-pointer as
-.Fa pairs ,
-the buffers are pre-allocated to zero.
-These values can be later reset (but not resized) with
+pointer, in which case x-values are set to the pair index from zero and
+y-values to zero.
+These values can be later reset with
 .Xr kdata_array_fill 3 ,
 or directly modified with
 .Xr kdata_array_add 3

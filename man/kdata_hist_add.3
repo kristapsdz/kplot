@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 16 2015 $
+.Dd $Mdocdate: January 30 2015 $
 .Dt KDATA_HIST_INCREMENT 3
 .Os
 .Sh NAME
@@ -27,9 +27,7 @@ The
 .Nm kdata_hist_add
 and
 .Nm kdata_hist_set
-invoke
-.Xr kdata_set 3
-to set or add
+set or add
 .Fa y
 to the position mapped from
 .Fa x
@@ -45,9 +43,7 @@ return 0 if
 .Fa x
 is outside of the histogram range, the source was not created with
 .Xr kdata_hist_alloc 3 ,
-or if
-.Xr kdata_set 3
-fails.
+or if dependent data sources fail.
 Otherwise it returns non-zero.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
@@ -61,7 +57,6 @@ Otherwise it returns non-zero.
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
 .Xr kdata_hist_alloc 3 ,
-.Xr kdata_set 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY

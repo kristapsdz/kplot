@@ -1,9 +1,10 @@
-.Dd $Mdocdate: January 30 2015 $
+.Dd $Mdocdate: January 31 2015 $
 .Dt KDATA_VECTOR_ADD 3
 .Os
 .Sh NAME
-.Nm kdata_vector_append
-.Nd append data to a vector data source
+.Nm kdata_vector_append ,
+.Nm kdata_vector_set
+.Nd modify data of a vector data source
 .Sh LIBRARY
 .Lb libkplot
 .Sh SYNOPSIS
@@ -15,25 +16,32 @@
 .Fa "double x"
 .Fa "double y"
 .Fc
+.Ft int
+.Fo kdata_vector_set
+.Fa "struct kdata *data"
+.Fa "size_t pos"
+.Fa "double x"
+.Fa "double y"
+.Fc
 .Sh DESCRIPTION
 The
 .Nm
-function invokes
-.Xr kdata_set 3
-with the point values
+function sets the
 .Fa x
 and
 .Fa y
-after (possibly) growing a vector data source allocated with
+values the pairs at
+.Fa pos ,
+or in the event of
+.Nm kdata_vector_append ,
+after growing vector data source allocated with
 .Xr kdata_vector_alloc 3 .
 .Sh RETURN VALUES
 .Nm
 returns 0 if the vector reallocation failed, the data source was not
 created with
 .Xr kdata_vector_alloc 3 ,
-or if
-.Xr kdata_set 3
-fails.
+or if dependent data sources fail.
 Otherwise it returns non-zero.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
@@ -46,7 +54,6 @@ Otherwise it returns non-zero.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
-.Xr kdata_set 3 ,
 .Xr kdata_vector_alloc 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS

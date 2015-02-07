@@ -22,10 +22,17 @@ Allocate plot data sources with
 .Xr kdata_stddev_alloc 3 ,
 and
 .Xr kdata_vector_alloc 3 .
+Arrays and buckets have integral pair positions, differing in that
+buckets linearly translate position requests into internal storage.
+Histograms map from a range of floating-point pair positions into
+internal storage.
+Buffers cannot be directly modified, and are instead copied from other
+sources.
+Mean and standard deviation sources attach to other sources and compute
+the mean and standard deviation as their values change.
+.It
 Modify using data source's individual functions or the generic
-.Xr kdata_get 3
-and
-.Xr kdata_set 3 .
+.Xr kdata_get 3 .
 .It
 Allocate plots with
 .Xr kplot_alloc 3 .
@@ -153,7 +160,6 @@ functions are also provided.
 .Xr kdata_pmfmean 3 ,
 .Xr kdata_pmfstddev 3 ,
 .Xr kdata_pmfvar 3 ,
-.Xr kdata_set 3 ,
 .Xr kdata_stddev_add 3 ,
 .Xr kdata_stddev_alloc 3 ,
 .Xr kdata_vector_alloc 3 ,

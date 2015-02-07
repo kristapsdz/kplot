@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 15 2015 $
+.Dd $Mdocdate: January 16 2015 $
 .Dt KDATA_BUCKET_ALLOC 3
 .Os
 .Sh NAME
@@ -18,8 +18,13 @@
 The
 .Nm kdata_bucket_alloc
 function creates a reference-counted data sources for
-.Xr kplot 3 .
-It uses a bucket data model: each integer within the range
+.Xr kplot 3 ,
+initially with x-values set to the pair index starting at
+.Fa rmin
+and y-values to zero.
+It is similar to
+.Xr kdata_array_alloc 3
+except it uses a bucket data model: each integer within the range
 .Fa rmin
 (inclusive) to
 .Fa rmax
@@ -44,6 +49,7 @@ if memory allocation failed.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
+.Xr kdata_array_alloc 3 ,
 .Xr kdata_bucket_add 3 ,
 .Xr kplot 3
 .\" .Sh STANDARDS
