@@ -1,9 +1,11 @@
-.Dd $Mdocdate: January 16 2015 $
+.Dd $Mdocdate: February 7 2015 $
 .Dt KDATA_ARRAY_FILL 3
 .Os
 .Sh NAME
 .Nm kdata_array_add ,
 .Nm kdata_array_fill ,
+.Nm kdata_array_fill_ydoubles ,
+.Nm kdata_array_fill_ysizes ,
 .Nm kdata_array_set
 .Nd modify array data source
 .Sh LIBRARY
@@ -24,6 +26,16 @@
 .Fa "void (*fp)(size_t, struct kpair *, void *)"
 .Fc
 .Ft int
+.Fo kdata_array_fill_ydoubles
+.Fa "struct kdata *data"
+.Fa "const double *ys"
+.Fc
+.Ft int
+.Fo kdata_array_fill_ysizes
+.Fa "struct kdata *data"
+.Fa "const size_t *ys"
+.Fc
+.Ft int
 .Fo kdata_array_set
 .Fa "struct kdata *data"
 .Fa "size_t pos"
@@ -34,6 +46,8 @@
 The
 .Nm kdata_array_add ,
 .Nm kdata_array_fill ,
+.Nm kdata_array_fill_ydoubles ,
+.Nm kdata_array_fill_ysizes ,
 and
 .Nm kdata_array_set
 functions modify the buffers of a data source created by
@@ -48,14 +62,24 @@ while
 and
 .Nm kdata_array_fill
 directly modify the buckets at position
+The
+.Nm kdata_array_fill_ydoubles
+and
+.Nm kdata_array_fill_ysizes
+set values to the corresponding array indices, which are assumed to be
+the same length as the data source (else the behaviour is undefined).
 .Fa pos .
 .Sh RETURN VALUES
-.Nm kdata_array_fill
-returns 0 if it has any dependants whose update fails, the positions
+.Nm kdata_array_fill ,
+.Nm kdata_array_fill_ydoubles ,
+.Nm kdata_array_fill_ysizes ,
+and
+.Nm kdata_array_set
+return 0 if they have any dependants whose update fails, the positions
 fall outside of the allocated boundaries, or the data source was not
 created with
 .Xr kdata_array_alloc 3 ;
-otherwise it returns 1.
+otherwise they return 1.
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
