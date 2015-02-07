@@ -92,10 +92,6 @@ struct	kplotdat {
 	enum kplotstype	  stype; /* multiplot type */
 	enum ksmthtype	  smthtype; /* smoothing type */
 	struct ksmthcfg	  smth; /* smooth configuration */
-	struct kpair	  rminv; /* minimum real point */
-	struct kpair	  rmaxv; /* maximum real point */
-	struct kpair	  dminv; /* minimum drawn point */
-	struct kpair	  dmaxv; /* maximum drawn point */
 };
 
 struct	kplot {

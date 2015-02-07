@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 26 2015 $
+.Dd $Mdocdate: February 1 2015 $
 .Dt KPLOT_ATTACH_DATA 3
 .Os
 .Sh NAME
@@ -36,28 +36,6 @@ The configuration for
 and
 .Dv KPLOT_LINESPOINTS
 plots.
-.It Va extrema
-A bit-field allowing arbitrary assignment of xy-ranges:
-.Dv EXTREMA_XMIN ,
-.Dv EXTREMA_XMAX ,
-.Dv EXTREMA_YMIN ,
-and/or
-.Dv EXTREMA_YMAX .
-This fixates the ranges unconditionally (i.e., no auto-scaling will
-occur and points or lines drawn outside will be clipped).
-.It Va extrema_xmin
-If
-.Dv EXTREMA_XMIN
-is set, this value will be used instead of a value computed from the data.
-.It Va extrema_xmax
-See
-.Va extrema_xmin .
-.It Va extrema_ymin
-See
-.Va extrema_xmin .
-.It Va extrema_ymax
-See
-.Va extrema_xmin .
 .It Va line
 The configuration for
 .Dv KPLOT_LINES

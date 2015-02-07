@@ -35,6 +35,28 @@ The options provided via the
 .Fa cfg
 object are as follows:
 .Bl -tag -width Ds
+.It Va extrema
+A bit-field allowing arbitrary assignment of xy-ranges:
+.Dv EXTREMA_XMIN ,
+.Dv EXTREMA_XMAX ,
+.Dv EXTREMA_YMIN ,
+and/or
+.Dv EXTREMA_YMAX .
+This fixates the ranges unconditionally (i.e., no auto-scaling will
+occur and points or lines drawn outside will be clipped).
+.It Va extrema_xmin
+If
+.Dv EXTREMA_XMIN
+is set, this value will be used instead of a value computed from the data.
+.It Va extrema_xmax
+See
+.Va extrema_xmin .
+.It Va extrema_ymin
+See
+.Va extrema_xmin .
+.It Va extrema_ymax
+See
+.Va extrema_xmin .
 .It Va margin
 Bitfield of which margins to draw:
 .Dv MARGIN_LEFT ,

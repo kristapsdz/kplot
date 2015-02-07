@@ -521,6 +521,14 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	cfg->xaxislabelpad = cfg->yaxislabelpad = 15.0;
 }
 
+static cairo_pattern_t *
+cairo_pattern_create(short r, short g, short b)
+{
+
+	return(cairo_pattern_create_rgb
+		(r / 255.0, g / 255.0, b / 255.0));
+}
+
 int
 kplot_draw(const struct kplot *p, double w, 
 	double h, cairo_t *cr, const struct kplotcfg *cfg)
@@ -529,6 +537,8 @@ kplot_draw(const struct kplot *p, double w,
 	struct kplotctx	 ctx;
 	struct kplotdat	*d;
 	int		 rc;
+	cairo_pattern_t	*defs[7];
+	cairo_status_t	 st;
 
 	memset(&ctx, 0, sizeof(struct kplotctx));
 
@@ -544,9 +554,20 @@ kplot_draw(const struct kplot *p, double w,
 		ctx.cfg = *cfg;
 
 	if (0 == ctx.cfg.clrsz) {
-		if ( ! kplotcfg_default_palette
-			 (&ctx.cfg.clrs, &ctx.cfg.clrsz))
-			return(0);
+		ctx.cfg.clrs = defs;
+		ctx.cfg.clrsz = 7;
+		defs[0] = cairo_pattern_create(0x94, 0x00, 0xd3);
+		defs[1] = cairo_pattern_create(0x00, 0x9e, 0x73);
+		defs[2] = cairo_pattern_create(0x56, 0xb4, 0xe9);
+		defs[3] = cairo_pattern_create(0xe6, 0x9f, 0x00);
+		defs[4] = cairo_pattern_create(0xf0, 0xe4, 0x42);
+		defs[5] = cairo_pattern_create(0x00, 0x72, 0xb2);
+		defs[6] = cairo_pattern_create(0xe5, 0x1e, 0x10);
+		for (i = 0; i < ctx.cfg.clrsz; i++) {
+			st = cairo_pattern_status(defs[i]);
+			if (CAIRO_STATUS_SUCCESS != st) 
+				goto out;
+		}
 	} else 
 		for (i = 0; i < ctx.cfg.clrsz; i++)
 			cairo_pattern_reference(ctx.cfg.clrs[i]);
@@ -695,14 +716,6 @@ out:
 	for (i = 0; i < ctx.cfg.clrsz; i++)
 		cairo_pattern_destroy(ctx.cfg.clrs[i]);
 	return(rc);
-}
-
-static cairo_pattern_t *
-cairo_pattern_create(short r, short g, short b)
-{
-
-	return(cairo_pattern_create_rgb
-		(r / 255.0, g / 255.0, b / 255.0));
 }
 
 int

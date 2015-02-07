@@ -2,7 +2,7 @@
 	<header>
 		<h1>0.1.9</h1>
 		<address>Kristaps Dzonsons</address>
-		<time datetime="2015-01-31">2015-01-31</time>
+		<time datetime="2015-02-07">2015-02-07</time>
 	</header>
 	<aside>
 		Stipulated that <a href="kplot_draw.3.html">kplot_draw(3)</a> can return error.
@@ -15,5 +15,7 @@
 		and so on.
 		Backed out <code>kdata_set(3)</code>, as some sources do extra bookkeeping that this would bypass in general use.
 		Added <a href="kdata_vector_append.3.html">kdata_vector_set(3)</a>.
+		Fixed clipping model when extrema (which are now in <a href="kplot_draw.3.html">kplot_draw(3)</a> instead of per-line) are
+		specified.
 	</aside>
 </article>
