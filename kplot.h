@@ -146,7 +146,9 @@ struct	kplotcfg {
 	double		  xaxislabelpad;
 	double		  yaxislabelpad;
 	const char	 *xaxislabel;
+	const char	 *x2axislabel;
 	const char	 *yaxislabel;
+	const char	 *y2axislabel;
 	struct kplotfont  axislabelfont;
 	double		  xaxislabelrot;
 	double		  yaxislabelrot;

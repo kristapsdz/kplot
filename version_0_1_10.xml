@@ -1,0 +1,10 @@
+<article data-sblg-article="1" data-sblg-tags="version">
+	<header>
+		<h1>0.1.10</h1>
+		<address>Kristaps Dzonsons</address>
+		<time datetime="2015-02-07">2015-02-07</time>
+	</header>
+	<aside>
+		Allow for x2axislabel (top) and y2axislabel (right).
+	</aside>
+</article>

@@ -22,7 +22,8 @@ EXAMPLES	= example0 \
 		  example7 \
 		  example8 \
 		  example9 \
-		  example10
+		  example10 \
+		  example11
 PNGS		= example0.png \
 		  example1.png \
 		  example2.png \
@@ -33,7 +34,8 @@ PNGS		= example0.png \
 		  example7.png \
 		  example8.png \
 		  example9.png \
-		  example10.png
+		  example10.png \
+		  example11.png
 SRCS		= Makefile \
 		  compat.post.h \
 		  compat.pre.h \
@@ -57,6 +59,7 @@ SRCS		= Makefile \
 		  example8.c \
 		  example9.c \
 		  example10.c \
+		  example11.c \
 		  grid.c \
 		  hist.c \
 		  label.c \
@@ -211,6 +214,9 @@ example9: example9.c libkplot.a
 example10: example10.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
 
+example11: example11.c libkplot.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
+
 example0.png: example0
 	./example0
 
@@ -243,6 +249,10 @@ example9.png: example9
 
 example10.png: example10
 	./example10
+
+example11.png: example11
+	./example11
+
 libkplot.a: $(OBJS)
 	$(AR) rs $@ $(OBJS)
 

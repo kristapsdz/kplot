@@ -141,6 +141,13 @@ kplotctx_label_init(struct kplotctx *ctx)
 		ctx->dims.y -= h + ctx->cfg.xaxislabelpad;
 	}
 
+	if (NULL != ctx->cfg.x2axislabel) {
+		bbox_extents(ctx, ctx->cfg.x2axislabel, 
+			&h, &w, ctx->cfg.xaxislabelrot);
+		ctx->offs.y += h + ctx->cfg.xaxislabelpad;
+		ctx->dims.y -= h + ctx->cfg.xaxislabelpad;
+	}
+
 	if (NULL != ctx->cfg.yaxislabel) {
 		bbox_extents(ctx, ctx->cfg.yaxislabel, 
 			&h, &w, ctx->cfg.yaxislabelrot);
@@ -148,6 +155,11 @@ kplotctx_label_init(struct kplotctx *ctx)
 		ctx->dims.x -= w + ctx->cfg.yaxislabelpad;
 	}
 
+	if (NULL != ctx->cfg.y2axislabel) {
+		bbox_extents(ctx, ctx->cfg.y2axislabel, 
+			&h, &w, ctx->cfg.yaxislabelrot);
+		ctx->dims.x -= w + ctx->cfg.yaxislabelpad;
+	}
 
 	if (TICLABEL_LEFT & ctx->cfg.ticlabel) {
 		ctx->offs.x += maxw + ctx->cfg.yticlabelpad;
@@ -311,6 +323,24 @@ kplotctx_label_init(struct kplotctx *ctx)
 		cairo_restore(ctx->cr);
 	}
 
+	if (NULL != ctx->cfg.x2axislabel) {
+		bbox_extents(ctx, ctx->cfg.x2axislabel, 
+			&h, &w, ctx->cfg.xaxislabelrot);
+		cairo_save(ctx->cr);
+		cairo_translate(ctx->cr, 
+			ctx->offs.x + ctx->dims.x / 2.0,
+			(MARGIN_TOP & ctx->cfg.margin ? 
+			ctx->cfg.marginsz : 0.0) + h / 2.0);
+		cairo_rotate(ctx->cr, ctx->cfg.xaxislabelrot);
+		cairo_text_extents(ctx->cr, ctx->cfg.x2axislabel, &e);
+		w = -e.width / 2.0;
+		h = e.height / 2.0;
+		cairo_translate(ctx->cr, w, h);
+		cairo_move_to(ctx->cr, 0.0, 0.0);
+		cairo_show_text(ctx->cr, ctx->cfg.x2axislabel);
+		cairo_restore(ctx->cr);
+	}
+
 	if (NULL != ctx->cfg.yaxislabel) {
 		bbox_extents(ctx, ctx->cfg.yaxislabel, 
 			&h, &w, ctx->cfg.yaxislabelrot);
@@ -326,6 +356,24 @@ kplotctx_label_init(struct kplotctx *ctx)
 		cairo_translate(ctx->cr, w, h);
 		cairo_move_to(ctx->cr, 0.0, 0.0);
 		cairo_show_text(ctx->cr, ctx->cfg.yaxislabel);
+		cairo_restore(ctx->cr);
+	}
+
+	if (NULL != ctx->cfg.y2axislabel) {
+		bbox_extents(ctx, ctx->cfg.y2axislabel, 
+			&h, &w, ctx->cfg.yaxislabelrot);
+		cairo_save(ctx->cr);
+		cairo_translate(ctx->cr, 
+			(MARGIN_RIGHT & ctx->cfg.margin ? 
+			 ctx->w - ctx->cfg.marginsz : ctx->w) - w / 2.0,
+			ctx->offs.y + ctx->dims.y / 2.0);
+		cairo_rotate(ctx->cr, ctx->cfg.yaxislabelrot);
+		cairo_text_extents(ctx->cr, ctx->cfg.y2axislabel, &e);
+		w = -e.width / 2.0;
+		h = e.height / 2.0;
+		cairo_translate(ctx->cr, w, h);
+		cairo_move_to(ctx->cr, 0.0, 0.0);
+		cairo_show_text(ctx->cr, ctx->cfg.y2axislabel);
 		cairo_restore(ctx->cr);
 	}
 }
