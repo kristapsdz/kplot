@@ -43,13 +43,15 @@ enum	kplotstype {
 enum	kplotctype {
 	KPLOTCTYPE_DEFAULT = 0,
 	KPLOTCTYPE_PALETTE,
-	KPLOTCTYPE_PATTERN
+	KPLOTCTYPE_PATTERN,
+	KPLOTCTYPE_RGBA
 };
 
 struct	kplotccfg {
 	enum kplotctype	 type;
 	size_t		 palette;
 	cairo_pattern_t	*pattern;
+	double		 rgba[4];
 };
 
 struct 	kplotfont {
@@ -98,6 +100,7 @@ struct	kdatacfg {
 };
 
 struct	kplotcfg {
+	struct kplotcfg	 *ccfgs;
 	cairo_pattern_t	**clrs;
 	size_t		  clrsz; 
 	double		  marginsz; 

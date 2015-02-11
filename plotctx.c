@@ -37,6 +37,10 @@ kplotctx_ccfg_init(struct kplotctx *ctx, struct kplotccfg *cfg)
 	case (KPLOTCTYPE_PATTERN):
 		cairo_set_source(ctx->cr, cfg->pattern);
 		break;
+	case (KPLOTCTYPE_RGBA):
+		cairo_set_source_rgba(ctx->cr, cfg->rgba[0],
+			cfg->rgba[1], cfg->rgba[2], cfg->rgba[3]);
+		break;
 	default:
 		abort();
 	}
