@@ -19,7 +19,14 @@ The
 creates a reference-counted data sources for
 .Xr kplot 3 .
 It attaches to zero or more existing data sources and, when they update
-their values, tracks the mean of sequence of updated values.
+their values per-index, tracks the mean of the sequence of updated
+values.
+Thus, if a mean data source is attached to two sources, its y-value for
+pair zero will reflect the mean of all values set to pair zero's
+y-value in the sources.
+Note that the indexing is absolute: if attached to a bucket or
+histogram, pair index zero refers to the first internal data storage,
+not storage mapped from the bucket or histogram.
 .Pp
 If
 .Fa source

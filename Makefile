@@ -2,7 +2,7 @@
 
 CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
 CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/usr/X11/include/cairo'`
-VERSION		= 0.1.9
+VERSION		= 0.1.10
 LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcairo'`
 #If you're on GNU/Linux, you'll need to uncomment this.
 #LDADD		+= -lbsd
