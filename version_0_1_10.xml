@@ -2,9 +2,15 @@
 	<header>
 		<h1>0.1.10</h1>
 		<address>Kristaps Dzonsons</address>
-		<time datetime="2015-02-07">2015-02-07</time>
+		<time datetime="2015-02-11">2015-02-11</time>
 	</header>
 	<aside>
 		Allow for x2axislabel (top) and y2axislabel (right).
+		Add KPLOTCTYPE_RGBA, which is like KPLOTCTYPE_PATTERN except it can be bound as a source without allocating the pattern object.
+		Move kplotcfg assignment into <a href="kplot_alloc.3.html">kplot_alloc(3)</a>.
+		Make kplotcfg colour palette use the kplotccfg (instead of cairo_pattern_t), and use RGBA as the default.
+		Also make default colours (tics, lines, etc.) use RGBA instead of patterns.
+		This allows the default allocation of colours not to use dynamic memory (using cairo_source_set_rgba instead of allocating a pattern).
+		As a side-effect, <a href="kplot_draw.3.html">kplot_draw(3)</a> no longer does any allocations, and thus has no return value.
 	</aside>
 </article>

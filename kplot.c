@@ -36,8 +36,10 @@ kplotdat_free(struct kplotdat *p)
 
 	for (i = 0; i < p->datasz; i++) {
 		kdata_destroy(p->datas[i]);
-		kplotccfg_destroy(&p->cfgs[i].line.clr);
-		kplotccfg_destroy(&p->cfgs[i].point.clr);
+		if (KPLOTCTYPE_PATTERN == p->cfgs[i].line.clr.type) 
+			cairo_pattern_destroy(p->cfgs[i].line.clr.pattern);
+		if (KPLOTCTYPE_PATTERN == p->cfgs[i].point.clr.type) 
+			cairo_pattern_destroy(p->cfgs[i].point.clr.pattern);
 	}
 
 	free(p->datas);
@@ -46,10 +48,65 @@ kplotdat_free(struct kplotdat *p)
 }
 
 struct kplot *
-kplot_alloc(void)
+kplot_alloc(const struct kplotcfg *cfg)
 {
+	struct kplot	*p;
+	size_t		 i;
 
-	return(calloc(1, sizeof(struct kplot)));
+	p = calloc(1, sizeof(struct kplot));
+
+	if (NULL == p)
+		return(NULL);
+
+	if (NULL == cfg)
+		kplotcfg_defaults(&p->cfg);
+	else 
+		p->cfg = *cfg;
+
+	/* Refernece all patterns. */
+
+	if (KPLOTCTYPE_PATTERN == p->cfg.borderline.clr.type)
+		cairo_pattern_reference
+			(p->cfg.borderline.clr.pattern);
+	if (KPLOTCTYPE_PATTERN == p->cfg.ticline.clr.type)
+		cairo_pattern_reference
+			(p->cfg.ticline.clr.pattern);
+	if (KPLOTCTYPE_PATTERN == p->cfg.gridline.clr.type)
+		cairo_pattern_reference
+			(p->cfg.gridline.clr.pattern);
+	if (KPLOTCTYPE_PATTERN == p->cfg.ticlabelfont.clr.type)
+		cairo_pattern_reference
+			(p->cfg.ticlabelfont.clr.pattern);
+	if (KPLOTCTYPE_PATTERN == p->cfg.axislabelfont.clr.type)
+		cairo_pattern_reference
+			(p->cfg.axislabelfont.clr.pattern);
+
+	if (0 == p->cfg.clrsz)
+		return(p);
+
+	/*
+	 * If we pass an array of colour settings, then we want to
+	 * duplicate the array instead of copying it wholesale, as the
+	 * caller may free it in the meantime.
+	 * In doing so, we need to reference the Cairo patterns.
+	 */
+	p->cfg.clrs = calloc(p->cfg.clrsz, sizeof(struct kplotccfg));
+
+	if (NULL == p->cfg.clrs) {
+		free(p);
+		p->cfg.clrsz = 0;
+		kplot_free(p);
+		return(NULL);
+	}
+
+	memcpy(p->cfg.clrs, cfg->clrs, 
+		p->cfg.clrsz * sizeof(struct kplotccfg));
+
+	for (i = 0; i < p->cfg.clrsz; i++)
+		if (KPLOTCTYPE_PATTERN == p->cfg.clrs[i].type)
+			cairo_pattern_reference(p->cfg.clrs[i].pattern);
+
+	return(p);
 }
 
 static void
@@ -68,11 +125,34 @@ kplot_data_remove_all(struct kplot *p)
 void
 kplot_free(struct kplot *p)
 {
+	size_t	 i;
 
 	if (NULL == p)
 		return;
 
 	kplot_data_remove_all(p);
+
+	if (KPLOTCTYPE_PATTERN == p->cfg.borderline.clr.type)
+		cairo_pattern_destroy
+			(p->cfg.borderline.clr.pattern);
+	if (KPLOTCTYPE_PATTERN == p->cfg.ticline.clr.type)
+		cairo_pattern_destroy
+			(p->cfg.ticline.clr.pattern);
+	if (KPLOTCTYPE_PATTERN == p->cfg.gridline.clr.type)
+		cairo_pattern_destroy
+			(p->cfg.gridline.clr.pattern);
+	if (KPLOTCTYPE_PATTERN == p->cfg.ticlabelfont.clr.type)
+		cairo_pattern_destroy
+			(p->cfg.ticlabelfont.clr.pattern);
+	if (KPLOTCTYPE_PATTERN == p->cfg.axislabelfont.clr.type)
+		cairo_pattern_destroy
+			(p->cfg.axislabelfont.clr.pattern);
+
+	for (i = 0; i < p->cfg.clrsz; i++) 
+		if (KPLOTCTYPE_PATTERN == p->cfg.clrs[i].type)
+			cairo_pattern_destroy(p->cfg.clrs[i].pattern);
+
+	free(p->cfg.clrs);
 	free(p->datas);
 	free(p);
 }

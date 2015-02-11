@@ -521,24 +521,13 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 	cfg->xaxislabelpad = cfg->yaxislabelpad = 15.0;
 }
 
-static cairo_pattern_t *
-cairo_pattern_create(short r, short g, short b)
-{
-
-	return(cairo_pattern_create_rgb
-		(r / 255.0, g / 255.0, b / 255.0));
-}
-
-int
-kplot_draw(const struct kplot *p, double w, 
-	double h, cairo_t *cr, const struct kplotcfg *cfg)
+void
+kplot_draw(struct kplot *p, double w, double h, cairo_t *cr)
 {
 	size_t	 	 i, start, end;
 	struct kplotctx	 ctx;
 	struct kplotdat	*d;
-	int		 rc;
-	cairo_pattern_t	*defs[7];
-	cairo_status_t	 st;
+	struct kplotccfg defs[7];
 
 	memset(&ctx, 0, sizeof(struct kplotctx));
 
@@ -547,55 +536,77 @@ kplot_draw(const struct kplot *p, double w,
 	ctx.cr = cr;
 	ctx.minv.x = ctx.minv.y = DBL_MAX;
 	ctx.maxv.x = ctx.maxv.y = -DBL_MAX;
+	ctx.cfg = p->cfg;
 
-	if (NULL == cfg)
-		kplotcfg_defaults(&ctx.cfg);
-	else 
-		ctx.cfg = *cfg;
+	if (KPLOTCTYPE_DEFAULT == ctx.cfg.borderline.clr.type) {
+		ctx.cfg.borderline.clr.type = KPLOTCTYPE_RGBA;
+		ctx.cfg.borderline.clr.rgba[0] = 0.0;
+		ctx.cfg.borderline.clr.rgba[1] = 0.0;
+		ctx.cfg.borderline.clr.rgba[2] = 0.0;
+		ctx.cfg.borderline.clr.rgba[3] = 1.0;
+	}
+
+	if (KPLOTCTYPE_DEFAULT == ctx.cfg.axislabelfont.clr.type) {
+		ctx.cfg.axislabelfont.clr.type = KPLOTCTYPE_RGBA;
+		ctx.cfg.axislabelfont.clr.rgba[0] = 0.0;
+		ctx.cfg.axislabelfont.clr.rgba[1] = 0.0;
+		ctx.cfg.axislabelfont.clr.rgba[2] = 0.0;
+		ctx.cfg.axislabelfont.clr.rgba[3] = 1.0;
+	}
+
+	if (KPLOTCTYPE_DEFAULT == ctx.cfg.ticline.clr.type) {
+		ctx.cfg.ticline.clr.type = KPLOTCTYPE_RGBA;
+		ctx.cfg.ticline.clr.rgba[0] = 0.0;
+		ctx.cfg.ticline.clr.rgba[1] = 0.0;
+		ctx.cfg.ticline.clr.rgba[2] = 0.0;
+		ctx.cfg.ticline.clr.rgba[3] = 1.0;
+	}
+
+	if (KPLOTCTYPE_DEFAULT == ctx.cfg.gridline.clr.type) {
+		ctx.cfg.gridline.clr.type = KPLOTCTYPE_RGBA;
+		ctx.cfg.gridline.clr.rgba[0] = 0.5;
+		ctx.cfg.gridline.clr.rgba[1] = 0.5;
+		ctx.cfg.gridline.clr.rgba[2] = 0.5;
+		ctx.cfg.gridline.clr.rgba[3] = 1.0;
+	}
+
+	if (KPLOTCTYPE_DEFAULT == ctx.cfg.ticlabelfont.clr.type) {
+		ctx.cfg.ticlabelfont.clr.type = KPLOTCTYPE_RGBA;
+		ctx.cfg.ticlabelfont.clr.rgba[0] = 0.5;
+		ctx.cfg.ticlabelfont.clr.rgba[1] = 0.5;
+		ctx.cfg.ticlabelfont.clr.rgba[2] = 0.5;
+		ctx.cfg.ticlabelfont.clr.rgba[3] = 1.0;
+	}
 
 	if (0 == ctx.cfg.clrsz) {
 		ctx.cfg.clrs = defs;
 		ctx.cfg.clrsz = 7;
-		defs[0] = cairo_pattern_create(0x94, 0x00, 0xd3);
-		defs[1] = cairo_pattern_create(0x00, 0x9e, 0x73);
-		defs[2] = cairo_pattern_create(0x56, 0xb4, 0xe9);
-		defs[3] = cairo_pattern_create(0xe6, 0x9f, 0x00);
-		defs[4] = cairo_pattern_create(0xf0, 0xe4, 0x42);
-		defs[5] = cairo_pattern_create(0x00, 0x72, 0xb2);
-		defs[6] = cairo_pattern_create(0xe5, 0x1e, 0x10);
 		for (i = 0; i < ctx.cfg.clrsz; i++) {
-			st = cairo_pattern_status(defs[i]);
-			if (CAIRO_STATUS_SUCCESS != st) 
-				goto out;
+			ctx.cfg.clrs[i].type = KPLOTCTYPE_RGBA;
+			ctx.cfg.clrs[i].rgba[3] = 1.0;
 		}
-	} else 
-		for (i = 0; i < ctx.cfg.clrsz; i++)
-			cairo_pattern_reference(ctx.cfg.clrs[i]);
-
-	rc = kplotccfg_init_rgb
-		(&ctx.cfg.borderline.clr, 0.0, 0.0, 0.0);
-	if ( ! rc)
-		goto out;
-
-	rc = kplotccfg_init_rgb
-		(&ctx.cfg.ticline.clr, 0.0, 0.0, 0.0);
-	if ( ! rc)
-		goto out;
-
-	rc = kplotccfg_init_rgb
-		(&ctx.cfg.gridline.clr, 0.5, 0.5, 0.5);
-	if ( ! rc)
-		goto out;
-
-	rc = kplotccfg_init_rgb
-		(&ctx.cfg.ticlabelfont.clr, 0.5, 0.5, 0.5);
-	if ( ! rc)
-		goto out;
-
-	rc = kplotccfg_init_rgb
-		(&ctx.cfg.axislabelfont.clr, 0.0, 0.0, 0.0);
-	if ( ! rc)
-		goto out;
+		ctx.cfg.clrs[0].rgba[0] = 0x94 / 255.0;
+		ctx.cfg.clrs[0].rgba[1] = 0x04 / 255.0;
+		ctx.cfg.clrs[0].rgba[2] = 0xd3 / 255.0;
+		ctx.cfg.clrs[1].rgba[0] = 0x00 / 255.0;
+		ctx.cfg.clrs[1].rgba[1] = 0x9e / 255.0;
+		ctx.cfg.clrs[1].rgba[2] = 0x73 / 255.0;
+		ctx.cfg.clrs[2].rgba[0] = 0x56 / 255.0;
+		ctx.cfg.clrs[2].rgba[1] = 0xb4 / 255.0;
+		ctx.cfg.clrs[2].rgba[2] = 0xe9 / 255.0;
+		ctx.cfg.clrs[3].rgba[0] = 0xe6 / 255.0;
+		ctx.cfg.clrs[3].rgba[1] = 0x9f / 255.0;
+		ctx.cfg.clrs[3].rgba[2] = 0x00 / 255.0;
+		ctx.cfg.clrs[4].rgba[0] = 0xf0 / 255.0;
+		ctx.cfg.clrs[4].rgba[1] = 0xe4 / 255.0;
+		ctx.cfg.clrs[4].rgba[2] = 0x42 / 255.0;
+		ctx.cfg.clrs[5].rgba[0] = 0x00 / 255.0;
+		ctx.cfg.clrs[5].rgba[1] = 0x72 / 255.0;
+		ctx.cfg.clrs[5].rgba[2] = 0xb2 / 255.0;
+		ctx.cfg.clrs[6].rgba[0] = 0xe5 / 255.0;
+		ctx.cfg.clrs[6].rgba[1] = 0x1e / 255.0;
+		ctx.cfg.clrs[6].rgba[2] = 0x10 / 255.0;
+	} 
 
 	for (i = 0; i < p->datasz; i++) {
 		d = &p->datas[i];
@@ -706,45 +717,43 @@ kplot_draw(const struct kplot *p, double w,
 			break;
 		}
 	}
-	rc = 1;
-out:
-	kplotccfg_destroy(&ctx.cfg.borderline.clr);
-	kplotccfg_destroy(&ctx.cfg.ticline.clr);
-	kplotccfg_destroy(&ctx.cfg.gridline.clr);
-	kplotccfg_destroy(&ctx.cfg.ticlabelfont.clr);
-	kplotccfg_destroy(&ctx.cfg.axislabelfont.clr);
-	for (i = 0; i < ctx.cfg.clrsz; i++)
-		cairo_pattern_destroy(ctx.cfg.clrs[i]);
-	return(rc);
 }
 
 int
-kplotcfg_default_palette(cairo_pattern_t ***pp, size_t *szp)
+kplotcfg_default_palette(struct kplotccfg **pp, size_t *szp)
 {
-	cairo_status_t	 st;
 	size_t		 i;
 
 	*szp = 7;
-	if (NULL == (*pp = calloc(*szp, sizeof(cairo_pattern_t *))))
+	if (NULL == (*pp = calloc(*szp, sizeof(struct kplotccfg))))
 		return(0);
 
-	(*pp)[0] = cairo_pattern_create(0x94, 0x00, 0xd3);
-	(*pp)[1] = cairo_pattern_create(0x00, 0x9e, 0x73);
-	(*pp)[2] = cairo_pattern_create(0x56, 0xb4, 0xe9);
-	(*pp)[3] = cairo_pattern_create(0xe6, 0x9f, 0x00);
-	(*pp)[4] = cairo_pattern_create(0xf0, 0xe4, 0x42);
-	(*pp)[5] = cairo_pattern_create(0x00, 0x72, 0xb2);
-	(*pp)[6] = cairo_pattern_create(0xe5, 0x1e, 0x10);
+	for (i = 0; i < *szp; i++) {
+		(*pp)[i].type = KPLOTCTYPE_RGBA;
+		(*pp)[i].rgba[3] = 1.0;
+	}
 
-	st = CAIRO_STATUS_SUCCESS;
-	for (i = 0; CAIRO_STATUS_SUCCESS == st && i < *szp; i++)
-		st = cairo_pattern_status((*pp)[i]);
+	(*pp)[0].rgba[0] = 0x94 / 255.0;
+	(*pp)[0].rgba[1] = 0x04 / 255.0;
+	(*pp)[0].rgba[2] = 0xd3 / 255.0;
+	(*pp)[1].rgba[0] = 0x00 / 255.0;
+	(*pp)[1].rgba[1] = 0x9e / 255.0;
+	(*pp)[1].rgba[2] = 0x73 / 255.0;
+	(*pp)[2].rgba[0] = 0x56 / 255.0;
+	(*pp)[2].rgba[1] = 0xb4 / 255.0;
+	(*pp)[2].rgba[2] = 0xe9 / 255.0;
+	(*pp)[3].rgba[0] = 0xe6 / 255.0;
+	(*pp)[3].rgba[1] = 0x9f / 255.0;
+	(*pp)[3].rgba[2] = 0x00 / 255.0;
+	(*pp)[4].rgba[0] = 0xf0 / 255.0;
+	(*pp)[4].rgba[1] = 0xe4 / 255.0;
+	(*pp)[4].rgba[2] = 0x42 / 255.0;
+	(*pp)[5].rgba[0] = 0x00 / 255.0;
+	(*pp)[5].rgba[1] = 0x72 / 255.0;
+	(*pp)[5].rgba[2] = 0xb2 / 255.0;
+	(*pp)[6].rgba[0] = 0xe5 / 255.0;
+	(*pp)[6].rgba[1] = 0x1e / 255.0;
+	(*pp)[6].rgba[2] = 0x10 / 255.0;
 
-	if (i == *szp)
-		return(1);
-
-	for (i = 0; i < *szp; i++) 
-		cairo_pattern_destroy((*pp)[i]);
-	free(*pp);
-	return(0);
+	return(1);
 }

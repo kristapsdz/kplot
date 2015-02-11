@@ -48,7 +48,7 @@ main(int argc, char *argv[])
 	} else if (NULL == (d2 = kdata_array_alloc(points2, 10))) {
 		perror(NULL);
 		goto out;
-	} else if (NULL == (p = kplot_alloc())) {
+	} else if (NULL == (p = kplot_alloc(NULL))) {
 		perror(NULL);
 		goto out;
 	} else if ( ! kplot_attach_data(p, d1, KPLOT_LINES, NULL)) {
@@ -89,7 +89,7 @@ main(int argc, char *argv[])
 	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0); 
 	cairo_rectangle(cr, 0.0, 0.0, 600.0, 400.0);
 	cairo_fill(cr);
-	kplot_draw(p, 600.0, 400.0, cr, NULL);
+	kplot_draw(p, 600.0, 400.0, cr);
 
 	st = cairo_surface_write_to_png
 		(cairo_get_target(cr), "example1.png");

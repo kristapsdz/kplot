@@ -53,7 +53,7 @@ main(void)
 	}
 	d1 = <a href="kdata_array_alloc.3.html">kdata_array_alloc</a>(points1, 50);
 	d2 = <a href="kdata_array_alloc.3.html">kdata_array_alloc</a>(points2, 50);
-	p = <a href="kplot_alloc.3.html">kplot_alloc</a>();
+	p = <a href="kplot_alloc.3.html">kplot_alloc</a>(NULL);
 	<a href="kplot_attach_data.3.html">kplot_attach_data</a>(p, d1, KPLOT_POINTS, NULL);
 	<a href="kplot_attach_data.3.html">kplot_attach_data</a>(p, d2, KPLOT_LINES, NULL);
 	<a href="kdata_destroy.3.html">kdata_destroy</a>(d1);
@@ -62,7 +62,7 @@ main(void)
 		(CAIRO_FORMAT_ARGB32, 600, 400);
 	cr = cairo_create(surf);
 	cairo_surface_destroy(surf);
-	<a href="kplot_draw.3.html">kplot_draw</a>(p, 600.0, 400.0, cr, NULL);
+	<a href="kplot_draw.3.html">kplot_draw</a>(p, 600.0, 400.0, cr);
 	cairo_surface_write_to_png
 		(cairo_get_target(cr), "<a href="example0.png">example0.png</a>");
 	cairo_destroy(cr);

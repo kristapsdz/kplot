@@ -100,8 +100,7 @@ struct	kdatacfg {
 };
 
 struct	kplotcfg {
-	struct kplotcfg	 *ccfgs;
-	cairo_pattern_t	**clrs;
+	struct kplotccfg *clrs;
 	size_t		  clrsz; 
 	double		  marginsz; 
 #define	MARGIN_LEFT	  0x01
@@ -218,10 +217,10 @@ ssize_t		 kdata_ymin(const struct kdata *, struct kpair *);
 
 void		 kdatacfg_defaults(struct kdatacfg *);
 void		 kplotcfg_defaults(struct kplotcfg *);
-int		 kplotcfg_default_palette(cairo_pattern_t ***, size_t *);
+int		 kplotcfg_default_palette(struct kplotccfg **, size_t *);
 void		 ksmthcfg_defaults(struct ksmthcfg *);
 
-struct kplot	*kplot_alloc(void);
+struct kplot	*kplot_alloc(const struct kplotcfg *);
 int		 kplot_attach_data(struct kplot *, struct kdata *, 
 			enum kplottype, const struct kdatacfg *);
 int		 kplot_attach_smooth(struct kplot *, struct kdata *, 
@@ -230,9 +229,7 @@ int		 kplot_attach_smooth(struct kplot *, struct kdata *,
 int		 kplot_attach_datas(struct kplot *, size_t, 
 			struct kdata **, const enum kplottype *, 
 			const struct kdatacfg *const *, enum kplotstype);
-int		 kplot_draw(const struct kplot *, 
-			double, double, cairo_t *, 
-			const struct kplotcfg *);
+void		 kplot_draw(struct kplot *, double, double, cairo_t *);
 void		 kplot_free(struct kplot *);
 
 __END_DECLS

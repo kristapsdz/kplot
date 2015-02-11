@@ -31,8 +31,11 @@ kplotctx_ccfg_init(struct kplotctx *ctx, struct kplotccfg *cfg)
 
 	switch (cfg->type) {
 	case (KPLOTCTYPE_PALETTE):
-		cairo_set_source(ctx->cr, 
-			ctx->cfg.clrs[cfg->palette % ctx->cfg.clrsz]);
+		cairo_set_source_rgba(ctx->cr, 
+			ctx->cfg.clrs[cfg->palette % ctx->cfg.clrsz].rgba[0],
+			ctx->cfg.clrs[cfg->palette % ctx->cfg.clrsz].rgba[1],
+			ctx->cfg.clrs[cfg->palette % ctx->cfg.clrsz].rgba[2],
+			ctx->cfg.clrs[cfg->palette % ctx->cfg.clrsz].rgba[3]);
 		break;
 	case (KPLOTCTYPE_PATTERN):
 		cairo_set_source(ctx->cr, cfg->pattern);

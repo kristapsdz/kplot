@@ -1,4 +1,4 @@
-.Dd $Mdocdate: February 1 2015 $
+.Dd $Mdocdate: February 7 2015 $
 .Dt KPLOT_ATTACH_DATA 3
 .Os
 .Sh NAME
@@ -111,7 +111,7 @@ If set to
 .Dv KPLOTCTYPE_DEFAULT
 .Pq the default ,
 the
-.Dv KPLOTCTYPE_PALETTE
+.Dv KPLOTCTYPE_RGBA
 option will be set during
 .Xr kplot_draw 3
 to the index of the line in the set of lines.
@@ -120,7 +120,7 @@ If
 .Va palette
 is used as an index into the colour palette matrix.
 This is clamped (modulo) to the palette size.
-Lastly,
+The
 .Dv KPLOTCTYPE_PATTERN
 will have use
 .Va pattern ,
@@ -128,6 +128,22 @@ which may not be
 .Dv NULL .
 The pattern is referenced when attached and dereferenced when the data
 source is removed from the plot.
+Lastly,
+.Dv KPLOTCTYPE_RGBA
+will use the RGBA entries (in the unit interval) of
+.Va rgba
+to set colours.
+This is the preferred method, as it does not involve any dynamic memory
+allocation overhead.
+.It Va pattern
+The pattern used with
+.Dv KPLOTCTYPE_PATTERN .
+.It Va rgba
+The RGBA (in the unit interval) used with
+.Dv KPLOTCTYPE_RGBA .
+.It Va palette
+The palette index used for
+.Dv KPLOTCTYPE_PALETTE .
 .El
 .Pp
 If

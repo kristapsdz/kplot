@@ -1,4 +1,4 @@
-.Dd $Mdocdate: February 7 2015 $
+.Dd $Mdocdate: February 9 2015 $
 .Dt KPLOT_DRAW 3
 .Os
 .Sh NAME
@@ -9,13 +9,12 @@
 .Sh SYNOPSIS
 .In cairo.h
 .In kplot.h
-.Ft int
+.Ft void
 .Fo kplot_draw
 .Fa "const struct kplot *p"
 .Fa double w
 .Fa double h
 .Fa "cairo_t *cr"
-.Fa "const struct kplotcfg *cfg"
 .Fc
 .Sh DESCRIPTION
 The
@@ -31,173 +30,7 @@ sources into the image.
 .Pq If no points are specified, the domain and range are zero.
 The image is laid out as described in the Drawing Model section of
 .Xr kplot 3 .
-The options provided via the
-.Fa cfg
-object are as follows:
-.Bl -tag -width Ds
-.It Va extrema
-A bit-field allowing arbitrary assignment of xy-ranges:
-.Dv EXTREMA_XMIN ,
-.Dv EXTREMA_XMAX ,
-.Dv EXTREMA_YMIN ,
-and/or
-.Dv EXTREMA_YMAX .
-This fixates the ranges unconditionally (i.e., no auto-scaling will
-occur and points or lines drawn outside will be clipped).
-.It Va extrema_xmin
-If
-.Dv EXTREMA_XMIN
-is set, this value will be used instead of a value computed from the data.
-.It Va extrema_xmax
-See
-.Va extrema_xmin .
-.It Va extrema_ymin
-See
-.Va extrema_xmin .
-.It Va extrema_ymax
-See
-.Va extrema_xmin .
-.It Va margin
-Bitfield of which margins to draw:
-.Dv MARGIN_LEFT ,
-.Dv MARGIN_RIGHT ,
-.Dv MARGIN_TOP ,
-.Dv MARGIN_BOTTOM ,
-or
-.Dv MARGIN_ALL .
-.It Va marginsz
-The width of the margin in user-space Cairo coordinates.
-These are clamped to be non-negative.
-The margin is the space between the image boundary and the longest (or
-tallest) label edge, or if no label is specified on any face, the plot
-area.
-.It Va ticlabel
-Bitfield of which labels to draw:
-.Dv TICLABEL_LEFT ,
-.Dv TICLABEL_RIGHT ,
-.Dv TICLABEL_TOP ,
-or
-.Dv TICLABEL_BOTTOM.
-.It Va ticlabelfont
-All font characteristics of the tic labels.
-.It Va xticlabelpad
-Space between horizontal (x-axis) tic labels and the plot area.
-Specifically, between the edge of the longest label along any face and
-the plot area.
-.It Va yticlabelpad
-See
-.Va xticlabelpad .
-.It Va xticlabelrot
-Rotation of horizontal (x-axis) labels (in radians) clamped to 90 degrees.
-Rotation is clockwise.
-Note that if this is nonzero, the tic label is aligned under the
-tic-mark at the top-left part of the field, instead of the middle as is
-the usual case.
-.It Va xticlabelfmt
-This function may be user-defined for formatting the horizontal x-axis
-label as a UTF-8 string limited to 128 bytes (including nil terminator).
-It accepts three arguments: the value to format, the string buffer in
-which to format, and the size of the buffer.
-The default is to use
-.Xr snprintf 3
-with the
-.Li %g
-format string.
-.It Va yticlabelfmt
-See
-.Va xticlabelfmt .
-.It Va border
-Bitfield of which borders to draw:
-.Dv BORDER_LEFT ,
-.Dv BORDER_RIGHT ,
-.Dv BORDER_TOP ,
-.Dv BORDER_BOTTOM ,
-or
-.Dv BORDER_ALL .
-.It Va borderline
-The configuration of the border line.
-See
-.Xr kplot_attach_data 3
-for an explanation of the line structure.
-.It Va clrs
-Array of Cairo patterns for the colour index.
-If no colours are specified, which is the default, a default palette
-will be installed.
-.It Va clrsz
-The number of colours in clrs.
-Colour indices index into the
-.Va clrs
-array modulo this value.
-.It Va xtics
-The number of tics (and thus labels) to draw along the horizontal
-x-axis.
-The border condition (one tic) is drawn in the centre.
-.It Va ytics
-See
-.Va xtics .
-.It Va tic
-Bitfield of which tics to draw:
-.Dv TIC_LEFT_IN ,
-.Dv TIC_RIGHT_IN ,
-.Dv TIC_TOP_IN ,
-.Dv TIC_BOTTOM_IN ,
-.Dv TIC_LEFT_OUT ,
-.Dv TIC_RIGHT_OUT ,
-.Dv TIC_TOP_OUT ,
-or
-.Dv TIC_BOTTOM_OUT .
-.It Va ticline
-The configuration of the tic line.
-See
-.Xr kplot_attach_data 3
-for an explanation of the line structure.
-.It Va xaxislabel
-The label for the x-axis, shown below the bottom x-axis tic labels (if
-specified).
-.It Va x2axislabel
-The label for the second x-axis, shown above the top x-axis tic labels
-(if specified).
-.It Va yaxislabel
-See
-.Va xaxislabel .
-.It Va y2axislabel
-See
-.Va xaxislabel .
-.It Va xaxislabelrot
-The clockwise rotation of the x-axis label.
-Note that this will turn around its centre, so no matter the rotation,
-it will be correctly buffered on both sides.
-.It Va yaxislabelrot
-See
-.Va xaxislabelrot .
-.It Va xaxislabelpad
-The padding between the top of the x-axis label and the bottom of the
-x-axis tics (if specified).
-.It Va yaxislabelpad
-See
-.Va xaxislabelpad .
-.It Va axislabelfont
-All font characteristics for the
-.Va xaxislabel
-and
-.Va yaxislabel .
-.It Va grid
-Bitfield of which grid lines to draw:
-.Dv GRID_X ,
-.Dv GRID_Y ,
-or
-.Dv GRID_ALL .
-.It Va gridline
-The configuration of grid lines.
-.El
-.Pp
-If
-.Dv NULL
-is passed as a configuration, reasonable defaults are used.
-.Sh RETURN VALUES
-.Nm
-returns 0 if memory allocation failed (e.g., allocating colours in
-Cairo), else it returns non-zero.
+.\" .Sh RETURN VALUES
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
 .\" .Sh FILES
@@ -209,7 +42,8 @@ Cairo), else it returns non-zero.
 .\" .Sh ERRORS
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
-.Xr kplot 3
+.Xr kplot 3 ,
+.Xr kplot_alloc 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
 .\" .Sh AUTHORS

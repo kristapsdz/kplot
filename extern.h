@@ -97,6 +97,7 @@ struct	kplotdat {
 struct	kplot {
 	struct kplotdat	*datas; /* data sets per plot */
 	size_t		 datasz; /* number of data sets */
+	struct kplotcfg	 cfg; /* configuration */
 };
 
 struct	kplotctx {
@@ -105,7 +106,7 @@ struct	kplotctx {
 	double		 w; /* width of context */
 	struct kpair	 minv; /* minimum data point values */
 	struct kpair	 maxv; /* maximum data point values */
-	struct kplotcfg	 cfg; /* configuration */
+	struct kplotcfg	 cfg;
 
 	/*
 	 * When computing the plot context, we need to account for a
@@ -137,12 +138,7 @@ void	 kplotctx_line_init(struct kplotctx *, struct kplotline *);
 void	 kplotctx_point_init(struct kplotctx *, struct kplotpoint *);
 void	 kplotctx_ticln_init(struct kplotctx *, struct kplotticln *);
 
-int	 kplotccfg_init_rgb(struct kplotccfg *, 
-		double, double, double);
-int	 kplotccfg_init_rgba(struct kplotccfg *, 
-		double, double, double, double);
 void	 kplotccfg_init_palette(struct kplotccfg *, size_t);
-void	 kplotccfg_destroy(struct kplotccfg *);
 
 __END_DECLS
 
