@@ -12,7 +12,8 @@ VERSIONS	= version_0_1_4.xml \
 		  version_0_1_7.xml \
 		  version_0_1_8.xml \
 		  version_0_1_9.xml \
-		  version_0_1_10.xml
+		  version_0_1_10.xml \
+		  version_0_1_11.xml
 EXAMPLES	= example0 \
 		  example1 \
 		  example2 \

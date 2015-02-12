@@ -1,4 +1,4 @@
-.Dd $Mdocdate: January 26 2015 $
+.Dd $Mdocdate: February 1 2015 $
 .Dt KPLOT_ATTACH_SMOOTH 3
 .Os
 .Sh NAME
@@ -57,6 +57,9 @@ points surrounding are not valid numbers, then the point is not
 averaged.
 .It Dv KSMOOTH_CDF
 Compute the empirical CDF from all valid points of the set.
+This will normalise the y-values to within the unit interval.
+.It Dv KSMOOTH_PMF
+Normalise the y-values as probabilities of valid points of the set.
 .El
 .Sh RETURN VALUES
 .Nm
@@ -80,7 +83,12 @@ In this case, all allocations and references will be dropped.
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
 .\" .Sh AUTHORS
-.\" .Sh CAVEATS
+.Sh CAVEATS
+The
+.Dv KSMOOTH_CDF
+an
+.Dv KSMOOTH_PMF
+has undefined behaviour for negative probabilities.
 .\" .Sh BUGS
 .\" .Sh SECURITY CONSIDERATIONS
 .\" Not used in OpenBSD.

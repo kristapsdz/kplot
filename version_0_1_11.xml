@@ -1,0 +1,11 @@
+<article data-sblg-article="1" data-sblg-tags="version">
+	<header>
+		<h1>0.1.11</h1>
+		<address>Kristaps Dzonsons</address>
+		<time datetime="2015-02-12">2015-02-12</time>
+	</header>
+	<aside>
+		Add KSMOOTH_PMF to <a href="kplot_attach_smooth.3.html">kplot_attach_smooth(3)</a> and have KSMOOTH_CDF properly normalise the
+		y-values.
+	</aside>
+</article>

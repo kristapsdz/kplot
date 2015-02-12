@@ -56,7 +56,11 @@ kpair_set(const struct kplotdat *d, size_t pos, struct kpair *kp)
 	switch (d->smthtype) {
 	case (KSMOOTH_CDF):
 		kp->x = d->datas[0]->pairs[pos].x;
-		kp->y += d->datas[0]->pairs[pos].y;
+		kp->y += d->datas[0]->pairs[pos].y / d->sum;
+		break;
+	case (KSMOOTH_PMF):
+		kp->x = d->datas[0]->pairs[pos].x;
+		kp->y = d->datas[0]->pairs[pos].y / d->sum;
 		break;
 	case (KSMOOTH_MOVAVG):
 		*kp = d->datas[0]->pairs[pos];
@@ -129,21 +133,49 @@ static void
 kdata_extrema_single(struct kplotdat *d, struct kplotctx *ctx)
 {
 	size_t	 	 i;
+	double		 max;
 	struct kpair	 kp;
 
+	max = -DBL_MAX;
+	d->sum = 0.0;
 	memset(&kp, 0, sizeof(struct kpair));
 	for (i = 0; i < d->datas[0]->pairsz; i++) {
 		if ( ! kpair_vrfy(&d->datas[0]->pairs[i]))
 			continue;
 		kpair_set(d, i, &kp);
+		if (KSMOOTH_CDF == d->smthtype) 
+			d->sum += d->datas[0]->pairs[i].y;
+		if (KSMOOTH_PMF == d->smthtype) {
+			d->sum += d->datas[0]->pairs[i].y;
+			if (d->datas[0]->pairs[i].y > max)
+				max = d->datas[0]->pairs[i].y;
+		}
 		if (kp.x < ctx->minv.x)
 			ctx->minv.x = kp.x;
-		if (kp.y < ctx->minv.y)
-			ctx->minv.y = kp.y;
 		if (kp.x > ctx->maxv.x)
 			ctx->maxv.x = kp.x;
-		if (kp.y > ctx->maxv.y)
-			ctx->maxv.y = kp.y;
+		switch (d->smthtype) {
+		case (KSMOOTH_CDF): 
+		case (KSMOOTH_PMF): 
+			break;
+		default:
+			if (kp.y < ctx->minv.y)
+				ctx->minv.y = kp.y;
+			if (kp.y > ctx->maxv.y)
+				ctx->maxv.y = kp.y;
+			break;
+		}
+	}
+	if (KSMOOTH_CDF == d->smthtype) {
+		if (0.0 < ctx->minv.y)
+			ctx->minv.y = 0.0;
+		if (1.0 > ctx->maxv.y)
+			ctx->maxv.y = 1.0;
+	} else if (KSMOOTH_PMF == d->smthtype) {
+		if (0.0 < ctx->minv.y)
+			ctx->minv.y = 0.0;
+		if (max / d->sum > ctx->maxv.y)
+			ctx->maxv.y = max / d->sum;
 	}
 }
 
@@ -428,9 +460,10 @@ kplotctx_draw_lines(struct kplotctx *ctx, const struct kplotdat *d)
 
 	ksubwin_lines(ctx, &d->cfgs[0]);
 	memset(&kp, 0, sizeof(struct kpair));
-	for (rc = 0, i = 0; 0 == rc && i < d->datas[0]->pairsz; i++) {
+	for (i = 0; i < d->datas[0]->pairsz; i++) {
 		kpair_set(d, i, &kp);
-		rc = kplotctx_point_to_real(&kp, &pair, ctx);
+		if (kplotctx_point_to_real(&kp, &pair, ctx))
+			break;
 	}
 
 	if (i == d->datas[0]->pairsz)

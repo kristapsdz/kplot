@@ -92,6 +92,7 @@ struct	kplotdat {
 	enum kplotstype	  stype; /* multiplot type */
 	enum ksmthtype	  smthtype; /* smoothing type */
 	struct ksmthcfg	  smth; /* smooth configuration */
+	double		  sum; /* used for KSMOOTH_CDF */
 };
 
 struct	kplot {
