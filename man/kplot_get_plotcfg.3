@@ -1,0 +1,45 @@
+.Dd $Mdocdate: February 11 2015 $
+.Dt KPLOT_GET_PLOTCFG 3
+.Os
+.Sh NAME
+.Nm kplot_get_plotcfg
+.Nd get configuration for a plot
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft "struct kplotcfg *"
+.Fo kplot_get_plotcfg
+.Fa "struct kplot *p"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm
+function returns the
+.Vt struct kplotcfg
+assigned to a plot with
+.Xr kplot_alloc 3 .
+This is never
+.Dv NULL .
+.\" .Sh RETURN VALUES
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3 ,
+.Xr kplot_alloc 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

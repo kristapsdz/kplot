@@ -167,6 +167,7 @@ struct	kplotcfg {
 };
 
 struct 	kdata;
+struct	kplot;
 
 __BEGIN_DECLS
 
@@ -232,6 +233,10 @@ int		 kplot_attach_datas(struct kplot *, size_t,
 			const struct kdatacfg *const *, enum kplotstype);
 void		 kplot_draw(struct kplot *, double, double, cairo_t *);
 void		 kplot_free(struct kplot *);
+int		 kplot_get_datacfg(struct kplot *, size_t,
+			struct kdatacfg **, size_t *);
+struct kplotcfg	*kplot_get_plotcfg(struct kplot *);
+
 
 __END_DECLS
 

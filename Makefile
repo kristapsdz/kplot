@@ -158,6 +158,8 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kplot_attach_smooth.3 \
 		  man/kplot_draw.3 \
 		  man/kplot_free.3 \
+		  man/kplot_get_datacfg.3 \
+		  man/kplot_get_plotcfg.3 \
 	 	  man/kplotcfg_defaults.3
 
 all: libkplot.a $(EXAMPLES)

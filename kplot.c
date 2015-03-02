@@ -109,6 +109,13 @@ kplot_alloc(const struct kplotcfg *cfg)
 	return(p);
 }
 
+struct kplotcfg *
+kplot_get_plotcfg(struct kplot *p)
+{
+
+	return(&p->cfg);
+}
+
 static void
 kplot_data_remove_all(struct kplot *p)
 {
@@ -219,6 +226,22 @@ kplotdat_attach(struct kplot *p, size_t sz, struct kdata **d,
 	p->datas[p->datasz].datasz = sz;
 	p->datas[p->datasz].stype = stype;
 	p->datasz++;
+	return(1);
+}
+
+int
+kplot_get_datacfg(struct kplot *p, size_t pos,
+	struct kdatacfg **datas, size_t *datasz)
+{
+
+	*datas = NULL;
+	*datasz = 0;
+
+	if (pos >= p->datasz)
+		return(0);
+
+	*datas = p->datas[pos].cfgs;
+	*datasz = p->datas[pos].datasz;
 	return(1);
 }
 

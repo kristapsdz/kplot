@@ -1,0 +1,67 @@
+.Dd $Mdocdate: February 11 2015 $
+.Dt KPLOT_GET_DATACFG 3
+.Os
+.Sh NAME
+.Nm kplot_get_datacfg
+.Nd get data configurations for a plot
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft int
+.Fo kplot_get_datacfg
+.Fa "struct kplot *p"
+.Fa "size_t pos"
+.Fa "struct kdatacfg **cfgs"
+.Fa "size_t *cfgsz"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm
+function returns the
+.Vt struct kdatacfg
+assigned to data attached with
+.Xr kdata_attach_data 3 ,
+.Xr kdata_attach_datas 3 ,
+and
+.Xr kdata_attach_smooth 3 .
+Since there may be more than one configuration per attachment,
+.Nm
+will assign the array to
+.Fa cfgs
+and the number of sources to
+.Fa cfgsz .
+The
+.Fa pos
+value refers to the order of attachment.
+.Sh RETURN VALUES
+.Nm
+returns 0 if there is no data source at that index, otherwise it returns
+non-zero and the
+.Fa cfgs
+and
+.Fa cfgsz
+are filled in.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3 ,
+.Xr kplot_attach_data 3 ,
+.Xr kplot_attach_datas 3 ,
+.Xr kplot_attach_smooth 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.
