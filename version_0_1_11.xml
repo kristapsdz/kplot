@@ -2,7 +2,7 @@
 	<header>
 		<h1>0.1.11</h1>
 		<address>Kristaps Dzonsons</address>
-		<time datetime="2015-02-12">2015-02-12</time>
+		<time datetime="2015-02-20">2015-02-20</time>
 	</header>
 	<aside>
 		Add KSMOOTH_PMF to <a href="kplot_attach_smooth.3.html">kplot_attach_smooth(3)</a> and have KSMOOTH_CDF properly normalise the

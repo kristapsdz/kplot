@@ -2,7 +2,7 @@
 
 CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
 CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/usr/X11/include/cairo'`
-VERSION		= 0.1.10
+VERSION		= 0.1.12
 LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcairo'`
 #If you're on GNU/Linux, you'll need to uncomment this.
 #LDADD		+= -lbsd
@@ -13,7 +13,8 @@ VERSIONS	= version_0_1_4.xml \
 		  version_0_1_8.xml \
 		  version_0_1_9.xml \
 		  version_0_1_10.xml \
-		  version_0_1_11.xml
+		  version_0_1_11.xml \
+		  version_0_1_12.xml
 EXAMPLES	= example0 \
 		  example1 \
 		  example2 \
@@ -25,7 +26,8 @@ EXAMPLES	= example0 \
 		  example8 \
 		  example9 \
 		  example10 \
-		  example11
+		  example11 \
+		  example12
 PNGS		= example0.png \
 		  example1.png \
 		  example2.png \
@@ -37,7 +39,8 @@ PNGS		= example0.png \
 		  example8.png \
 		  example9.png \
 		  example10.png \
-		  example11.png
+		  example11.png \
+		  example12.png
 SRCS		= Makefile \
 		  compat.post.h \
 		  compat.pre.h \
@@ -62,6 +65,7 @@ SRCS		= Makefile \
 		  example9.c \
 		  example10.c \
 		  example11.c \
+		  example12.c \
 		  grid.c \
 		  hist.c \
 		  label.c \
@@ -124,6 +128,7 @@ HTMLS		= index.html \
 		  man/kplot_attach_data.3.html \
 		  man/kplot_attach_datas.3.html \
 		  man/kplot_attach_smooth.3.html \
+		  man/kplot_detach.3.html \
 		  man/kplot_draw.3.html \
 		  man/kplot_free.3.html \
 	 	  man/kplotcfg_defaults.3.html
@@ -156,6 +161,7 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kplot_attach_data.3 \
 		  man/kplot_attach_datas.3 \
 		  man/kplot_attach_smooth.3 \
+		  man/kplot_detach.3 \
 		  man/kplot_draw.3 \
 		  man/kplot_free.3 \
 		  man/kplot_get_datacfg.3 \
@@ -172,16 +178,16 @@ install: all
 	install -m 0444 kplot.h $(DESTDIR)$(PREFIX)/include
 	install -m 0444 $(MANS) $(DESTDIR)$(PREFIX)/man/man3
 
-www: $(HTMLS) $(PNGS) kplot-$(VERSION).tgz kplot-$(VERSION).tgz.sha512
+www: $(HTMLS) $(PNGS) kplot.tgz kplot.tgz.sha512
 
 installwww: www
 	mkdir -p $(PREFIX)
 	mkdir -p $(PREFIX)/snapshots
 	install -m 0444 $(PNGS) $(HTMLS) index.css $(PREFIX)
-	install -m 0444 kplot-$(VERSION).tgz $(PREFIX)/snapshots/kplot.tgz
-	install -m 0444 kplot-$(VERSION).tgz.sha512 $(PREFIX)/snapshots/kplot.tgz.sha512
-	install -m 0444 kplot-$(VERSION).tgz $(PREFIX)/snapshots
-	install -m 0444 kplot-$(VERSION).tgz.sha512 $(PREFIX)/snapshots
+	install -m 0444 kplot.tgz $(PREFIX)/snapshots/kplot-$(VERSION).tgz
+	install -m 0444 kplot.tgz.sha512 $(PREFIX)/snapshots/kplot-$(VERSION).tgz.sha512
+	install -m 0444 kplot.tgz $(PREFIX)/snapshots
+	install -m 0444 kplot.tgz.sha512 $(PREFIX)/snapshots
 
 $(EXAMPLES): libkplot.a
 
@@ -221,6 +227,9 @@ example10: example10.c libkplot.a
 example11: example11.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
 
+example12: example12.c libkplot.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
+
 example0.png: example0
 	./example0
 
@@ -257,6 +266,9 @@ example10.png: example10
 example11.png: example11
 	./example11
 
+example12.png: example12
+	./example12
+
 libkplot.a: $(OBJS)
 	$(AR) rs $@ $(OBJS)
 
@@ -276,10 +288,10 @@ compat.h: compat.pre.h compat.post.h
 index.html: index.xml $(VERSIONS)
 	sblg -t index.xml -o- $(VERSIONS) | sed "s!@VERSION@!$(VERSION)!g" >$@
 
-kplot-$(VERSION).tgz.sha512: kplot-$(VERSION).tgz
-	openssl dgst -sha512 kplot-$(VERSION).tgz >$@
+kplot.tgz.sha512: kplot.tgz
+	openssl dgst -sha512 kplot.tgz >$@
 
-kplot-$(VERSION).tgz:
+kplot.tgz:
 	mkdir -p .dist/kplot-$(VERSION)
 	mkdir -p .dist/kplot-$(VERSION)/man
 	cp $(SRCS) .dist/kplot-$(VERSION)
@@ -293,4 +305,4 @@ clean:
 	rm -rf *.dSYM
 	rm -f $(OBJS)
 	rm -f $(HTMLS) $(PNGS)
-	rm -f kplot-$(VERSION).tgz kplot-$(VERSION).tgz.sha512
+	rm -f kplot.tgz kplot.tgz.sha512

@@ -1,0 +1,10 @@
+<article data-sblg-article="1" data-sblg-tags="version">
+	<header>
+		<h1>0.1.12</h1>
+		<address>Kristaps Dzonsons</address>
+		<time datetime="2015-03-24">2015-03-24</time>
+	</header>
+	<aside>
+		Add <a href="kplot_detach.3.html">kplot_detach(3)</a> to remove previously-attached plots.
+	</aside>
+</article>

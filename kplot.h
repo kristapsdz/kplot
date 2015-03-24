@@ -223,6 +223,7 @@ int		 kplotcfg_default_palette(struct kplotccfg **, size_t *);
 void		 ksmthcfg_defaults(struct ksmthcfg *);
 
 struct kplot	*kplot_alloc(const struct kplotcfg *);
+int		 kplot_detach(struct kplot *, const struct kdata *);
 int		 kplot_attach_data(struct kplot *, struct kdata *, 
 			enum kplottype, const struct kdatacfg *);
 int		 kplot_attach_smooth(struct kplot *, struct kdata *, 

@@ -171,6 +171,52 @@ ksmthcfg_defaults(struct ksmthcfg *p)
 	p->movsamples = 3;
 }
 
+int
+kplot_detach(struct kplot *p, const struct kdata *d)
+{
+	size_t		 i, j;
+	struct kplotdat	*dat;
+	void		*pp;
+
+	/* 
+	 * Search for the data plot.
+	 * We look in all plot sources, so if this is just one of a
+	 * multiplot, we'll still remove it.
+	 */
+	for (i = 0; i < p->datasz; i++) {
+		dat = &p->datas[i];
+		for (j = 0; j < dat->datasz; j++)
+			if (dat->datas[j] == d)
+				break;
+		if (j < dat->datasz)
+			break;
+	}
+	/* Not found... */
+	if (i == p->datasz)
+		return(0);
+
+	/* Free the found data plot source. */
+	kplotdat_free(&p->datas[i]);
+
+	/* 
+	 * Move data above the copied region to replace the current
+	 * region.
+	 * This preserves the order of plot sets.
+	 */
+	memmove(&p->datas[i], &p->datas[i + 1], 
+		(p->datasz - i - 1) *
+		sizeof(struct kplotdat));
+	p->datasz--;
+	pp = reallocarray(p->datas, 
+		p->datasz, sizeof(struct kplotdat));
+	if (NULL == pp) {
+		/* This really, really shouldn't happen. */
+		return(0);
+	}
+	p->datas = pp;
+	return(1);
+}
+
 static int
 kplotdat_attach(struct kplot *p, size_t sz, struct kdata **d, 
 	const struct kdatacfg *const *cfg,

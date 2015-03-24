@@ -1,0 +1,61 @@
+.Dd $Mdocdate: February 12 2015 $
+.Dt KPLOT_DETACH 3
+.Os
+.Sh NAME
+.Nm kplot_detach
+.Nd detach plots from the plotting context
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft int
+.Fo kplot_detach
+.Fa "struct kplot *p"
+.Fa "const struct kdata *d"
+.Fc
+.Sh DESCRIPTION
+The
+.Nm
+function detaches a data source
+.Fa d
+from a plotting context
+.Fa p
+as added with
+.Xr kplot_attach_data 3 ,
+.Xr kplot_attach_datas 3 ,
+or
+.Xr kplot_attach_smooth 3 .
+In doing so, it decrements the reference count of the data source.
+.Pp
+If the data source is added with
+.Xr kplot_attach_datas 3 ,
+all of the data sources attached alongside are removed as well.
+.Sh RETURN VALUES
+.Nm
+returns 0 if the data source was not found or reallocation of internal
+structures failed due to memory exhaustion.
+(The latter behaviour is very unusual, as the reallocation is always to
+a smaller buffer.)
+Otherwise it returns non-zero.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplot 3 ,
+.Xr kplot_attach_data 3 ,
+.Xr kplot_attach_datas 3 ,
+.Xr kplot_attach_smooth 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.
