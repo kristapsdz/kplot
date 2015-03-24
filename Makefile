@@ -131,6 +131,8 @@ HTMLS		= index.html \
 		  man/kplot_detach.3.html \
 		  man/kplot_draw.3.html \
 		  man/kplot_free.3.html \
+		  man/kplot_get_datacfg.3.html \
+		  man/kplot_get_plotcfg.3.html \
 	 	  man/kplotcfg_defaults.3.html
 MANS		= man/kdata_array_alloc.3 \
 		  man/kdata_array_fill.3 \
