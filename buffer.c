@@ -51,6 +51,9 @@ kdata_buffer_copy(struct kdata *dst, const struct kdata *src)
 	size_t	 i;
 	int	 rc = 1;
 
+	if (KDATA_BUFFER != dst->type)
+		return(0);
+
 	/* 
 	 * FIXME: use a pairbufsz-type of construct.
 	 * We're not tied to any particular buffer size, so this should

@@ -193,11 +193,13 @@ installwww: www
 
 $(EXAMPLES): libkplot.a
 
+EXAMPLE_LIBS = -lm libkplot.a
+
 example0: example0.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -lm -o $@ $< libkplot.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
 
 example1: example1.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
 
 example2: example2.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< libkplot.a
