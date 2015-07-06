@@ -14,6 +14,8 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+#include "compat.h"
+
 #include <assert.h>
 #include <cairo.h>
 #include <float.h>
@@ -23,7 +25,6 @@
 #include <string.h>
 
 #include "kplot.h"
-#include "compat.h"
 #include "extern.h"
 
 /*
