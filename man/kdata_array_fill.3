@@ -1,4 +1,4 @@
-.Dd $Mdocdate: February 7 2015 $
+.Dd $Mdocdate: July 6 2015 $
 .Dt KDATA_ARRAY_FILL 3
 .Os
 .Sh NAME
@@ -61,14 +61,14 @@ while
 .Nm kdata_array_add
 and
 .Nm kdata_array_fill
-directly modify the buckets at position.
+directly modify the buckets at position
+.Fa pos .
 The
 .Nm kdata_array_fill_ydoubles
 and
 .Nm kdata_array_fill_ysizes
 set values to the corresponding array indices, which are assumed to be
 the same length as the data source (else the behaviour is undefined).
-.Fa pos .
 .Sh RETURN VALUES
 .Nm kdata_array_fill ,
 .Nm kdata_array_fill_ydoubles ,
