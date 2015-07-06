@@ -1,9 +1,10 @@
 .SUFFIXES: .3 .3.html
 
 CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
-CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/usr/X11/include/cairo'`
-VERSION		= 0.1.12
-LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcairo'`
+#If you're on Mac OSX without XQuarts, you'll need /usr/X11 instead of /opt/X11!
+CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/opt/X11/include/cairo'`
+VERSION		= 0.1.13
+LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/opt/X11/lib -lcairo'`
 #If you're on GNU/Linux, you'll need to uncomment this.
 #LDADD		+= -L/usr/local/include -lbsd
 VERSIONS	= version_0_1_4.xml \
@@ -14,7 +15,8 @@ VERSIONS	= version_0_1_4.xml \
 		  version_0_1_9.xml \
 		  version_0_1_10.xml \
 		  version_0_1_11.xml \
-		  version_0_1_12.xml
+		  version_0_1_12.xml \
+		  version_0_1_13.xml
 EXAMPLES	= example0 \
 		  example1 \
 		  example2 \
@@ -193,46 +195,46 @@ installwww: www
 
 $(EXAMPLES): libkplot.a
 
-EXAMPLE_LIBS = -lm libkplot.a
+EXAMPLE_LIBS = libkplot.a $(LDADD) -lm 
 
 example0: example0.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example1: example1.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example2: example2.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example3: example3.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example4: example4.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example5: example5.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example6: example6.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example7: example7.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example8: example8.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example9: example9.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example10: example10.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example11: example11.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example12: example12.c libkplot.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDADD) -o $@ $< $(EXAMPLE_LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example0.png: example0
 	./example0
