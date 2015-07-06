@@ -5,7 +5,7 @@ CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/usr/X11/inclu
 VERSION		= 0.1.12
 LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/usr/X11/lib -lcairo'`
 #If you're on GNU/Linux, you'll need to uncomment this.
-LDADD		+= -L/usr/local/include -lbsd
+#LDADD		+= -L/usr/local/include -lbsd
 VERSIONS	= version_0_1_4.xml \
 		  version_0_1_5.xml \
 		  version_0_1_6.xml \
