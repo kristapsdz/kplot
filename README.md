@@ -14,8 +14,11 @@ One creates a data source and a plot, fills the data source with points,
 connects the source to the plot, the plots.
 The data source can have its values changed, the plot can be re-plotted,
 etc.
-The following example creates [this
-graph](http://kristaps.bsd.lv/kplot/example0.png).
+
+![log-scale](http://kristaps.bsd.lv/kplot/example0.png)
+
+The above graph is created by the following.
+Note that there is little error-checking!
 
 	#include <cairo.h>
 	#include <math.h>
