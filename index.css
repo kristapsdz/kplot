@@ -1,17 +1,31 @@
 body			{ margin: 0; 
 			  font-family: serif;
-			  font-size: 14pt; }
+			  font-family: Garamond,Baskerville,Baskerville Old Face,Hoefler Text,Times New Roman,serif;
+			  font-size: 12pt;
+			  font-style: normal;
+			  font-variant: normal;
+			  font-weight: 400;
+			  line-height: 18pt; }
+h1 			{ font-family: Georgia, Times, Times New Roman, serif;
+			  font-size: 24pt;
+			  font-style: normal;
+			  font-variant: normal;
+			  font-weight: normal;
+			  line-height: 26.4pt; }
 pre			{ padding: 1em 4%; 
 			  background-color: #333; 
 			  font-family: monospace;
 			  color: #eee; }
 .nm			{ font-style: italic; }
 header .nm		{ font-style: normal;
-			  color: #333;
-			  font-weight: bolder; }
-header nav a		{ color: #444; 
-			  text-shadow: 1px 1px #ccc;
-			  font-size: 16pt; }
+			  color: #333; }
+header nav span	+ span	{ border-left: thin solid #888; 
+			  margin-left: 1ex;
+			  padding-left: 1ex; }
+header nav a		{ color: #222; 
+			  display: inline-block;
+			  margin-right: 1ex;
+			  text-shadow: 1px 1px #ccc; }
 header nav a:hover	{ color: #000;
 			  text-shadow: 1px 1px #eee; }
 header h1		{ margin: 0.5ex 0; }
@@ -20,7 +34,7 @@ pre.prettyprint		{ border: none;
 			  line-height: 130%;
 			  margin: 0; 
 			  overflow: hidden;
-			  box-shadow: 0px 4px 7px #888;
+			  box-shadow: 0px 1px 2px #888;
 			  width: auto; }
 pre.prettyprint a	{ font-style: italic; }
 pre.prettyprint a:hover	{ font-style: italic; }
@@ -28,12 +42,11 @@ pre, code		{ font-size: 10pt;
 			  font-family: monospace; }
 pre			{ margin: 0; }
 pre a			{ color: yellow; }
-#codesample		{ box-shadow: 0px -2px 4px #333; }
+#codesample		{ box-shadow: 0px -1px 2px #333; }
 header			{ text-align: center; 
 			  background-color: #eee;
 			  padding: 1em 0; }
 header > div > *	{ display: inline-block; 
-			  font-size: 24pt;
 			  margin: 0; }
 nav[data-sblg-nav], p	{ padding: 0 4%; 
 			  line-height: 120%; }
@@ -61,6 +74,12 @@ footer a		{ color: #000; }
 nav[data-sblg-nav] ul	{ list-style-type: none; 
 			  padding: 0;
 			  margin: 0; }
-nav[data-sblg-nav] li	{ margin: 1ex 0; }
+nav[data-sblg-nav] li	{ margin-bottom: 1em; }
 nav[data-sblg-nav] li > div:last-child
 			{ margin-left: 3ex; }
+footer img		{ margin-bottom: -8px; }
+@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+h1			{ font-size: 17pt; }
+nav a span		{ display: none; }
+pre			{ font-size: 8pt; }
+}

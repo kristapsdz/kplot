@@ -24,9 +24,27 @@
 				<span itemprop="description" class="nd">Cairo plotting library</span>
 			</h1>
 			<nav>
-				<a itemprop="downloadURL" href="snapshots/kplot.tgz"><i class="fa fa-fw fa-gears"></i></a>
-				<a href="snapshots/kplot.tgz.sha512"><i class="fa fa-fw fa-lock"></i></a>
-				<a href="snapshots"><i class="fa fa-fw fa-archive"></i></a>
+				<span>
+					Version @VERSION@
+				</span>
+				<span>
+					<a itemprop="downloadURL" href="snapshots/kplot.tgz">
+						<span>Source</span>
+						<i class="fa fa-gears"></i>
+					</a>
+					<a href="snapshots/kplot.tgz.sha512">
+						<span>Digest</span>
+						<i class="fa fa-lock"></i>
+					</a>
+					<a href="https://github.com/kristapsdz/kplot">
+						<span>GitHub</span>
+						<i class="fa fa-github"></i>
+					</a>
+					<a href="snapshots">
+						<span>Archive</span>
+						<i class="fa fa-archive"></i>
+					</a>
+				</span>
 			</nav>
 		</header>
 		<figure id="codesample">
@@ -91,7 +109,21 @@ main(void)
 			<div>${sblg-aside}</div>
 		</nav>
 		<footer>
-			&#169; 2014&#8211;2015, <a href="http://kristaps.bsd.lv">Kristaps Dzonsons</a>
+			<div>
+				&#169; 2014&#8211;2016, <a href="http://kristaps.bsd.lv">Kristaps Dzonsons</a>
+			</div>
+			<div>
+				<a href="snapshots/kplot.tgz"><i class="fa fa-gears"></i></a>
+				<a href="snapshots/kplot.tgz.sha512"><i class="fa fa-lock"></i></a>
+				<a href="https://github.com/kristapsdz/kplot"><i class="fa fa-github"></i></a>
+				<a href="snapshots"><i class="fa fa-archive"></i></a>
+				<span>Built with <a href="http://kristaps.bsd.lv/sblg">sblg</a> on <a href="http://www.openbsd.org">OpenBSD</a></span>
+			</div>
+			<div>
+				<a href="https://scan.coverity.com/projects/kplot">
+					<img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/7934/badge.svg" />
+				</a>
+			</div>
 		</footer>
 	</body>
 </html>

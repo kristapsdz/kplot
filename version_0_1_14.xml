@@ -1,0 +1,11 @@
+<article data-sblg-article="1" data-sblg-tags="version">
+	<header>
+		<h1>0.1.14</h1>
+		<address>Kristaps Dzonsons</address>
+		<time datetime="2016-02-11">2016-02-11</time>
+	</header>
+	<aside>
+		Mirror the repository on <a href="https://github.com/kristapsdz/kplot">GitHub</a>.
+		Register the project with <a href="https://scan.coverity.com/projects/kplot">Coverity</a>.
+	</aside>
+</article>
