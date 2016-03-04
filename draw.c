@@ -387,8 +387,9 @@ kplotctx_draw_yerrline_baselines(struct kplotctx *ctx,
 	assert(d->datasz > 1);
 	ksubwin_lines(ctx, &d->cfgs[0]);
 	kplotctx_line_init(ctx, &d->cfgs[0].line);
-	kplotctx_point_to_real
+	rc = kplotctx_point_to_real
 		(&d->datas[0]->pairs[start], &pair, ctx);
+	assert(0 != rc);
 	cairo_move_to(ctx->cr, pair.x, pair.y);
 	for (i = start; i < end; i++) {
 		if ( ! (kpair_vrfy(&d->datas[0]->pairs[i]) &&
@@ -416,7 +417,8 @@ kplotctx_draw_yerrline_pairlines(struct kplotctx *ctx,
 	orig.x = d->datas[0]->pairs[start].x;
 	orig.y = d->datas[0]->pairs[start].y +
 		 d->datas[1]->pairs[start].y;
-	kplotctx_point_to_real(&orig, &pair, ctx);
+	rc = kplotctx_point_to_real(&orig, &pair, ctx);
+	assert(0 != rc);
 	cairo_move_to(ctx->cr, pair.x, pair.y);
 	for (i = start; i < end; i++) {
 		if ( ! (kpair_vrfy(&d->datas[0]->pairs[i]) &&
