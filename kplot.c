@@ -94,7 +94,6 @@ kplot_alloc(const struct kplotcfg *cfg)
 	p->cfg.clrs = calloc(p->cfg.clrsz, sizeof(struct kplotccfg));
 
 	if (NULL == p->cfg.clrs) {
-		free(p);
 		p->cfg.clrsz = 0;
 		kplot_free(p);
 		return(NULL);
