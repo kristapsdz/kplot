@@ -1,4 +1,4 @@
-/*	$Id$ */
+/*	$Id: kplot.h,v 1.40 2015/03/24 13:05:05 kristaps Exp $ */
 /*
  * Copyright (c) 2014, 2015 Kristaps Dzonsons <kristaps@bsd.lv>
  *
@@ -24,8 +24,10 @@ struct 	kpair {
 
 enum	kplottype {
 	KPLOT_POINTS,
+	KPLOT_MARKS,
 	KPLOT_LINES,
-	KPLOT_LINESPOINTS
+	KPLOT_LINESPOINTS,
+	KPLOT_LINESMARKS
 };
 
 enum	ksmthtype {
