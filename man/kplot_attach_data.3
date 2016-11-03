@@ -1,4 +1,4 @@
-.Dd $Mdocdate: February 11 2015 $
+.Dd $Mdocdate: July 6 2015 $
 .Dt KPLOT_ATTACH_DATA 3
 .Os
 .Sh NAME
@@ -32,13 +32,16 @@ object are as follows:
 .Bl -tag -width Ds
 .It Va point
 The configuration for
-.Dv KPLOT_POINTS
+.Dv KPLOT_POINTS ,
+.Dv KPLOT_MARKS ,
+.Dv KPLOT_LINESMARKS ,
 and
 .Dv KPLOT_LINESPOINTS
 plots.
 .It Va line
 The configuration for
 .Dv KPLOT_LINES
+.Dv KPLOT_LINESMARKS
 and
 .Dv KPLOT_LINESPOINTS
 types.
@@ -84,6 +87,7 @@ The diameter of the point line in pixels as defined by Cairo's
 By default, this is 1.0.
 .It Va radius
 The circle radius defaulting to 3.0.
+It is also used for the mark width.
 .It Va dashes
 A dash configuration as described by Cairo's
 .Fn cairo_set_dash

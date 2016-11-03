@@ -24,8 +24,10 @@ struct 	kpair {
 
 enum	kplottype {
 	KPLOT_POINTS,
+	KPLOT_MARKS,
 	KPLOT_LINES,
-	KPLOT_LINESPOINTS
+	KPLOT_LINESPOINTS,
+	KPLOT_LINESMARKS
 };
 
 enum	ksmthtype {
