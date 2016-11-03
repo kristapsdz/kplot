@@ -4,9 +4,10 @@
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 		<meta charset="utf-8" /> 
 		<title>kplot: Cairo plotting library</title>
-		<link rel="stylesheet" href="index.css" type="text/css" />
-		<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=sons-of-obsidian"></script>
-		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="index.css" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="https://code.cdn.mozilla.net/fonts/fira.css" />
+		<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=sons-of-obsidian"></script>
 	</head>
 	<body itemscope="itemscope" itemtype="http://schema.org/SoftwareApplication">
 		<figure id="gallery">
@@ -29,24 +30,28 @@
 				</span>
 				<span>
 					<a itemprop="downloadURL" href="snapshots/kplot.tgz">
-						<span>Source</span>
 						<i class="fa fa-gears"></i>
 					</a>
 					<a href="snapshots/kplot.tgz.sha512">
-						<span>Digest</span>
 						<i class="fa fa-lock"></i>
 					</a>
 					<a href="https://github.com/kristapsdz/kplot">
-						<span>GitHub</span>
 						<i class="fa fa-github"></i>
 					</a>
 					<a href="snapshots">
-						<span>Archive</span>
 						<i class="fa fa-archive"></i>
 					</a>
 				</span>
 			</nav>
 		</header>
+		<p class="intro">
+			This is an example usage of <span class="nm">kplot</span>, an ISO C, <a href="http://opensource.org/licenses/ISC"
+				rel="license">ISC</a>-licensed UNIX programming library for plotting graphs on a <a
+				href="http://cairographics.org">Cairo</a> surface.
+			It handles drawing margins, axis labels, tic labels, tics, borders, grids, and the data itself.
+			Data may be specified structurally as finite buckets, range histograms, arrays, and vectors.
+			Data may also be computed from other sources, such as the mean and standard deviation.
+		</p>
 		<figure id="codesample">
 			<pre class="prettyprint linenums">#include &lt;cairo.h&gt;
 #include &lt;math.h&gt;
@@ -57,47 +62,44 @@
 int
 main(void)
 {
-	struct kpair	 points1[50], points2[50];
-	struct kdata	*d1, *d2;
-	struct kplot	*p;
-	cairo_surface_t	*surf;
-	size_t		 i;
-	cairo_t		*cr;
+  struct kpair points1[50], points2[50];
+  struct kdata *d1, *d2;
+  struct kplot *p;
+  cairo_surface_t *surf;
+  size_t i;
+  cairo_t *cr;
 
-	for (i = 0; i &lt; 50; i++) {
-		points1[i].x = points2[i].x = (i + 1) / 50.0;
-		points1[i].y = log((i + 1) / 50.0);
-		points2[i].y = -log((i + 1) / 50.0) + points1[0].y;
-	}
-	d1 = <a href="kdata_array_alloc.3.html">kdata_array_alloc</a>(points1, 50);
-	d2 = <a href="kdata_array_alloc.3.html">kdata_array_alloc</a>(points2, 50);
-	p = <a href="kplot_alloc.3.html">kplot_alloc</a>(NULL);
-	<a href="kplot_attach_data.3.html">kplot_attach_data</a>(p, d1, KPLOT_POINTS, NULL);
-	<a href="kplot_attach_data.3.html">kplot_attach_data</a>(p, d2, KPLOT_LINES, NULL);
-	<a href="kdata_destroy.3.html">kdata_destroy</a>(d1);
-	<a href="kdata_destroy.3.html">kdata_destroy</a>(d2);
-	surf = cairo_image_surface_create
-		(CAIRO_FORMAT_ARGB32, 600, 400);
-	cr = cairo_create(surf);
-	cairo_surface_destroy(surf);
-	<a href="kplot_draw.3.html">kplot_draw</a>(p, 600.0, 400.0, cr);
-	cairo_surface_write_to_png
-		(cairo_get_target(cr), "<a href="example0.png">example0.png</a>");
-	cairo_destroy(cr);
-	<a href="kplot_free.3.html">kplot_free</a>(p);
-	return(EXIT_SUCCESS);
+  for (i = 0; i &lt; 50; i++) {
+    points1[i].x = points2[i].x = (i + 1) / 50.0;
+    points1[i].y = log((i + 1) / 50.0);
+    points2[i].y = -log((i + 1) / 50.0) + points1[0].y;
+  }
+  d1 = <a href="kdata_array_alloc.3.html">kdata_array_alloc</a>(points1, 50);
+  d2 = <a href="kdata_array_alloc.3.html">kdata_array_alloc</a>(points2, 50);
+  p = <a href="kplot_alloc.3.html">kplot_alloc</a>(NULL);
+  <a href="kplot_attach_data.3.html">kplot_attach_data</a>(p, d1, KPLOT_POINTS, NULL);
+  <a href="kplot_attach_data.3.html">kplot_attach_data</a>(p, d2, KPLOT_LINES, NULL);
+  <a href="kdata_destroy.3.html">kdata_destroy</a>(d1);
+  <a href="kdata_destroy.3.html">kdata_destroy</a>(d2);
+  surf = cairo_image_surface_create
+    (CAIRO_FORMAT_ARGB32, 600, 400);
+  cr = cairo_create(surf);
+  cairo_surface_destroy(surf);
+  <a href="kplot_draw.3.html">kplot_draw</a>(p, 600.0, 400.0, cr);
+  cairo_surface_write_to_png
+    (cairo_get_target(cr), "<a href="example0.png">example0.png</a>");
+  cairo_destroy(cr);
+  <a href="kplot_free.3.html">kplot_free</a>(p);
+  return(EXIT_SUCCESS);
 }</pre>
 		</figure>
 		<p>
-			The above is an example usage of <span class="nm">kplot</span>, an ISO C, <a href="http://opensource.org/licenses/ISC"
-				rel="license">ISC</a>-licensed UNIX programming library for plotting graphs on a <a
-				href="http://cairographics.org">Cairo</a> surface.
-			It handles drawing margins, axis labels, tic labels, tics, borders, grids, and the data itself.
-			Data may be specified structurally as finite buckets, range histograms, arrays, and vectors.
-			Data may also be computed from other sources, such as the mean and standard deviation.
 			For a complete reference, consult <a href="kplot.3.html">kplot(3)</a>.
 			Download sources from <a href="snapshots/kplot.tgz">kplot.tgz</a> (current version @VERSION@, <a href="snapshots/kplot.tgz.sha512">sha512</a>) or
 			browse the <a href="snapshots">archive</a>.
+			If you'd like to contribute, please contact <a href="https://kristaps.bsd.lv">Kristaps</a> directly, or use the 
+			<a href="https://github.com/kristapsdz/kplot">GitHub/kplot</a> page.
+			The source has been tested on OpenBSD, FreeBSD, NetBSD, Mac OS X, and various Linux distributions.
 			<span class="nm">kplot</span> is a <a href="http://www.bsd.lv">BSD.lv</a> project.
 		</p>
 		<nav data-sblg-nav="1" data-sblg-navcontent="1">
@@ -113,10 +115,10 @@ main(void)
 				&#169; 2014&#8211;2016, <a href="http://kristaps.bsd.lv">Kristaps Dzonsons</a>
 			</div>
 			<div>
-				<a href="snapshots/kplot.tgz"><i class="fa fa-gears"></i></a>
-				<a href="snapshots/kplot.tgz.sha512"><i class="fa fa-lock"></i></a>
-				<a href="https://github.com/kristapsdz/kplot"><i class="fa fa-github"></i></a>
-				<a href="snapshots"><i class="fa fa-archive"></i></a>
+				<a href="snapshots/kplot.tgz"><i class="fa fa-fw fa-gears"></i></a>
+				<a href="snapshots/kplot.tgz.sha512"><i class="fa fa-fw fa-lock"></i></a>
+				<a href="https://github.com/kristapsdz/kplot"><i class="fa fa-fw fa-github"></i></a>
+				<a href="snapshots"><i class="fa fa-fw fa-archive"></i></a>
 				<span>Built with <a href="http://kristaps.bsd.lv/sblg">sblg</a> on <a href="http://www.openbsd.org">OpenBSD</a></span>
 			</div>
 			<div>
