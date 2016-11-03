@@ -174,4 +174,16 @@
 			Register the project with <a href="https://scan.coverity.com/projects/kplot">Coverity</a> and fixed a minor issues in an error path.
 		</aside>
 	</article>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.15</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2016-11-02">2016-11-02</time>
+		</header>
+		<aside>
+			Merge new <code>KPLOT_MARKS</code> and <code>KPLOT_LINESMARKS</code> provided in <a
+				href="https://github.com/kristapsdz/kplot/pull/1">pull/1</a>: thanks!
+			While there, also tune up some of the documentation.
+		</aside>
+	</article>
 </articles>
