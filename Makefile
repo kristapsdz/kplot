@@ -3,7 +3,7 @@
 CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
 #If you're on Mac OSX without XQuarts, you'll need /usr/X11 instead of /opt/X11!
 CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/opt/X11/include/cairo'`
-VERSION		= 0.1.14
+VERSION		= 0.1.15
 LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/opt/X11/lib -lcairo'`
 #If you're on GNU/Linux, you'll need to uncomment this.
 #LDADD		+= -L/usr/local/include -lbsd
