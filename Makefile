@@ -180,7 +180,7 @@ www: $(HTMLS) $(PNGS) kplot.tgz kplot.tgz.sha512
 installwww: www
 	mkdir -p $(PREFIX)
 	mkdir -p $(PREFIX)/snapshots
-	install -m 0444 $(PNGS) $(HTMLS) index.css $(PREFIX)
+	install -m 0444 $(PNGS) $(HTMLS) index.css mandoc.css $(PREFIX)
 	install -m 0444 kplot.tgz $(PREFIX)/snapshots/kplot-$(VERSION).tgz
 	install -m 0444 kplot.tgz.sha512 $(PREFIX)/snapshots/kplot-$(VERSION).tgz.sha512
 	install -m 0444 kplot.tgz $(PREFIX)/snapshots
@@ -271,6 +271,9 @@ example11.png: example11
 example12.png: example12
 	./example12
 
+example13.png: example13
+	./example13
+
 libkplot.a: $(OBJS)
 	$(AR) rs $@ $(OBJS)
 
@@ -282,7 +285,7 @@ compat.h: compat.pre.h compat.post.h
 	  cat compat.post.h ; ) >$@
 
 .3.3.html:
-	mandoc -Thtml -Oman=%N.%S.html $< >$@
+	mandoc -Thtml -Ostyle=mandoc.css,man=%N.%S.html $< >$@
 
 .c.o:
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
