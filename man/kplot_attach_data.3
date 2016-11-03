@@ -1,4 +1,4 @@
-.Dd $Mdocdate: July 6 2015 $
+.Dd $Mdocdate: November 3 2016 $
 .Dt KPLOT_ATTACH_DATA 3
 .Os
 .Sh NAME
@@ -26,6 +26,26 @@ to a plotting context
 reference-counting the data source in the process.
 The plot style assigned to the plot is
 .Fa t .
+The style may be one of the following:
+.Bl -tag -width Ds
+.It Dv KPLOT_POINTS
+Points (really circles of a given radius).
+.It Dv KPLOT_MARKS
+Marks in the form of x's of a given width.
+.It Dv KPLOT_LINES
+Smooth lines.
+.It Dv KPLOT_LINESPOINTS
+A combination of
+.Dv KPLOT_LINES
+and
+.Dv KPLOT_POINTS .
+.It Dv KPLOT_LINESMARKS
+A combination of
+.Dv KPLOT_LINES
+and
+.Dv KPLOT_MARKS .
+.El
+.Pp
 The options provided via the
 .Fa cfg
 object are as follows:
