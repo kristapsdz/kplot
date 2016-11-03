@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<articles>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.4</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2014-11-30">2014-11-30</time>
+		</header>
+		<aside>
+			Initial public release.
+			(Not the initial private release, however.)
+			The API is very likely to change!
+		</aside>
+	</article>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.5</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2015-01-16">2015-01-16</time>
+		</header>
+		<aside>
+			Removed the <code>kdata_copy()</code> function in favour of <a href="kdata_buffer_alloc.3.html">kdata_buffer_alloc(3)</a> and <a
+				href="kdata_buffer_copy.3.html">kdata_buffer_copy(3)</a>, which quickly copy only the value pairs of their sources.
+			The reason for this removal is the addition of <q>dependant</q> data sources (e.g., the <a
+				href="kdata_mean_alloc.3.html">kdata_mean_alloc(3)</a>), which act on structural data sources (such as buckets) that
+			compute values based upon existing value-pairs.
+			Also removed the <code>kdata_array_realloc()</code> function.
+			For clarity, renamed <code>kdata_hist_increment(3)</code>, <code>kdata_bucket_increment(3)</code>, 
+			<code>kdata_vector_add(3)</code>, and <code>kplot_data_add(3)</code> 
+			to <a href="kdata_hist_add.3.html">kdata_hist_add(3)</a>, <a
+				href="kdata_bucket_add.3.html">kdata_bucket_add(3)</a>, <a
+				href="kdata_vector_append.3.html">kdata_vector_append(3)</a>, and <a 
+				href="kplot_data_attach.3.html">kplot_data_attach(3)</a>, respectively.
+			Added <a href="kdata_array_fill.3.html">kdata_array_add(3)</a>
+			and <a href="kdata_array_fill.3.html">kdata_array_set(3)</a>
+			for completeness.
+		</aside>
+	</article>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.6</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2015-01-22">2015-01-22</time>
+		</header>
+		<aside>
+			Added the <a href="kdata_stddev_alloc.3.html">kdata_stddev_alloc(3)</a> function family for computing the running standard
+			deviation of a data source (by way of its unbiased sample variance).
+			Also added the <a href="kplot_datas_attach.3.html">kplot_datas_attach(3)</a> function for multi-set plots, e.g., y-error lines.
+		</aside>
+	</article>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.7</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2015-01-26">2015-01-26</time>
+		</header>
+		<aside>
+			Renamed <code>kplot_data_attach(3)</code> and <code>kplot_datas_attach(3)</code> to <a
+				href="kplot_attach_data.3.html">kplot_attach_data(3)</a> and <a
+				href="kplot_attach_datas.3.html">kplot_attach_datas(3)</a>, respectively.
+			Added a <code>KPLOT_LINESPOINTS</code> plotting type to <a href="kplot_attach_data.3.html">kplot_attach_data(3)</a>.
+			Added <a href="kplot_attach_smooth.3.html">kplot_attach_smooth(3)</a> functionality, for the time being with only a moving
+			average and CDF generator.
+			Removed <code>kplot_data_remove_all(3)</code> (to be re-added and re-named when necssary).
+			Added <a href="kdata_max.3.html">kdata_max(3)</a> and <a href="kdata_min.3.html">kdata_min(3)</a>.
+			Modified <a href="kdata_bucket_add.3.html">kdata_bucket_set(3)</a> to accept both the x and y values.
+			Fixed <a href="kdata_hist_add.3.html">kdata_hist_add(3)</a> and <a href="kdata_hist_set.3.html">kdata_hist_set(3)</a> range
+			checks.
+			Added <code>KPLOTS_YERRORBAR</code> to <a href="kplot_attach_datas.3.html">kplot_attach_datas(3)</a>.
+		</aside>
+	</article>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.8</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2015-01-31">2015-01-31</time>
+		</header>
+		<aside>
+			Renamed <code>kdata_min(3)</code> and <code>kdata_max(3)</code> to <a href="kdata_xmin.3.html">kdata_ymin(3)</a> and <a
+				href="kdata_xmax.3.html">kdata_ymax(3)</a>, respectively.
+			Added <a href="kdata_xmin.3.html">kdata_xmin(3)</a> and <a href="kdata_xmax.3.html">kdata_xmax(3)</a>.
+			Added <a href="kdata_xmean.3.html">kdata_xmean(3)</a>, <a href="kdata_xmean.3.html">kdata_ymean(3)</a>,
+			<a href="kdata_xstddev.3.html">kdata_xstddev(3)</a>, and <a href="kdata_xstddev.3.html">kdata_ystddev(3)</a>.
+			Added (or rather, exposed) <a href="kdata_set.3.html">kdata_set(3)</a> for generically modifying bucket contents and
+			<a href="kdata_get.3.html">kdata_get(3)</a> for getting.
+			Added <a href="kdata_pmfmean.3.html">kdata_pmfmean(3)</a>, <a href="kdata_pmfstddev.3.html">kdata_pmfstddev(3)</a>, and <a
+				href="kdata_pmfvar.3.html">kdata_pmfvar(3)</a>.
+		</aside>
+	</article>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.9</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2015-02-07">2015-02-07</time>
+		</header>
+		<aside>
+			Stipulated that <a href="kplot_draw.3.html">kplot_draw(3)</a> can return error.
+			Overhauled colour management: colours may either be palette-driven, which indexes into a list of patterns; a custom pattern; or
+			a default that depends on the colour context.
+			By default, grid components (e.g., tic and grid lines) are assigned specific colours and lines and points are assigned a
+			palette.
+			The palette itself is also most robust.
+			This overhaul works much nicer with the Cairo colour model itself and allows for all sorts of customisation, e.g., linear fading
+			and so on.
+			Backed out <code>kdata_set(3)</code>, as some sources do extra bookkeeping that this would bypass in general use.
+			Added <a href="kdata_vector_append.3.html">kdata_vector_set(3)</a>,
+			<a href="kdata_array_fill.3.html">kdata_array_fill_ydoubles(3)</a>, and
+			<a href="kdata_array_fill.3.html">kdata_array_fill_ysizes(3)</a>.
+			Fixed clipping model when extrema (which are now in <a href="kplot_draw.3.html">kplot_draw(3)</a> instead of per-line) are
+			specified.
+		</aside>
+	</article>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.10</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2015-02-11">2015-02-11</time>
+		</header>
+		<aside>
+			Allow for x2axislabel (top) and y2axislabel (right).
+			Add KPLOTCTYPE_RGBA, which is like KPLOTCTYPE_PATTERN except it can be bound as a source without allocating the pattern object.
+			Move kplotcfg assignment into <a href="kplot_alloc.3.html">kplot_alloc(3)</a>.
+			Make kplotcfg colour palette use the kplotccfg (instead of cairo_pattern_t), and use RGBA as the default.
+			Also make default colours (tics, lines, etc.) use RGBA instead of patterns.
+			This allows the default allocation of colours not to use dynamic memory (using cairo_source_set_rgba instead of allocating a pattern).
+			As a side-effect, <a href="kplot_draw.3.html">kplot_draw(3)</a> no longer does any allocations, and thus has no return value.
+		</aside>
+	</article>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.12</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2015-03-24">2015-03-24</time>
+		</header>
+		<aside>
+			Add <a href="kplot_detach.3.html">kplot_detach(3)</a> to remove previously-attached plots.
+		</aside>
+	</article>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.11</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2015-02-20">2015-02-20</time>
+		</header>
+		<aside>
+			Add KSMOOTH_PMF to <a href="kplot_attach_smooth.3.html">kplot_attach_smooth(3)</a> and have KSMOOTH_CDF properly normalise the
+			y-values.
+			Add <a href="kplot_get_datacfg.3.html">kplot_get_datacfg(3)</a> and <a href="kplot_get_plotcfg.3.html">kplot_get_plotcfg(3)</a>
+			to retrieve (and possibly modify) plot configurations.
+		</aside>
+	</article>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.13</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2015-07-06">2015-07-06</time>
+		</header>
+		<aside>
+			Clean up typos in the manpages (patch from Svyatoslav Mishyn&#8212;thanks!).
+			Augment the compatibility framework to compile on systems without <code>__BEGIN_DECLS</code> and so forth (e.g., <a
+				href="http://www.musl-libc.org/">musl</a>).
+			Compiling with <a href="http://xquartz.macosforge.org/landing/">XQuartz</a> now default for Mac OS X (see the <span
+				class="file">Makefile</span> for the small change for compiling with the native X11).
+		</aside>
+	</article>
+	<article data-sblg-article="1" data-sblg-tags="version">
+		<header>
+			<h1>0.1.14</h1>
+			<address>Kristaps Dzonsons</address>
+			<time datetime="2016-03-02">2016-03-02</time>
+		</header>
+		<aside>
+			Mirror the repository on <a href="https://github.com/kristapsdz/kplot">GitHub</a>.
+			Register the project with <a href="https://scan.coverity.com/projects/kplot">Coverity</a> and fixed a minor issues in an error path.
+		</aside>
+	</article>
+</articles>

@@ -7,17 +7,6 @@ VERSION		= 0.1.14
 LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/opt/X11/lib -lcairo'`
 #If you're on GNU/Linux, you'll need to uncomment this.
 #LDADD		+= -L/usr/local/include -lbsd
-VERSIONS	= version_0_1_4.xml \
-		  version_0_1_5.xml \
-		  version_0_1_6.xml \
-		  version_0_1_7.xml \
-		  version_0_1_8.xml \
-		  version_0_1_9.xml \
-		  version_0_1_10.xml \
-		  version_0_1_11.xml \
-		  version_0_1_12.xml \
-		  version_0_1_13.xml \
-		  version_0_1_14.xml
 EXAMPLES	= example0 \
 		  example1 \
 		  example2 \
@@ -298,8 +287,8 @@ compat.h: compat.pre.h compat.post.h
 .c.o:
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
-index.html: index.xml $(VERSIONS)
-	sblg -t index.xml -o- $(VERSIONS) | sed "s!@VERSION@!$(VERSION)!g" >$@
+index.html: index.xml versions.xml
+	sblg -t index.xml -o- versions.xml | sed "s!@VERSION@!$(VERSION)!g" >$@
 
 kplot.tgz.sha512: kplot.tgz
 	openssl dgst -sha512 kplot.tgz >$@
