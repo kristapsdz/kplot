@@ -173,7 +173,7 @@ install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/share/man/man3
 	install -m 0444 libkplot.a $(DESTDIR)$(PREFIX)/lib
 	install -m 0444 kplot.h $(DESTDIR)$(PREFIX)/include
-	install -m 0444 $(MANS) $(DESTDIR)$(PREFIX)/man/man3
+	install -m 0444 $(MANS) $(DESTDIR)$(PREFIX)/share/man/man3
 
 www: $(HTMLS) $(PNGS) kplot.tgz kplot.tgz.sha512
 
