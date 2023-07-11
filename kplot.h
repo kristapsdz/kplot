@@ -168,9 +168,28 @@ struct	kplotcfg {
 	double		  extrema_ymax;
 };
 
+struct  kplotctx {
+    cairo_t     *cr; /* cairo context */
+    double       h; /* height of context */
+    double       w; /* width of context */
+    struct kpair     minv; /* minimum data point values */
+    struct kpair     maxv; /* maximum data point values */
+    struct kplotcfg  cfg;
+
+    /*
+     * When computing the plot context, we need to account for a
+     * margin, labels, and boundary.
+     * To do this, we use these "soft" offset and dimensions.
+     * Once we've accounted for the above, we'll use this to
+     * translate and resize the Cairo context for graphing.
+     */
+    struct kpair     offs;
+    struct kpair     dims;
+};
+
+
 struct 	kdata;
 struct	kplot;
-struct	kplotctx;
 
 __BEGIN_DECLS
 
