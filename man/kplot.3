@@ -47,6 +47,8 @@ by multiple plots.
 .It
 Draw plots to Cairo contexts with
 .Xr kplot_draw 3 .
+or
+.Xr kplotctx_draw 3 .
 .It
 Free plots with
 .Xr kplot_free 3
@@ -57,6 +59,8 @@ and data sources with
 Each plot domain and range is extended to fit all of its data sources at
 the moment
 .Xr kplot_draw 3
+or
+.Xr kplotctx_draw 3 .
 is invoked.
 .Ss Styles
 Styles are applied to plots and when a plot data source is added to a
@@ -179,6 +183,7 @@ functions are also provided.
 .Xr kplot_attach_smooth 3 ,
 .Xr kplot_detach 3 ,
 .Xr kplot_draw 3 ,
+.Xr kplotctx_draw 3 ,
 .Xr kplot_free 3 ,
 .Xr kplot_get_datacfg 3 ,
 .Xr kplot_get_plotcfg 3 ,

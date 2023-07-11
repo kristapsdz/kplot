@@ -160,6 +160,7 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kplot_attach_smooth.3 \
 		  man/kplot_detach.3 \
 		  man/kplot_draw.3 \
+		  man/kplotctx_draw.3 \
 		  man/kplot_free.3 \
 		  man/kplot_get_datacfg.3 \
 		  man/kplot_get_plotcfg.3 \
