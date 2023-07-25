@@ -168,6 +168,26 @@ struct	kplotcfg {
 	double		  extrema_ymax;
 };
 
+struct  kplotctx {
+    cairo_t     *cr; /* cairo context */
+    double       h; /* height of context */
+    double       w; /* width of context */
+    struct kpair     minv; /* minimum data point values */
+    struct kpair     maxv; /* maximum data point values */
+    struct kplotcfg  cfg;
+
+    /*
+     * When computing the plot context, we need to account for a
+     * margin, labels, and boundary.
+     * To do this, we use these "soft" offset and dimensions.
+     * Once we've accounted for the above, we'll use this to
+     * translate and resize the Cairo context for graphing.
+     */
+    struct kpair     offs;
+    struct kpair     dims;
+};
+
+
 struct 	kdata;
 struct	kplot;
 
@@ -234,6 +254,7 @@ int		 kplot_attach_smooth(struct kplot *, struct kdata *,
 int		 kplot_attach_datas(struct kplot *, size_t, 
 			struct kdata **, const enum kplottype *, 
 			const struct kdatacfg *const *, enum kplotstype);
+void		 kplotctx_draw(struct kplotctx *, struct kplot *, double, double, cairo_t *);
 void		 kplot_draw(struct kplot *, double, double, cairo_t *);
 void		 kplot_free(struct kplot *);
 int		 kplot_get_datacfg(struct kplot *, size_t,
