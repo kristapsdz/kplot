@@ -136,8 +136,6 @@ out:
 	kdata_destroy(d[1]);
 	kdata_destroy(d[2]);
 	kdata_destroy(d[3]);
-#ifdef	__APPLE__
 	cairo_debug_reset_static_data();
-#endif
 	return(rc);
 }

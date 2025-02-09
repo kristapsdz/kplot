@@ -1,0 +1,6 @@
+*.o
+*.a
+example[0-9]
+example[0-9][0-9]
+test-reallocarray
+compat.h

@@ -1,0 +1,18 @@
+{
+   xml
+   Memcheck:Leak
+   ...
+   fun:XML_ParseBuffer
+}
+{
+   font_create
+   Memcheck:Leak
+   ...
+   fun:cairo_scaled_font_create
+}
+{
+   font_create
+   Memcheck:Leak
+   ...
+   fun:FcInitLoadConfigAndFonts
+}

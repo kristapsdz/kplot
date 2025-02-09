@@ -1,0 +1,19 @@
+name: Regression Tests
+on: [push]
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcairo-devel valgrind
+    - name: Configure
+      run: |
+        echo 'CFLAGS += -fsanitize=undefined,address -fno-omit-frame-pointer -O0' > Makefile.local
+        echo 'LDFLAGS += -fsanitize=undefined,address -fno-omit-frame-pointer -O0' >> Makefile.local
+        LSAN_OPTIONS=suppressions=kplot.lsan.supp,print_suppressions=0 make regress
+        rm -f Makefile.local
+        make clean
+        VALGRIND="valgrind --suppressions=kplot.valgrind.supp -q --leak-check=full --leak-resolution=high --show-reachable=yes" make regress

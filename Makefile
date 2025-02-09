@@ -1,6 +1,7 @@
 .SUFFIXES: .3 .3.html
 
 CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
+sinclude Makefile.local
 #If you're on Mac OSX without XQuarts, you'll need /usr/X11 instead of /opt/X11!
 CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/opt/X11/include/cairo'`
 VERSION		= 0.1.15
@@ -35,6 +36,7 @@ PNGS		= example0.png \
 		  example11.png \
 		  example12.png \
 		  example13.png
+.PHONY: $(PNGS)
 SRCS		= Makefile \
 		  compat.post.h \
 		  compat.pre.h \
@@ -186,6 +188,8 @@ installwww: www
 	install -m 0444 kplot.tgz $(PREFIX)/snapshots
 	install -m 0444 kplot.tgz.sha512 $(PREFIX)/snapshots
 
+regress: $(PNGS)
+
 $(EXAMPLES): libkplot.a
 
 EXAMPLE_LIBS = libkplot.a $(LDADD) -lm 
@@ -233,46 +237,46 @@ example13: example13.c libkplot.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(EXAMPLE_LIBS)
 
 example0.png: example0
-	./example0
+	$(VALGRIND) ./example0
 
 example1.png: example1
-	./example1
+	$(VALGRIND) ./example1
 
 example2.png: example2
-	./example2
+	$(VALGRIND) ./example2
 
 example3.png: example3
-	./example3
+	$(VALGRIND) ./example3
 
 example4.png: example4
-	./example4
+	$(VALGRIND) ./example4
 
 example5.png: example5
-	./example5
+	$(VALGRIND) ./example5
 
 example6.png: example6
-	./example6
+	$(VALGRIND) ./example6
 
 example7.png: example7
-	./example7
+	$(VALGRIND) ./example7
 
 example8.png: example8
-	./example8
+	$(VALGRIND) ./example8
 
 example9.png: example9
-	./example9
+	$(VALGRIND) ./example9
 
 example10.png: example10
-	./example10
+	$(VALGRIND) ./example10
 
 example11.png: example11
-	./example11
+	$(VALGRIND) ./example11
 
 example12.png: example12
-	./example12
+	$(VALGRIND) ./example12
 
 example13.png: example13
-	./example13
+	$(VALGRIND) ./example13
 
 libkplot.a: $(OBJS)
 	$(AR) rs $@ $(OBJS)
