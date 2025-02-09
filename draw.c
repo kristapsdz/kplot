@@ -873,7 +873,8 @@ kplotctx_draw(struct kplotctx *ctx, struct kplot *p, double w, double h, cairo_t
 void
 kplot_draw(struct kplot *p, double w, double h, cairo_t *cr)
 {
-	struct kplotctx	ctx;
+	struct kplotctx	 ctx;
+
 	kplotctx_draw(&ctx, p, w, h, cr);
 }
 int
