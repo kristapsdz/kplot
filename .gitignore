@@ -6,3 +6,4 @@ config.h
 Makefile.configure
 config.log
 *.swp
+*.png

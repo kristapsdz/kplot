@@ -32,8 +32,8 @@ bbox_extents(struct kplotctx *ctx, const char *v,
 	cairo_text_extents_t e;
 
 	cairo_text_extents(ctx->cr, v, &e);
-	*h = abs(e.width * sin(rot)) + abs(e.height * cos(rot));
-	*w = abs(e.width * cos(rot)) + abs(e.height * sin(rot));
+	*h = fabs(e.width * sin(rot)) + fabs(e.height * cos(rot));
+	*w = fabs(e.width * cos(rot)) + fabs(e.height * sin(rot));
 }
 
 void
