@@ -234,6 +234,7 @@ void		 kdatacfg_defaults(struct kdatacfg *);
 void		 kplotcfg_defaults(struct kplotcfg *);
 int		 kplotcfg_default_palette(struct kplotccfg **, size_t *);
 void		 ksmthcfg_defaults(struct ksmthcfg *);
+void		 kplotfont_defaults(struct kplotfont *);
 
 struct kplot	*kplot_alloc(const struct kplotcfg *);
 int		 kplot_detach(struct kplot *, const struct kdata *);
