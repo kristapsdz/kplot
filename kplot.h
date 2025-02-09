@@ -244,8 +244,12 @@ int		 kplot_attach_smooth(struct kplot *, struct kdata *,
 			enum ksmthtype, const struct ksmthcfg *);
 int		 kplot_attach_datas(struct kplot *, size_t, 
 			struct kdata **, const enum kplottype *, 
-			const struct kdatacfg *const *, enum kplotstype);
-void		 kplotctx_draw(struct kplotctx *, struct kplot *, double, double, cairo_t *);
+			const struct kdatacfg *const *,
+			enum kplotstype);
+void		 kplotctx_draw(struct kplotctx *, struct kplot *,
+			double, double, cairo_t *);
+void		 kplotctx_translate(const struct kplotctx *, double,
+			double, double *, double *);
 void		 kplot_draw(struct kplot *, double, double, cairo_t *);
 void		 kplot_free(struct kplot *);
 int		 kplot_get_datacfg(struct kplot *, size_t,

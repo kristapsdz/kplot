@@ -1,0 +1,58 @@
+.Dd $Mdocdate$
+.Dt KPLOTCTX_TRANSLATE 3
+.Os
+.Sh NAME
+.Nm kplotctx_translate
+.Nd translate from context points to data points
+.Sh LIBRARY
+.Lb libkplot
+.Sh SYNOPSIS
+.In cairo.h
+.In kplot.h
+.Ft int
+.Fo kplotctx_translate
+.Fa "const struct kplotctx *ctx"
+.Fa double cairo_x
+.Fa double cairo_y
+.Fa double *data_x
+.Fa double *data_y
+.Fc
+.Sh DESCRIPTION
+The
+.Nm
+function translates from source Cairo context points
+.Fa cairo_x
+and
+.Fa cairo_y
+into data point destinations
+.Fa data_x
+and
+.Fa data_y .
+If a data point destination is
+.Dv NULL ,
+its source value is not translated.
+The function is commonly used to map mouse positions over a context into
+the points they represent in the data space, taking into account margins,
+offsets, etc.
+.Sh RETURN VALUES
+Returns zero if either of Cairo context points are not in the point
+space, -1 if context has zero dimension, or 1 on success.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, and 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, and 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, 8, and 9 printf/stderr messages only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, 4, and 9 errno settings only.
+.Sh SEE ALSO
+.Xr kplotctx_draw 3
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.\" .Sh AUTHORS
+.\" .Sh CAVEATS
+.\" .Sh BUGS
+.\" .Sh SECURITY CONSIDERATIONS
+.\" Not used in OpenBSD.

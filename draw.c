@@ -880,6 +880,41 @@ kplot_draw(struct kplot *p, double w, double h, cairo_t *cr)
 }
 
 int
+kplotctx_translate(const struct kplotctx *ctx, double cairo_x,
+	double cairo_y, double *data_x, double *data_y)
+{
+	double	n_x, n_y, range_x, range_y;
+
+	/*
+	 * Normalise coordinates in the unit interval. Don't allow
+	 * division by zero.  Don't let through values outside of the
+	 * mappable space.
+	 */
+
+	if (data_x != NULL) {
+		if (fpclassify(ctx->dims.x) == FP_ZERO)
+			return -1;
+		n_x = (cairo_x - ctx->offs.x) / ctx->dims.x;
+		if (n_x < 0.0 || n_x > 1.0)
+			return 0;
+		range_x = ctx->cfg.extrema_xmax - ctx->cfg.extrema_xmin;
+		*data_x = n_x * range_x + ctx->cfg.extrema_xmin;
+	}
+
+	if (data_x != NULL) {
+		if (fpclassify(ctx->dims.y) == FP_ZERO)
+			return -1;
+		n_y = 1.0 - (cairo_y - ctx->offs.y) / ctx->dims.y;
+		if (n_y < 0.0 || n_y > 1.0)
+			return 0;
+		range_y = ctx->cfg.extrema_ymax - ctx->cfg.extrema_ymin;
+		*data_y = n_y * range_y + ctx->cfg.extrema_ymin;
+	}
+
+	return 1;
+}
+
+int
 kplotcfg_default_palette(struct kplotccfg **pp, size_t *szp)
 {
 	size_t		 i;
