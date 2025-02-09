@@ -1,5 +1,5 @@
 .Dd $Mdocdate: February 9 2015 $
-.Dt KPLOT_DRAW 3
+.Dt KPLOTCTX_DRAW 3
 .Os
 .Sh NAME
 .Nm kplotctx_draw
@@ -20,15 +20,7 @@
 .Sh DESCRIPTION
 The
 .Nm
-function is equivalent to 
-.Xr kplot_draw 3
-with the only difference, that the plot context is returned into
-.Fa ctx .
-User is responsible for allocatinf sufficient memory.q
-.Nm
-draws all valid points of all data sources attached to
-.Fa p
-onto a Cairo context
+function draws all valid points of all data sources onto a Cairo context
 .Fa cr
 of height
 .Fa h
@@ -39,6 +31,35 @@ sources into the image.
 .Pq If no points are specified, the domain and range are zero.
 The image is laid out as described in the Drawing Model section of
 .Xr kplot 3 .
+.Pp
+It is the same as
+.Xr kplot_draw 3 ,
+but allows access to the translation context
+.Fa ctx .
+This is zeroed and filled so that the caller has access to the plot's
+offset, dimensions, and other values for translating into and from the
+Cairo context.
+.Pp
+The translation context
+.Fa ctx
+consists of the following members:
+.Bl -tag -width Ds
+.It Fa "cairo_t *cr"
+Cairo context copied from the caller argument.
+.It Fa "double h"
+Height of the context copied from the caller argument.
+.It Fa "double w"
+Width of the context copied from the caller argument.
+.It Fa "struct kpair minv"
+Minimum data point values.
+.It Fa "struct maxv minv"
+Maximum data point values.
+.It Fa "struct kplotcfg cfg"
+Configuration copied from the plot.
+.It Fa "struct kpair offs" , "struct kpair dims"
+Offset and dimensions of the plot itself after accounting for
+margin, labels, and boundary.
+.El
 .\" .Sh RETURN VALUES
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
@@ -52,8 +73,8 @@ The image is laid out as described in the Drawing Model section of
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
 .Xr kplot 3 ,
-.Xr kplot_draw 3 ,
-.Xr kplot_alloc 3
+.Xr kplot_alloc 3 ,
+.Xr kplot_draw 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
 .\" .Sh AUTHORS

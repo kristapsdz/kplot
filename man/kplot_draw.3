@@ -30,6 +30,10 @@ sources into the image.
 .Pq If no points are specified, the domain and range are zero.
 The image is laid out as described in the Drawing Model section of
 .Xr kplot 3 .
+.Pp
+It is the same as
+.Xr kplotctx_draw 3 ,
+but does not expose the translation context itself.
 .\" .Sh RETURN VALUES
 .\" .Sh ENVIRONMENT
 .\" For sections 1, 6, 7, and 8 only.
@@ -43,8 +47,8 @@ The image is laid out as described in the Drawing Model section of
 .\" For sections 2, 3, 4, and 9 errno settings only.
 .Sh SEE ALSO
 .Xr kplot 3 ,
-.Xr kplotctx_draw 3 ,
-.Xr kplot_alloc 3
+.Xr kplot_alloc 3 ,
+.Xr kplotctx_draw 3
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
 .\" .Sh AUTHORS
