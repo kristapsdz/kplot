@@ -249,7 +249,7 @@ int		 kplot_attach_datas(struct kplot *, size_t,
 			enum kplotstype);
 void		 kplotctx_draw(struct kplotctx *, struct kplot *,
 			double, double, cairo_t *);
-void		 kplotctx_translate(const struct kplotctx *, double,
+int		 kplotctx_translate(const struct kplotctx *, double,
 			double, double *, double *);
 void		 kplot_draw(struct kplot *, double, double, cairo_t *);
 void		 kplot_free(struct kplot *);
