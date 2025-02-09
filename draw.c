@@ -647,7 +647,8 @@ kplotcfg_defaults(struct kplotcfg *cfg)
 }
 
 void
-kplotctx_draw(struct kplotctx *ctx, struct kplot *p, double w, double h, cairo_t *cr)
+kplotctx_draw(struct kplotctx *ctx, struct kplot *p, double w,
+	double h, cairo_t *cr)
 {
 	size_t	 	 i, start, end;
 	struct kplotdat	*d;
@@ -877,6 +878,7 @@ kplot_draw(struct kplot *p, double w, double h, cairo_t *cr)
 
 	kplotctx_draw(&ctx, p, w, h, cr);
 }
+
 int
 kplotcfg_default_palette(struct kplotccfg **pp, size_t *szp)
 {
