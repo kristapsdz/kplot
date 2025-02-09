@@ -1,13 +1,9 @@
 .SUFFIXES: .3 .3.html
 
-CFLAGS		= -g -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Wwrite-strings
+include Makefile.configure
+WWWDIR		 = /var/www/vhosts/kristaps.bsd.lv/htdocs/kplot
 sinclude Makefile.local
-#If you're on Mac OSX without XQuarts, you'll need /usr/X11 instead of /opt/X11!
-CPPFLAGS	= `pkg-config --cflags --silence-errors cairo || echo '-I/opt/X11/include/cairo'`
 VERSION		= 0.1.15
-LDADD		= `pkg-config --libs --silence-errors cairo || echo '-L/opt/X11/lib -lcairo'`
-#If you're on GNU/Linux, you'll need to uncomment this.
-#LDADD		+= -L/usr/local/include -lbsd
 EXAMPLES	= example0 \
 		  example1 \
 		  example2 \
@@ -38,9 +34,6 @@ PNGS		= example0.png \
 		  example13.png
 .PHONY: $(PNGS)
 SRCS		= Makefile \
-		  compat.post.h \
-		  compat.pre.h \
-		  compat.sh \
 		  colours.c \
 		  extern.h \
 		  kplot.h \
@@ -71,9 +64,7 @@ SRCS		= Makefile \
 		  margin.c \
 		  mean.c \
 		  plotctx.c \
-		  reallocarray.c \
 		  stddev.c \
-		  test-reallocarray.c \
 		  tic.c \
 		  vector.c
 OBJS		= array.o \
@@ -90,11 +81,9 @@ OBJS		= array.o \
 		  margin.o \
 		  mean.o \
 		  plotctx.o \
-		  reallocarray.o \
 		  stddev.o \
 		  tic.o \
 		  vector.o
-PREFIX		= /usr/local
 HTMLS		= index.html \
 		  man/kdata_array_alloc.3.html \
 		  man/kdata_array_fill.3.html \
@@ -168,6 +157,11 @@ MANS		= man/kdata_array_alloc.3 \
 		  man/kplot_get_plotcfg.3 \
 	 	  man/kplotcfg_defaults.3
 
+LDADD_PKG	!= pkg-config --libs cairo 2>/dev/null || echo "-lcairo"
+CFLAGS_PKG	!= pkg-config --cflags cairo 2>/dev/null || echo ""
+CFLAGS		+= $(CFLAGS_PKG)
+LDADD		+= $(LDADD_PKG)
+
 all: libkplot.a $(EXAMPLES)
 
 install: all
@@ -181,13 +175,13 @@ install: all
 www: $(HTMLS) $(PNGS) kplot.tgz kplot.tgz.sha512
 
 installwww: www
-	mkdir -p $(PREFIX)
-	mkdir -p $(PREFIX)/snapshots
-	install -m 0444 $(PNGS) $(HTMLS) index.css mandoc.css $(PREFIX)
-	install -m 0444 kplot.tgz $(PREFIX)/snapshots/kplot-$(VERSION).tgz
-	install -m 0444 kplot.tgz.sha512 $(PREFIX)/snapshots/kplot-$(VERSION).tgz.sha512
-	install -m 0444 kplot.tgz $(PREFIX)/snapshots
-	install -m 0444 kplot.tgz.sha512 $(PREFIX)/snapshots
+	mkdir -p $(WWWDIR)
+	mkdir -p $(WWWDIR)/snapshots
+	install -m 0444 $(PNGS) $(HTMLS) index.css mandoc.css $(WWWDIR)
+	install -m 0444 kplot.tgz $(WWWDIR)/snapshots/kplot-$(VERSION).tgz
+	install -m 0444 kplot.tgz.sha512 $(WWWDIR)/snapshots/kplot-$(VERSION).tgz.sha512
+	install -m 0444 kplot.tgz $(WWWDIR)/snapshots
+	install -m 0444 kplot.tgz.sha512 $(WWWDIR)/snapshots
 
 regress: $(PNGS)
 
@@ -282,12 +276,7 @@ example13.png: example13
 libkplot.a: $(OBJS)
 	$(AR) rs $@ $(OBJS)
 
-$(OBJS): kplot.h compat.h extern.h
-
-compat.h: compat.pre.h compat.post.h
-	( cat compat.pre.h ; \
-	  CC="$(CC)" CFLAGS="$(CFLAGS)" sh compat.sh reallocarray ; \
-	  cat compat.post.h ; ) >$@
+$(OBJS): kplot.h config.h extern.h
 
 .3.3.html:
 	mandoc -Thtml -Ostyle=mandoc.css,man=%N.%S.html $< >$@
@@ -309,8 +298,11 @@ kplot.tgz:
 	(cd .dist && tar zcf ../$@ kplot-$(VERSION))
 	rm -rf .dist
 
+distclean: clean
+	rm -f Makefile.configure config.h config.log config.h.old config.log.old
+
 clean:
-	rm -f libkplot.a compat.h test-reallocarray 
+	rm -f libkplot.a
 	rm -f $(EXAMPLES)
 	rm -rf *.dSYM
 	rm -f $(OBJS)
